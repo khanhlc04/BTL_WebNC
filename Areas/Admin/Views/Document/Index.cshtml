@@ -1,0 +1,53 @@
+@{
+  ViewData["Title"] = "Quản lý tài liệu";
+  Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<h2>Quản lý tài liệu</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Tiêu đề</th>
+      <th>Thumbnail</th>
+      <th>File URL</th>
+      <th>Thao tác</th>
+    </tr>
+  </thead>
+  <tbody>
+    @if (Model != null)
+    {
+      foreach (var item in Model)
+      {
+        <tr>
+          <td>@item.Id</td>
+          <td>@item.Title</td>
+          <td>
+            @if (!string.IsNullOrEmpty(item.ThumbnailUrl))
+            {
+              <img src="@item.ThumbnailUrl" alt="Thumbnail" style="max-width:80px;max-height:80px;" />
+            }
+          </td>
+          <td>
+            @if (!string.IsNullOrEmpty(item.FileUrl))
+            {
+              <a href="@item.FileUrl" target="_blank">@item.FileUrl</a>
+            }
+          </td>
+          <td>
+            <a asp-controller="Document" asp-action="EditDocument" asp-route-id="@item.Id"
+              class="btn btn-sm btn-warning">Sửa</a>
+            <a asp-controller="Document" asp-action="DeleteDocument" asp-route-id="@item.Id"
+              class="btn btn-sm btn-danger">Xóa</a>
+          </td>
+        </tr>
+      }
+    }
+    else
+    {
+      <tr>
+        <td colspan="5">Không có dữ liệu</td>
+      </tr>
+    }
+  </tbody>
+</table>
+<a asp-controller="Document" asp-action="CreateDocument" class="btn btn-primary">Thêm tài liệu</a>

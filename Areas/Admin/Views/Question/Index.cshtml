@@ -1,0 +1,39 @@
+@{
+  ViewData["Title"] = "Quản lý câu hỏi";
+  Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<h2>Quản lý câu hỏi</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nội dung câu hỏi</th>
+      <th>Người hỏi (Email)</th>
+      <th>Thời gian</th>
+      <th>Thao tác</th>
+    </tr>
+  </thead>
+  <tbody>
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Content</td>
+                <td>@(item.Account != null ? item.Account.Email : "")</td>
+                <td>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>
+                    <a asp-controller="Question" asp-action="EditQuestion" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Sửa</a>
+                    <a asp-controller="Question" asp-action="DeleteQuestion" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Xóa</a>
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr><td colspan="5">Không có dữ liệu</td></tr>
+    }
+  </tbody>
+</table>
+<a asp-controller="Question" asp-action="CreateQuestion" class="btn btn-primary">Thêm câu hỏi</a>

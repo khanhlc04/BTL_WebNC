@@ -1,0 +1,23 @@
+@{
+  ViewData["Title"] = "Thêm tài liệu";
+  Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Thêm tài liệu mới</h2>
+
+<form asp-controller="Document" asp-action="CreateDocument" method="post">
+  <div class="mb-3">
+    <label for="Title" class="form-label">Tiêu đề tài liệu</label>
+    <input type="text" class="form-control" id="Title" name="Title" required />
+  </div>
+  <div class="mb-3">
+    <label for="ThumbnailUrl" class="form-label">Thumbnail URL</label>
+    <input type="text" class="form-control" id="ThumbnailUrl" name="ThumbnailUrl" placeholder="https://..." required />
+  </div>
+  <div class="mb-3">
+    <label for="FileUrl" class="form-label">Tài liệu URL</label>
+    <input type="text" class="form-control" id="FileUrl" name="FileUrl" placeholder="https://..." required />
+  </div>
+  <button type="submit" class="btn btn-primary">Lưu tài liệu</button>
+  <a asp-controller="Document" asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</form>

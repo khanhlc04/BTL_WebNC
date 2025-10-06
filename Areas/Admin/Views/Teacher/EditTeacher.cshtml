@@ -1,0 +1,18 @@
+@{
+    ViewData["Title"] = "Chỉnh sửa giảng viên";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<h2>Chỉnh sửa giảng viên</h2>
+<form method="post" asp-controller="Teacher" asp-action="EditTeacher">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <div class="mb-3">
+        <label for="FullName" class="form-label">Họ tên</label>
+        <input type="text" class="form-control" id="FullName" name="FullName" value="@Model.FullName" required />
+    </div>
+    <div class="mb-3">
+        <label for="Email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" required />
+    </div>
+    <button type="submit" class="btn btn-success">Lưu thay đổi</button>
+    <a asp-controller="Teacher" asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</form>

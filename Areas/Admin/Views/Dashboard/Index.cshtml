@@ -1,0 +1,46 @@
+@{
+  ViewData["Title"] = "Admin Dashboard";
+  Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+  <h1 class="mb-4">Trang Quản Trị Admin</h1>
+  <div class="row">
+    <div class="col-md-3 mb-4">
+      <div class="card text-bg-primary h-100">
+        <div class="card-body">
+          <h5 class="card-title"><i class="bi bi-person-badge"></i> Quản lý Giảng viên</h5>
+          <p class="card-text">Thêm, sửa, xóa thông tin giảng viên.</p>
+          <a asp-controller="Teacher" asp-action="Index" class="btn btn-light">Xem chi tiết</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-4">
+      <div class="card text-bg-warning h-100">
+        <div class="card-body">
+          <h5 class="card-title"><i class="bi bi-person-lines-fill"></i> Quản lý Sinh viên</h5>
+          <p class="card-text">Thêm, sửa, xóa thông tin sinh viên.</p>
+          <a asp-controller="Student" asp-action="Index" class="btn btn-light">Xem chi tiết</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-4">
+      <div class="card text-bg-success h-100">
+        <div class="card-body">
+          <h5 class="card-title"><i class="bi bi-question-circle"></i> Quản lý Câu hỏi</h5>
+          <p class="card-text">Quản lý các câu hỏi và trả lời.</p>
+          <a asp-controller="Question" asp-action="Index" class="btn btn-light">Xem chi tiết</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-4">
+      <div class="card text-bg-info h-100">
+        <div class="card-body">
+          <h5 class="card-title"><i class="bi bi-file-earmark-text"></i> Quản lý Tài liệu</h5>
+          <p class="card-text">Quản lý tài liệu được chia sẻ.</p>
+          <a asp-controller="Document" asp-action="Index" class="btn btn-light">Xem chi tiết</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
