@@ -166,3 +166,4 @@ D:\Web NC\BTL_WebNC\obj\Debug\net8.0\refint\BTL_WebNC.dll
 D:\Web NC\BTL_WebNC\obj\Debug\net8.0\BTL_WebNC.pdb
 D:\Web NC\BTL_WebNC\obj\Debug\net8.0\BTL_WebNC.genruntimeconfig.cache
 D:\Web NC\BTL_WebNC\obj\Debug\net8.0\ref\BTL_WebNC.dll
+D:\Web NC\BTL_WebNC\obj\Debug\net8.0\BTL_WebNC.sourcelink.json
