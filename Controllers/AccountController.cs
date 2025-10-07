@@ -28,7 +28,7 @@ namespace BTLChatDemo.Controllers
                 }
                 return RedirectToAction("Index", "Home");
             }
-            return View("~/Views/Auth/Login.cshtml");
+            return View();
         }
 
         // POST: /Account/Login
