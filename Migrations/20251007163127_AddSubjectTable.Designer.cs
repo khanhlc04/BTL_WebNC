@@ -4,6 +4,7 @@ using BTLChatDemo.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BTL_WebNC.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251007163127_AddSubjectTable")]
+    partial class AddSubjectTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -440,8 +443,8 @@ namespace BTL_WebNC.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BTLChatDemo.Models.Teacher.TeacherModel", "Teacher")
-                        .WithMany("TeacherSubjects")
+                    b.HasOne("BTLChatDemo.Models.Account.AccountModel", "Teacher")
+                        .WithMany()
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -449,11 +452,6 @@ namespace BTL_WebNC.Migrations
                     b.Navigation("Subject");
 
                     b.Navigation("Teacher");
-                });
-
-            modelBuilder.Entity("BTLChatDemo.Models.Teacher.TeacherModel", b =>
-                {
-                    b.Navigation("TeacherSubjects");
                 });
 #pragma warning restore 612, 618
         }

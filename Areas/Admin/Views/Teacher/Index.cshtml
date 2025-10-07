@@ -10,6 +10,7 @@
             <th>Họ tên</th>
             <th>Email</th>
             <th>Mã tài khoản</th>
+            <th>Môn học dạy</th>
             <th>Thao tác</th>
         </tr>
     </thead>
@@ -24,15 +25,29 @@
                     <td>@item.Email</td>
                     <td>@item.AccountId</td>
                     <td>
-                        <a asp-controller="Teacher" asp-action="EditTeacher" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Sửa</a>
-                        <a asp-controller="Teacher" asp-action="DeleteTeacher" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Xóa</a>
+                        @if (item.TeacherSubjects != null && item.TeacherSubjects.Count > 0)
+                        {
+                           @string.Join(", ", ((IEnumerable<dynamic>)item.TeacherSubjects).Select(ts => ts.Subject != null ? ts.Subject.Name : "Unknown"))
+                        }
+                        else
+                        {
+                            <span>Chưa đăng ký môn học</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-controller="Teacher" asp-action="EditTeacher" asp-route-id="@item.Id"
+                            class="btn btn-sm btn-warning">Sửa</a>
+                        <a asp-controller="Teacher" asp-action="DeleteTeacher" asp-route-id="@item.Id"
+                            class="btn btn-sm btn-danger">Xóa</a>
                     </td>
                 </tr>
             }
         }
         else
         {
-            <tr><td colspan="5">Không có dữ liệu</td></tr>
+            <tr>
+                <td colspan="6">Không có dữ liệu</td>
+            </tr>
         }
     </tbody>
 </table>

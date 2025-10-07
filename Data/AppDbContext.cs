@@ -5,7 +5,9 @@ using BTLChatDemo.Models.Document;
 using BTLChatDemo.Models.Question;
 using BTLChatDemo.Models.RoomChat;
 using BTLChatDemo.Models.Student;
+using BTLChatDemo.Models.Subject;
 using BTLChatDemo.Models.Teacher;
+using BTLChatDemo.Models.TeacherSubject;
 using Microsoft.EntityFrameworkCore;
 
 namespace BTLChatDemo.Data
@@ -24,6 +26,8 @@ namespace BTLChatDemo.Data
         public DbSet<ChatModel> Chats { get; set; }
         public DbSet<RoomChatModel> RoomChats { get; set; }
         public DbSet<DocumentModel> Documents { get; set; }
+        public DbSet<SubjectModel> Subjects { get; set; }
+        public DbSet<TeacherSubjectModel> TeacherSubjects { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -98,6 +102,23 @@ namespace BTLChatDemo.Data
                 .HasForeignKey(r => r.TeacherId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Configure TeacherSubject
+            modelBuilder.Entity<TeacherSubjectModel>().HasKey(ts => ts.Id);
+
+            modelBuilder
+                .Entity<TeacherSubjectModel>()
+                .HasOne(ts => ts.Teacher)
+                .WithMany(t => t.TeacherSubjects)
+                .HasForeignKey(ts => ts.TeacherId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder
+                .Entity<TeacherSubjectModel>()
+                .HasOne(ts => ts.Subject)
+                .WithMany()
+                .HasForeignKey(ts => ts.SubjectId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             // Configure unique constraints
             modelBuilder.Entity<AccountModel>().HasIndex(a => a.Email).IsUnique();
 
@@ -112,6 +133,8 @@ namespace BTLChatDemo.Data
                 .Entity<RoomChatModel>()
                 .HasIndex(r => new { r.StudentId, r.TeacherId })
                 .IsUnique();
+
+            modelBuilder.Entity<SubjectModel>().HasKey(s => s.Id);
         }
     }
 }

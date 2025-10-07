@@ -1,0 +1,37 @@
+@{
+    ViewData["Title"] = "Quản lý môn học";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<h2>Quản lý môn học</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên môn học</th>
+            <th>Mô tả</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>@item.Description</td>
+                    <td>
+                        <a asp-area="Admin" asp-controller="Subject" asp-action="EditSubject" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Sửa</a>
+                        <a asp-area="Admin" asp-controller="Subject" asp-action="DeleteSubject" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Xóa</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr><td colspan="4">Không có dữ liệu</td></tr>
+        }
+    </tbody>
+</table>
+<a asp-area="Admin" asp-controller="Subject" asp-action="CreateSubject" class="btn btn-primary">Thêm môn học</a>

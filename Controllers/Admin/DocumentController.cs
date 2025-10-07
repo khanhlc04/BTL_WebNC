@@ -23,8 +23,15 @@ namespace BTL_WebNC.Controllers.Admin
         public IActionResult CreateDocument() => View();
 
         [HttpPost]
-        public async Task<IActionResult> CreateDocument(DocumentModel model)
+        public async Task<IActionResult> CreateDocument(string Title, string ThumbnailUrl, string FileUrl, int SubjectId)
         {
+            var model = new DocumentModel
+            {
+                Title = Title,
+                ThumbnailUrl = ThumbnailUrl,
+                FileUrl = FileUrl,
+                SubjectId = SubjectId
+            };
             await _documentRepo.CreateAsync(model);
             return RedirectToAction("Index");
         }
@@ -36,9 +43,17 @@ namespace BTL_WebNC.Controllers.Admin
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditDocument(DocumentModel model)
+        public async Task<IActionResult> EditDocument(int Id, string Title, string ThumbnailUrl, string FileUrl, int SubjectId)
         {
-            await _documentRepo.UpdateAsync(model);
+            var model = await _documentRepo.GetByIdAsync(Id);
+            if (model != null)
+            {
+                model.Title = Title;
+                model.ThumbnailUrl = ThumbnailUrl;
+                model.FileUrl = FileUrl;
+                model.SubjectId = SubjectId;
+                await _documentRepo.UpdateAsync(model);
+            }
             return RedirectToAction("Index");
         }
 

@@ -1,0 +1,17 @@
+@{
+    ViewData["Title"] = "Thêm môn học";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<h2>Thêm môn học mới</h2>
+<form asp-area="Admin" asp-controller="Subject" asp-action="CreateSubject" method="post">
+    <div class="mb-3">
+        <label for="Name" class="form-label">Tên môn học</label>
+        <input type="text" class="form-control" id="Name" name="Name" required />
+    </div>
+    <div class="mb-3">
+        <label for="Description" class="form-label">Mô tả</label>
+        <textarea class="form-control" id="Description" name="Description" rows="3" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-success">Tạo mới</button>
+    <a asp-area="Admin" asp-controller="Subject" asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</form>

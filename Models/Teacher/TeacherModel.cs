@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using BTLChatDemo.Models.Account;
+using BTLChatDemo.Models.TeacherSubject;
 
 namespace BTLChatDemo.Models.Teacher
 {
@@ -25,6 +26,8 @@ namespace BTLChatDemo.Models.Teacher
 
         [ForeignKey("AccountId")]
         public virtual AccountModel Account { get; set; }
+
+        public virtual ICollection<TeacherSubjectModel> TeacherSubjects { get; set; }
 
         public bool Deleted { get; set; } = false;
     }

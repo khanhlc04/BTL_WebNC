@@ -1,9 +1,11 @@
 @{
     ViewData["Title"] = "Chỉnh sửa giảng viên";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var subjects = ViewBag.Subjects as IEnumerable<BTLChatDemo.Models.Subject.SubjectModel>;
+    var selectedSubjectIds = ViewBag.SelectedSubjectIds as List<int>;
 }
 <h2>Chỉnh sửa giảng viên</h2>
-<form method="post" asp-controller="Teacher" asp-action="EditTeacher">
+<form method="post" asp-controller="Teacher" asp-action="EditTeacher" asp-area="Admin">
     <input type="hidden" name="Id" value="@Model.Id" />
     <div class="mb-3">
         <label for="FullName" class="form-label">Họ tên</label>
@@ -13,6 +15,19 @@
         <label for="Email" class="form-label">Email</label>
         <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" required />
     </div>
+    <div class="mb-3">
+        <label for="SubjectIds" class="form-label">Môn học giảng viên dạy</label>
+        <select id="SubjectIds" name="SubjectIds" multiple class="form-control">
+            @if (subjects != null)
+            {
+                foreach (var subject in subjects)
+                {
+                    var isSelected = selectedSubjectIds != null && selectedSubjectIds.Contains(subject.Id);
+                    <option value="@subject.Id" selected="@isSelected">@subject.Name</option>
+                }
+            }
+        </select>
+    </div>
     <button type="submit" class="btn btn-success">Lưu thay đổi</button>
-    <a asp-controller="Teacher" asp-action="Index" class="btn btn-secondary">Quay lại</a>
+    <a asp-controller="Teacher" asp-action="Index" asp-area="Admin" class="btn btn-secondary">Quay lại</a>
 </form>

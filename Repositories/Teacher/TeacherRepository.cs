@@ -17,6 +17,8 @@ namespace BTLChatDemo.Repositories
         {
             return await _context
                 .Teachers.Include(t => t.Account)
+                .Include(t => t.TeacherSubjects.Where(ts => !ts.Deleted))
+                .ThenInclude(ts => ts.Subject)
                 .Where(t => !t.Deleted)
                 .ToListAsync();
         }

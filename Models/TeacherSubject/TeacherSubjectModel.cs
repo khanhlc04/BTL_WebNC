@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using BTLChatDemo.Models.Account;
 using BTLChatDemo.Models.Subject;
+using BTLChatDemo.Models.Teacher;
 
 namespace BTLChatDemo.Models.TeacherSubject
 {
@@ -17,7 +18,7 @@ namespace BTLChatDemo.Models.TeacherSubject
         public int TeacherId { get; set; }
 
         [ForeignKey("TeacherId")]
-        public virtual AccountModel Teacher { get; set; }
+        public virtual TeacherModel Teacher { get; set; }
 
         [Required]
         public int SubjectId { get; set; }

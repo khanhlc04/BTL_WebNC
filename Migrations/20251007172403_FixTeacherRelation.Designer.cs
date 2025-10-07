@@ -4,6 +4,7 @@ using BTLChatDemo.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BTL_WebNC.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251007172403_FixTeacherRelation")]
+    partial class FixTeacherRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -322,11 +325,16 @@ namespace BTL_WebNC.Migrations
                     b.Property<int>("TeacherId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("TeacherModelId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("SubjectId");
 
                     b.HasIndex("TeacherId");
+
+                    b.HasIndex("TeacherModelId");
 
                     b.ToTable("TeacherSubject");
                 });
@@ -441,10 +449,14 @@ namespace BTL_WebNC.Migrations
                         .IsRequired();
 
                     b.HasOne("BTLChatDemo.Models.Teacher.TeacherModel", "Teacher")
-                        .WithMany("TeacherSubjects")
+                        .WithMany()
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("BTLChatDemo.Models.Teacher.TeacherModel", null)
+                        .WithMany("TeacherSubjects")
+                        .HasForeignKey("TeacherModelId");
 
                     b.Navigation("Subject");
 

@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using BTLChatDemo.Models.Account;
+using BTLChatDemo.Models.Subject;
 
 namespace BTLChatDemo.Models.Document
 {
@@ -22,6 +23,12 @@ namespace BTLChatDemo.Models.Document
 
         [Required]
         public string FileUrl { get; set; }
+
+        [Required]
+        public int SubjectId { get; set; }
+
+        [ForeignKey("SubjectId")]
+        public virtual SubjectModel Subject { get; set; }
 
         public bool Deleted { get; set; } = false;
     }

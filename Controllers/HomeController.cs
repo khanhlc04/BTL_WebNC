@@ -7,14 +7,7 @@ namespace BTLChatDemo.Controllers
     {
         public IActionResult Index()
         {
-            if (!User.Identity.IsAuthenticated)
-                return RedirectToAction("Login", "Account");
-
-            var role = User.FindFirst(ClaimTypes.Role)?.Value;
-            if (role == "Admin")
-                return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
-
-            return View();
+            return RedirectToAction("Login", "Account");
         }
     }
 }

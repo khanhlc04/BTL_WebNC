@@ -24,7 +24,7 @@ namespace BTLChatDemo.Controllers
                 var role = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
                 if (role == "Admin")
                 {
-                    return RedirectToAction("Index", "Dashboard");
+                    return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
                 }
                 return RedirectToAction("Index", "Home");
             }
@@ -76,7 +76,7 @@ namespace BTLChatDemo.Controllers
 
                     if (account.Email == "admin@gmail.com")
                     {
-                        return RedirectToAction("Index", "Dashboard");
+                        return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
                     }
                     else
                     {

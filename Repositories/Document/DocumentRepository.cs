@@ -15,10 +15,7 @@ namespace BTLChatDemo.Repositories
 
         public async Task<IEnumerable<DocumentModel>> GetAllAsync()
         {
-            return await _context
-                .Documents.Where(d => !d.Deleted)
-                .OrderBy(d => d.Title) // Sắp xếp theo Title thay vì CreatedAt
-                .ToListAsync();
+            return await _context.Documents.Where(d => !d.Deleted).OrderBy(d => d.Title).ToListAsync();
         }
 
         public async Task<DocumentModel?> GetByIdAsync(int id)

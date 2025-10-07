@@ -7,9 +7,6 @@ namespace BTLChatDemo.Extensions
     {
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
-            // Base Repository
-            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-
             // Specific Repositories
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IStudentRepository, StudentRepository>();
@@ -19,6 +16,8 @@ namespace BTLChatDemo.Extensions
             services.AddScoped<IChatRepository, ChatRepository>();
             services.AddScoped<IRoomChatRepository, RoomChatRepository>();
             services.AddScoped<IDocumentRepository, DocumentRepository>();
+            services.AddScoped<ISubjectRepository, SubjectRepository>();
+            services.AddScoped<ITeacherSubjectRepository, TeacherSubjectRepository>();
 
             return services;
         }
