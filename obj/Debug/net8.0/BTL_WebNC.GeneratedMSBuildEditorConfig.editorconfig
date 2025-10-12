@@ -26,100 +26,92 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = D:\Web NC\BTL_WebNC
 build_property._RazorSourceGeneratorDebug = 
 
-[D:/Web NC/BTL_WebNC/Areas/Admin/Views/Dashboard/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcRGFzaGJvYXJkXEluZGV4LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Web NC/BTL_WebNC/Areas/Admin/Views/Document/CreateDocument.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcRG9jdW1lbnRcQ3JlYXRlRG9jdW1lbnQuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Web NC/BTL_WebNC/Areas/Admin/Views/Document/DeleteDocument.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcRG9jdW1lbnRcRGVsZXRlRG9jdW1lbnQuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Web NC/BTL_WebNC/Areas/Admin/Views/Document/EditDocument.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcRG9jdW1lbnRcRWRpdERvY3VtZW50LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Web NC/BTL_WebNC/Areas/Admin/Views/Document/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcRG9jdW1lbnRcSW5kZXguY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Web NC/BTL_WebNC/Areas/Admin/Views/Question/CreateQuestion.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcUXVlc3Rpb25cQ3JlYXRlUXVlc3Rpb24uY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Web NC/BTL_WebNC/Areas/Admin/Views/Question/DeleteQuestion.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcUXVlc3Rpb25cRGVsZXRlUXVlc3Rpb24uY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Web NC/BTL_WebNC/Areas/Admin/Views/Question/EditQuestion.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcUXVlc3Rpb25cRWRpdFF1ZXN0aW9uLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Web NC/BTL_WebNC/Areas/Admin/Views/Question/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcUXVlc3Rpb25cSW5kZXguY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Web NC/BTL_WebNC/Areas/Admin/Views/Student/CreateStudent.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU3R1ZGVudFxDcmVhdGVTdHVkZW50LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Web NC/BTL_WebNC/Areas/Admin/Views/Student/DeleteStudent.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU3R1ZGVudFxEZWxldGVTdHVkZW50LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Web NC/BTL_WebNC/Areas/Admin/Views/Student/EditStudent.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU3R1ZGVudFxFZGl0U3R1ZGVudC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Web NC/BTL_WebNC/Areas/Admin/Views/Student/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU3R1ZGVudFxJbmRleC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Web NC/BTL_WebNC/Areas/Admin/Views/Subject/CreateSubject.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU3ViamVjdFxDcmVhdGVTdWJqZWN0LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Web NC/BTL_WebNC/Areas/Admin/Views/Subject/DeleteSubject.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU3ViamVjdFxEZWxldGVTdWJqZWN0LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Web NC/BTL_WebNC/Areas/Admin/Views/Subject/EditSubject.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU3ViamVjdFxFZGl0U3ViamVjdC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Web NC/BTL_WebNC/Areas/Admin/Views/Subject/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU3ViamVjdFxJbmRleC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Web NC/BTL_WebNC/Areas/Admin/Views/Teacher/CreateTeacher.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcVGVhY2hlclxDcmVhdGVUZWFjaGVyLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Web NC/BTL_WebNC/Areas/Admin/Views/Teacher/DeleteTeacher.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcVGVhY2hlclxEZWxldGVUZWFjaGVyLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Web NC/BTL_WebNC/Areas/Admin/Views/Teacher/EditTeacher.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcVGVhY2hlclxFZGl0VGVhY2hlci5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Web NC/BTL_WebNC/Areas/Admin/Views/Teacher/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcVGVhY2hlclxJbmRleC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Web NC/BTL_WebNC/Areas/Admin/Views/_ViewImports.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Web NC/BTL_WebNC/Areas/Admin/Views/_ViewStart.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
 [D:/Web NC/BTL_WebNC/Views/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Dashboard/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRGFzaGJvYXJkXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Document/CreateDocument.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRG9jdW1lbnRcQ3JlYXRlRG9jdW1lbnQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Document/DeleteDocument.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRG9jdW1lbnRcRGVsZXRlRG9jdW1lbnQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Document/EditDocument.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRG9jdW1lbnRcRWRpdERvY3VtZW50LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Document/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRG9jdW1lbnRcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Question/CreateQuestion.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cUXVlc3Rpb25cQ3JlYXRlUXVlc3Rpb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Question/DeleteQuestion.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cUXVlc3Rpb25cRGVsZXRlUXVlc3Rpb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Question/EditQuestion.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cUXVlc3Rpb25cRWRpdFF1ZXN0aW9uLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Question/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cUXVlc3Rpb25cSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Student/CreateStudent.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cU3R1ZGVudFxDcmVhdGVTdHVkZW50LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Student/DeleteStudent.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cU3R1ZGVudFxEZWxldGVTdHVkZW50LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Student/EditStudent.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cU3R1ZGVudFxFZGl0U3R1ZGVudC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Student/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cU3R1ZGVudFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Subject/CreateSubject.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cU3ViamVjdFxDcmVhdGVTdWJqZWN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Subject/DeleteSubject.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cU3ViamVjdFxEZWxldGVTdWJqZWN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Subject/EditSubject.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cU3ViamVjdFxFZGl0U3ViamVjdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Subject/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cU3ViamVjdFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Teacher/CreateTeacher.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cVGVhY2hlclxDcmVhdGVUZWFjaGVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Teacher/DeleteTeacher.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cVGVhY2hlclxEZWxldGVUZWFjaGVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Teacher/EditTeacher.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cVGVhY2hlclxFZGl0VGVhY2hlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Teacher/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cVGVhY2hlclxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Web NC/BTL_WebNC/Views/Home/Index.cshtml]

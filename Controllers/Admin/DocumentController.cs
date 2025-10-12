@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BTL_WebNC.Controllers.Admin
 {
-    [Area("Admin")]
+    [Route("Admin/[controller]")]
     public class DocumentController : Controller
     {
         private readonly IDocumentRepository _documentRepo;
@@ -17,20 +17,26 @@ namespace BTL_WebNC.Controllers.Admin
         public async Task<IActionResult> Index()
         {
             var documents = await _documentRepo.GetAllAsync();
-            return View(documents);
+            return View("~/Views/Admin/Document/Index.cshtml", documents);
         }
 
-        public IActionResult CreateDocument() => View();
+        public IActionResult CreateDocument() =>
+            View("~/Views/Admin/Document/CreateDocument.cshtml");
 
         [HttpPost]
-        public async Task<IActionResult> CreateDocument(string Title, string ThumbnailUrl, string FileUrl, int SubjectId)
+        public async Task<IActionResult> CreateDocument(
+            string Title,
+            string ThumbnailUrl,
+            string FileUrl,
+            int SubjectId
+        )
         {
             var model = new DocumentModel
             {
                 Title = Title,
                 ThumbnailUrl = ThumbnailUrl,
                 FileUrl = FileUrl,
-                SubjectId = SubjectId
+                SubjectId = SubjectId,
             };
             await _documentRepo.CreateAsync(model);
             return RedirectToAction("Index");
@@ -39,11 +45,17 @@ namespace BTL_WebNC.Controllers.Admin
         public async Task<IActionResult> EditDocument(int id)
         {
             var document = await _documentRepo.GetByIdAsync(id);
-            return View(document);
+            return View("~/Views/Admin/Document/EditDocument.cshtml", document);
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditDocument(int Id, string Title, string ThumbnailUrl, string FileUrl, int SubjectId)
+        public async Task<IActionResult> EditDocument(
+            int Id,
+            string Title,
+            string ThumbnailUrl,
+            string FileUrl,
+            int SubjectId
+        )
         {
             var model = await _documentRepo.GetByIdAsync(Id);
             if (model != null)
@@ -60,7 +72,7 @@ namespace BTL_WebNC.Controllers.Admin
         public async Task<IActionResult> DeleteDocument(int id)
         {
             var document = await _documentRepo.GetByIdAsync(id);
-            return View(document);
+            return View("~/Views/Admin/Document/DeleteDocument.cshtml", document);
         }
 
         [HttpPost]

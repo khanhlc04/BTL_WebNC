@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BTL_WebNC.Controllers.Admin
 {
-    [Area("Admin")]
+    [Route("Admin/[controller]")]
     public class TeacherController : Controller
     {
         private readonly ITeacherRepository _teacherRepo;
@@ -32,13 +32,13 @@ namespace BTL_WebNC.Controllers.Admin
         {
             var teachers = await _teacherRepo.GetAllAsync();
 
-            return View(teachers);
+            return View("~/Views/Admin/Teacher/Index.cshtml", teachers);
         }
 
         public async Task<IActionResult> CreateTeacher()
         {
             ViewBag.Subjects = await _subjectRepo.GetAllAsync();
-            return View();
+            return View("~/Views/Admin/Teacher/CreateTeacher.cshtml");
         }
 
         [HttpPost]
@@ -123,7 +123,7 @@ namespace BTL_WebNC.Controllers.Admin
         public async Task<IActionResult> DeleteTeacher(int id)
         {
             var teacher = await _teacherRepo.GetByIdAsync(id);
-            return View(teacher);
+            return View("~/Views/Admin/Teacher/DeleteTeacher.cshtml", teacher);
         }
 
         [HttpPost]

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BTL_WebNC.Controllers.Admin
 {
-    [Area("Admin")]
+    [Route("Admin/[controller]")]
     public class StudentController : Controller
     {
         private readonly IStudentRepository _studentRepo;
@@ -20,10 +20,10 @@ namespace BTL_WebNC.Controllers.Admin
         public async Task<IActionResult> Index()
         {
             var students = await _studentRepo.GetAllAsync();
-            return View(students);
+            return View("~/Views/Admin/Student/Index.cshtml", students);
         }
 
-        public IActionResult CreateStudent() => View();
+        public IActionResult CreateStudent() => View("~/Views/Admin/Student/CreateStudent.cshtml");
 
         [HttpPost]
         [HttpPost]
@@ -51,7 +51,7 @@ namespace BTL_WebNC.Controllers.Admin
         public async Task<IActionResult> EditStudent(int id)
         {
             var student = await _studentRepo.GetByIdAsync(id);
-            return View(student);
+            return View("~/Views/Admin/Student/EditStudent.cshtml", student);
         }
 
         [HttpPost]
@@ -64,7 +64,7 @@ namespace BTL_WebNC.Controllers.Admin
         public async Task<IActionResult> DeleteStudent(int id)
         {
             var student = await _studentRepo.GetByIdAsync(id);
-            return View(student);
+            return View("~/Views/Admin/Student/DeleteStudent.cshtml", student);
         }
 
         [HttpPost]

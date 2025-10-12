@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BTL_WebNC.Controllers.Admin
 {
-    [Area("Admin")]
+    [Route("Admin/[controller]")]
     public class SubjectController : Controller
     {
         private readonly ISubjectRepository _subjectRepo;
@@ -17,10 +17,10 @@ namespace BTL_WebNC.Controllers.Admin
         public async Task<IActionResult> Index()
         {
             var subjects = await _subjectRepo.GetAllAsync();
-            return View(subjects);
+            return View("~/Views/Admin/Subject/Index.cshtml", subjects);
         }
 
-        public IActionResult CreateSubject() => View();
+        public IActionResult CreateSubject() => View("~/Views/Admin/Subject/CreateSubject.cshtml");
 
         [HttpPost]
         public async Task<IActionResult> CreateSubject(string Name, string Description)
@@ -33,7 +33,7 @@ namespace BTL_WebNC.Controllers.Admin
         public async Task<IActionResult> EditSubject(int id)
         {
             var subject = await _subjectRepo.GetByIdAsync(id);
-            return View(subject);
+            return View("~/Views/Admin/Subject/EditSubject.cshtml", subject);
         }
 
         [HttpPost]
@@ -52,7 +52,7 @@ namespace BTL_WebNC.Controllers.Admin
         public async Task<IActionResult> DeleteSubject(int id)
         {
             var subject = await _subjectRepo.GetByIdAsync(id);
-            return View(subject);
+            return View("~/Views/Admin/Subject/DeleteSubject.cshtml", subject);
         }
 
         [HttpPost]

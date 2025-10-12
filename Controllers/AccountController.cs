@@ -24,7 +24,7 @@ namespace BTLChatDemo.Controllers
                 var role = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
                 if (role == "Admin")
                 {
-                    return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
+                    return RedirectToAction("Index", "Dashboard");
                 }
                 return RedirectToAction("Index", "Home");
             }

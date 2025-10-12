@@ -37,7 +37,7 @@ namespace BTLChatDemo.Repositories
                 .Answers.Include(a => a.Account)
                 .Include(a => a.Question)
                 .Where(a => a.QuestionId == questionId && !a.Deleted)
-                .OrderByDescending(a => a.CreatedAt) // Bỏ IsAccepted và VoteCount
+                .OrderByDescending(a => a.CreatedAt)
                 .ToListAsync();
         }
 

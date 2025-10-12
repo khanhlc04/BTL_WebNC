@@ -14,41 +14,41 @@
   <div class="d-flex" style="min-height: 100vh;">
     <nav class="sidebar bg-dark text-light p-3" style="width: 250px; min-height: 100vh;">
       <div class="sidebar-header mb-4">
-        <a class="navbar-brand text-light" asp-controller="Dashboard" asp-action="Index">Admin Dashboard</a>
+        <a class="navbar-brand text-light" asp-controller="Admin/Dashboard" asp-action="Index">Admin Dashboard</a>
       </div>
       <ul class="nav flex-column">
         <li class="nav-item mb-2">
-          <a class="nav-link text-light" asp-controller="Dashboard" asp-action="Index">
+          <a class="nav-link text-light" href="/Admin/Dashboard">
             <i class="bi bi-speedometer2"></i> Dashboard
           </a>
         </li>
         <li class="nav-item mb-2">
-          <a class="nav-link text-light" asp-controller="Question" asp-action="Index">
+          <a class="nav-link text-light" href="Question">
             <i class="bi bi-question-circle"></i> Quản lý câu hỏi
           </a>
         </li>
         <li class="nav-item mb-2">
-          <a class="nav-link text-light" asp-controller="Document" asp-action="Index">
+          <a class="nav-link text-light" href="Document">
             <i class="bi bi-file-earmark-text"></i> Quản lý tài liệu
           </a>
         </li>
         <li class="nav-item mb-2">
-          <a class="nav-link text-light" asp-controller="Teacher" asp-action="Index">
+          <a class="nav-link text-light" href="Teacher">
             <i class="bi bi-person-badge"></i> Quản lý giảng viên
           </a>
         </li>
         <li class="nav-item mb-2">
-          <a class="nav-link text-light" asp-controller="Student" asp-action="Index">
+          <a class="nav-link text-light" href="Student">
             <i class="bi bi-person"></i> Quản lý sinh viên
           </a>
         </li>
         <li class="nav-item mb-2">
-          <a class="nav-link text-light" asp-controller="Subject" asp-action="Index">
+          <a class="nav-link text-light" href="Subject">
             <i class="bi bi-person"></i> Quản lý môn học
           </a>
         </li>
         <li class="nav-item mt-4">
-          <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="Logout">
+          <a class="nav-link text-light" asp-controller="Account" asp-action="Logout">
             <i class="bi bi-box-arrow-right"></i> Đăng xuất
           </a>
         </li>
