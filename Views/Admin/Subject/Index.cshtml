@@ -22,8 +22,8 @@
                     <td>@item.Name</td>
                     <td>@item.Description</td>
                     <td>
-                        <a asp-controller="Subject" asp-action="EditSubject" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Sửa</a>
-                        <a asp-controller="Subject" asp-action="DeleteSubject" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Xóa</a>
+                        <a asp-controller="AdminSubject" asp-action="EditSubject" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Sửa</a>
+                        <a asp-controller="AdminSubject" asp-action="DeleteSubject" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Xóa</a>
                     </td>
                 </tr>
             }
@@ -34,4 +34,4 @@
         }
     </tbody>
 </table>
-<a asp-controller="Subject" asp-action="CreateSubject" class="btn btn-primary">Thêm môn học</a>
+<a asp-controller="AdminSubject" asp-action="CreateSubject" class="btn btn-primary">Thêm môn học</a>

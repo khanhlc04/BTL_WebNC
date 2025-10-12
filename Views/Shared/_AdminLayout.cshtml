@@ -14,36 +14,36 @@
   <div class="d-flex" style="min-height: 100vh;">
     <nav class="sidebar bg-dark text-light p-3" style="width: 250px; min-height: 100vh;">
       <div class="sidebar-header mb-4">
-        <a class="navbar-brand text-light" asp-controller="Admin/Dashboard" asp-action="Index">Admin Dashboard</a>
+        <a class="navbar-brand text-light" asp-controller="AdminDashboard" asp-action="Index">Admin Dashboard</a>
       </div>
       <ul class="nav flex-column">
         <li class="nav-item mb-2">
-          <a class="nav-link text-light" href="/Admin/Dashboard">
+          <a class="nav-link text-light" asp-controller="AdminDashboard" asp-action="Index">
             <i class="bi bi-speedometer2"></i> Dashboard
           </a>
         </li>
         <li class="nav-item mb-2">
-          <a class="nav-link text-light" asp-controller="Question" asp-action="Index">
+          <a class="nav-link text-light" asp-controller="AdminQuestion" asp-action="Index">
             <i class="bi bi-question-circle"></i> Quản lý câu hỏi
           </a>
         </li>
         <li class="nav-item mb-2">
-          <a class="nav-link text-light" asp-controller="Document" asp-action="Index">
+          <a class="nav-link text-light" asp-controller="AdminDocument" asp-action="Index">
             <i class="bi bi-file-earmark-text"></i> Quản lý tài liệu
           </a>
         </li>
         <li class="nav-item mb-2">
-          <a class="nav-link text-light" asp-controller="Teacher" asp-action="Index">
+          <a class="nav-link text-light" asp-controller="AdminTeacher" asp-action="Index">
             <i class="bi bi-person-badge"></i> Quản lý giảng viên
           </a>
         </li>
         <li class="nav-item mb-2">
-          <a class="nav-link text-light" asp-controller="Student" asp-action="Index">
+          <a class="nav-link text-light" asp-controller="AdminStudent" asp-action="Index">
             <i class="bi bi-person"></i> Quản lý sinh viên
           </a>
         </li>
         <li class="nav-item mb-2">
-          <a class="nav-link text-light" asp-controller="Subject" asp-action="Index">
+          <a class="nav-link text-light" asp-controller="AdminSubject" asp-action="Index">
             <i class="bi bi-person"></i> Quản lý môn học
           </a>
         </li>

@@ -5,7 +5,7 @@
     var selectedSubjectIds = ViewBag.SelectedSubjectIds as List<int>;
 }
 <h2>Chỉnh sửa giảng viên</h2>
-<form method="post" asp-controller="Teacher" asp-action="EditTeacher" asp-area="Admin">
+<form method="post" asp-controller="AdminTeacher" asp-action="EditTeacher" asp-area="Admin">
     <input type="hidden" name="Id" value="@Model.Id" />
     <div class="mb-3">
         <label for="FullName" class="form-label">Họ tên</label>
@@ -29,5 +29,5 @@
         </select>
     </div>
     <button type="submit" class="btn btn-success">Lưu thay đổi</button>
-    <a asp-controller="Teacher" asp-action="Index" asp-area="Admin" class="btn btn-secondary">Quay lại</a>
+    <a asp-controller="AdminTeacher" asp-action="Index" asp-area="Admin" class="btn btn-secondary">Quay lại</a>
 </form>

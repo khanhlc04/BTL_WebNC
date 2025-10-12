@@ -3,7 +3,7 @@
   Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 <h2>Chỉnh sửa tài liệu</h2>
-<form asp-controller="Document" asp-action="EditDocument" method="post">
+<form asp-controller="AdminDocument" asp-action="EditDocument" method="post">
   <input type="hidden" name="Id" value="@Model.Id" />
   <div class="mb-3">
     <label for="Title" class="form-label">Tiêu đề tài liệu</label>
@@ -22,5 +22,5 @@
     <input type="number" class="form-control" id="SubjectId" name="SubjectId" value="@Model.SubjectId" required />
   </div>
   <button type="submit" class="btn btn-success">Lưu thay đổi</button>
-  <a asp-controller="Document" asp-action="Index" class="btn btn-secondary">Quay lại</a>
+  <a asp-controller="AdminDocument" asp-action="Index" class="btn btn-secondary">Quay lại</a>
 </form>

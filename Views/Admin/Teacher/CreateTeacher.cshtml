@@ -6,7 +6,7 @@
     var subjects = ViewBag.Subjects as List<SubjectModel>;
 }
 <h2>Thêm giảng viên mới</h2>
-<form method="post" asp-controller="Teacher" asp-action="CreateTeacher">
+<form method="post" asp-controller="AdminTeacher" asp-action="CreateTeacher">
     <div class="mb-3">
         <label for="FullName" class="form-label">Họ tên</label>
         <input type="text" class="form-control" id="FullName" name="FullName" required />
@@ -29,5 +29,5 @@
         </select>
     </div>
     <button type="submit" class="btn btn-success">Tạo mới</button>
-    <a asp-controller="Teacher" asp-action="Index" class="btn btn-secondary">Quay lại</a>
+    <a asp-controller="AdminTeacher" asp-action="Index" class="btn btn-secondary">Quay lại</a>
 </form>

@@ -26,9 +26,9 @@
           <td>@item.StudentCode</td>
           <td>@item.AccountId</td>
           <td>
-            <a asp-controller="Student" asp-action="EditStudent" asp-route-id="@item.Id"
+            <a asp-controller="AdminStudent" asp-action="EditStudent" asp-route-id="@item.Id"
               class="btn btn-sm btn-warning">Sửa</a>
-            <a asp-controller="Student" asp-action="DeleteStudent" asp-route-id="@item.Id"
+            <a asp-controller="AdminStudent" asp-action="DeleteStudent" asp-route-id="@item.Id"
               class="btn btn-sm btn-danger">Xóa</a>
           </td>
         </tr>
@@ -42,4 +42,4 @@
     }
   </tbody>
 </table>
-<a asp-controller="Student" asp-action="CreateStudent" class="btn btn-primary">Thêm sinh viên</a>
+<a asp-controller="AdminStudent" asp-action="CreateStudent" class="btn btn-primary">Thêm sinh viên</a>

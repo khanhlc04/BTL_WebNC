@@ -2,8 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BTLChatDemo.Controllers.Admin
 {
-    [Route("Admin/[controller]")]
-    public class DashboardController : Controller
+    public class AdminDashboardController : Controller
     {
         public IActionResult Index()
         {

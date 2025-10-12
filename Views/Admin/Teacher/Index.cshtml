@@ -35,9 +35,9 @@
                         }
                     </td>
                     <td>
-                        <a asp-controller="Teacher" asp-action="EditTeacher" asp-route-id="@item.Id"
+                        <a asp-controller="AdminTeacher" asp-action="EditTeacher" asp-route-id="@item.Id"
                             class="btn btn-sm btn-warning">Sửa</a>
-                        <a asp-controller="Teacher" asp-action="DeleteTeacher" asp-route-id="@item.Id"
+                        <a asp-controller="AdminTeacher" asp-action="DeleteTeacher" asp-route-id="@item.Id"
                             class="btn btn-sm btn-danger">Xóa</a>
                     </td>
                 </tr>
@@ -51,4 +51,4 @@
         }
     </tbody>
 </table>
-<a asp-controller="Teacher" asp-action="CreateTeacher" class="btn btn-primary">Thêm giảng viên</a>
+<a asp-controller="AdminTeacher" asp-action="CreateTeacher" class="btn btn-primary">Thêm giảng viên</a>

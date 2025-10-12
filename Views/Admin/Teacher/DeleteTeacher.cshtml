@@ -4,8 +4,8 @@
 }
 <h2>Xác nhận xóa giảng viên</h2>
 <p>Bạn có chắc chắn muốn xóa giảng viên <strong>@Model.FullName</strong>?</p>
-<form method="post" asp-controller="Teacher" asp-action="DeleteTeacherConfirmed">
+<form method="post" asp-controller="AdminTeacher" asp-action="DeleteTeacherConfirmed">
     <input type="hidden" name="Id" value="@Model.Id" />
     <button type="submit" class="btn btn-danger">Xóa</button>
-    <a asp-controller="Teacher" asp-action="Index" class="btn btn-secondary">Hủy</a>
+    <a asp-controller="AdminTeacher" asp-action="Index" class="btn btn-secondary">Hủy</a>
 </form>

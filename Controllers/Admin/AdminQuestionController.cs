@@ -4,12 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BTL_WebNC.Controllers.Admin
 {
-    [Route("Admin/[controller]/[action]")]
-    public class QuestionController : Controller
+    public class AdminQuestionController : Controller
     {
         private readonly IQuestionRepository _questionRepo;
 
-        public QuestionController(IQuestionRepository questionRepo)
+        public AdminQuestionController(IQuestionRepository questionRepo)
         {
             _questionRepo = questionRepo;
         }

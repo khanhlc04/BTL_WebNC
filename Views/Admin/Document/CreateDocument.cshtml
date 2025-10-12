@@ -5,7 +5,7 @@
 
 <h2>Thêm tài liệu mới</h2>
 
-<form asp-controller="Document" asp-action="CreateDocument" method="post">
+<form asp-controller="AdminDocument" asp-action="CreateDocument" method="post">
   <div class="mb-3">
     <label for="Title" class="form-label">Tiêu đề tài liệu</label>
     <input type="text" class="form-control" id="Title" name="Title" required />
@@ -23,5 +23,5 @@
     <input type="number" class="form-control" id="SubjectId" name="SubjectId" required />
   </div>
   <button type="submit" class="btn btn-primary">Lưu tài liệu</button>
-  <a asp-controller="Document" asp-action="Index" class="btn btn-secondary">Quay lại</a>
+  <a asp-controller="AdminDocument" asp-action="Index" class="btn btn-secondary">Quay lại</a>
 </form>

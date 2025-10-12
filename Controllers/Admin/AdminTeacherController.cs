@@ -6,8 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BTL_WebNC.Controllers.Admin
 {
-    [Route("Admin/[controller]/[action]")]
-    public class TeacherController : Controller
+    public class AdminTeacherController : Controller
     {
         private readonly ITeacherRepository _teacherRepo;
         private readonly IAccountRepository _accountRepo;
@@ -15,7 +14,7 @@ namespace BTL_WebNC.Controllers.Admin
         private readonly ISubjectRepository _subjectRepo;
         private readonly ITeacherSubjectRepository _teacherSubjectRepo;
 
-        public TeacherController(
+        public AdminTeacherController(
             ITeacherRepository teacherRepo,
             IAccountRepository accountRepo,
             ISubjectRepository subjectRepo,

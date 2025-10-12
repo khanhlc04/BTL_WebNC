@@ -3,7 +3,7 @@
   Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 <h2>Chỉnh sửa câu hỏi</h2>
-<form method="post" asp-controller="Question" asp-action="EditQuestion">
+<form method="post" asp-controller="AdminQuestion" asp-action="EditQuestion">
   <input type="hidden" name="Id" value="@Model.Id" />
   <div class="mb-3">
     <label for="Content" class="form-label">Nội dung câu hỏi</label>
@@ -14,5 +14,5 @@
     <input type="number" class="form-control" id="AccountId" name="AccountId" value="@Model.AccountId" required />
   </div>
   <button type="submit" class="btn btn-success">Lưu thay đổi</button>
-  <a asp-controller="Question" asp-action="Index" class="btn btn-secondary">Quay lại</a>
+  <a asp-controller="AdminQuestion" asp-action="Index" class="btn btn-secondary">Quay lại</a>
 </form>

@@ -4,12 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BTL_WebNC.Controllers.Admin
 {
-    [Route("Admin/[controller]/[action]")]
-    public class DocumentController : Controller
+    public class AdminDocumentController : Controller
     {
         private readonly IDocumentRepository _documentRepo;
 
-        public DocumentController(IDocumentRepository documentRepo)
+        public AdminDocumentController(IDocumentRepository documentRepo)
         {
             _documentRepo = documentRepo;
         }

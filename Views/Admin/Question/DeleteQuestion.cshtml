@@ -4,8 +4,8 @@
 }
 <h2>Xác nhận xóa câu hỏi</h2>
 <p>Bạn có chắc chắn muốn xóa câu hỏi này?</p>
-<form method="post" asp-controller="Question" asp-action="DeleteQuestionConfirmed">
+<form method="post" asp-controller="AdminQuestion" asp-action="DeleteQuestionConfirmed">
   <input type="hidden" name="id" value="@Model.Id" />
   <button type="submit" class="btn btn-danger">Xóa</button>
-  <a asp-controller="Question" asp-action="Index" class="btn btn-secondary">Hủy</a>
+  <a asp-controller="AdminQuestion" asp-action="Index" class="btn btn-secondary">Hủy</a>
 </form>
