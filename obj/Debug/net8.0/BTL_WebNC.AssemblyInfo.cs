@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BTL_WebNC")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3a1b0e6cc77cab940b2860a13da35172c8952905")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+008884441287eb693572407e4db3abff3a07496b")]
 [assembly: System.Reflection.AssemblyProductAttribute("BTL_WebNC")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BTL_WebNC")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
