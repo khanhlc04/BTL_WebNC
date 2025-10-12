@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BTL_WebNC.Controllers.Admin
 {
-    [Route("Admin/[controller]")]
+    [Route("Admin/[controller]/[action]")]
     public class TeacherController : Controller
     {
         private readonly ITeacherRepository _teacherRepo;
@@ -85,7 +85,7 @@ namespace BTL_WebNC.Controllers.Admin
             ViewBag.Subjects = subjects;
             ViewBag.SelectedSubjectIds = selectedSubjectIds;
 
-            return View("~/Areas/Admin/Views/Teacher/EditTeacher.cshtml", teacher);
+            return View("~/Views/Admin/Teacher/EditTeacher.cshtml", teacher);
         }
 
         [HttpPost]

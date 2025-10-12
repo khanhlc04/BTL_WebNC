@@ -36,8 +36,8 @@
                 </td>
                 <td>@item.SubjectId</td>
                 <td>
-                    <a asp-area="Admin" asp-controller="Document" asp-action="EditDocument" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Sửa</a>
-                    <a asp-area="Admin" asp-controller="Document" asp-action="DeleteDocument" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Xóa</a>
+                    <a asp-controller="Document" asp-action="EditDocument" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Sửa</a>
+                    <a asp-controller="Document" asp-action="DeleteDocument" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Xóa</a>
                 </td>
             </tr>
         }
@@ -48,4 +48,4 @@
     }
   </tbody>
 </table>
-<a asp-area="Admin" asp-controller="Document" asp-action="CreateDocument" class="btn btn-primary">Thêm tài liệu</a>
+<a asp-controller="Document" asp-action="CreateDocument" class="btn btn-primary">Thêm tài liệu</a>

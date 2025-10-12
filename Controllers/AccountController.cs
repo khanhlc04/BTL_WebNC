@@ -76,7 +76,7 @@ namespace BTLChatDemo.Controllers
 
                     if (account.Email == "admin@gmail.com")
                     {
-                        return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
+                        return RedirectToAction("Index", "Dashboard");
                     }
                     else
                     {

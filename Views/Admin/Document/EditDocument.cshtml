@@ -3,7 +3,7 @@
   Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 <h2>Chỉnh sửa tài liệu</h2>
-<form asp-area="Admin" asp-controller="Document" asp-action="EditDocument" method="post">
+<form asp-controller="Document" asp-action="EditDocument" method="post">
   <input type="hidden" name="Id" value="@Model.Id" />
   <div class="mb-3">
     <label for="Title" class="form-label">Tiêu đề tài liệu</label>
