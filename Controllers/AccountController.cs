@@ -26,7 +26,7 @@ namespace BTLChatDemo.Controllers
                 {
                     return RedirectToAction("Index", "AdminDashboard");
                 }
-                return View("~/Views/Home/Index.cshtml");
+                return View("~/Views/Document/Document.cshtml");
             }
             return View();
         }

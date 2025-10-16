@@ -1,4 +1,5 @@
 using BTLChatDemo.Models.Document;
+using BTLChatDemo.Models.Subject;
 
 namespace BTLChatDemo.Repositories
 {
@@ -11,5 +12,6 @@ namespace BTLChatDemo.Repositories
         Task<bool> DeleteAsync(int id);
         Task<bool> ExistsAsync(int id);
         Task<IEnumerable<DocumentModel>> SearchAsync(string searchTerm);
+        Task<IEnumerable<SubjectModel>> GetSubjectsAsync();
     }
 }

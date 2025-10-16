@@ -1,5 +1,6 @@
 using BTLChatDemo.Data;
 using BTLChatDemo.Models.Document;
+using BTLChatDemo.Models.Subject;
 using Microsoft.EntityFrameworkCore;
 
 namespace BTLChatDemo.Repositories
@@ -60,5 +61,10 @@ namespace BTLChatDemo.Repositories
                 .OrderBy(d => d.Title)
                 .ToListAsync();
         }
+        public async Task<IEnumerable<SubjectModel>> GetSubjectsAsync()
+        {
+            return await _context.Subjects.OrderBy(s => s.Name).ToListAsync();
+        }
+
     }
 }
