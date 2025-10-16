@@ -1,9 +1,9 @@
-using BTLChatDemo.Data;
-using BTLChatDemo.Models.Document;
-using BTLChatDemo.Models.Subject;
+using BTL_WebNC.Data;
+using BTL_WebNC.Models.Document;
+using BTL_WebNC.Models.Subject;
 using Microsoft.EntityFrameworkCore;
 
-namespace BTLChatDemo.Repositories
+namespace BTL_WebNC.Repositories
 {
     public class DocumentRepository : IDocumentRepository
     {

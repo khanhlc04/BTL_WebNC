@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace BTLChatDemo.Controllers
+namespace BTL_WebNC.Controllers
 {
     public class HomeController : Controller
     {

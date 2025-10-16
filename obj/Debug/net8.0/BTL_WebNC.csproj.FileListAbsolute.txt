@@ -512,4 +512,3 @@ D:\VSCode\LtWebNC\BTLChatDemo\obj\Debug\net8.0\refint\BTL_WebNC.dll
 D:\VSCode\LtWebNC\BTLChatDemo\obj\Debug\net8.0\BTL_WebNC.pdb
 D:\VSCode\LtWebNC\BTLChatDemo\obj\Debug\net8.0\BTL_WebNC.genruntimeconfig.cache
 D:\VSCode\LtWebNC\BTLChatDemo\obj\Debug\net8.0\ref\BTL_WebNC.dll
-D:\VSCode\LtWebNC\BTLChatDemo\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

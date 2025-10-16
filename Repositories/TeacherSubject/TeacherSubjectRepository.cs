@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BTLChatDemo.Data;
-using BTLChatDemo.Models.TeacherSubject;
+using BTL_WebNC.Data;
+using BTL_WebNC.Models.TeacherSubject;
 using Microsoft.EntityFrameworkCore;
 
-namespace BTLChatDemo.Repositories
+namespace BTL_WebNC.Repositories
 {
     public class TeacherSubjectRepository : ITeacherSubjectRepository
     {

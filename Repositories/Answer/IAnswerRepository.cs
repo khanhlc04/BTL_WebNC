@@ -1,6 +1,6 @@
-using BTLChatDemo.Models.Answer;
+using BTL_WebNC.Models.Answer;
 
-namespace BTLChatDemo.Repositories
+namespace BTL_WebNC.Repositories
 {
     public interface IAnswerRepository
     {

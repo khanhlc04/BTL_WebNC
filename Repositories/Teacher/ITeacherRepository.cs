@@ -1,6 +1,6 @@
-using BTLChatDemo.Models.Teacher;
+using BTL_WebNC.Models.Teacher;
 
-namespace BTLChatDemo.Repositories
+namespace BTL_WebNC.Repositories
 {
     public interface ITeacherRepository
     {

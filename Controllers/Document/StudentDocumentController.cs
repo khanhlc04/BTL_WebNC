@@ -1,10 +1,10 @@
-﻿using BTLChatDemo.Models.Document;
-using BTLChatDemo.Repositories;
+﻿using BTL_WebNC.Models.Document;
+using BTL_WebNC.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
 
 
-namespace BTLChatDemo.Controllers.Document
+namespace BTL_WebNC.Controllers.Document
 {
     public class StudentDocumentController : Controller
     {

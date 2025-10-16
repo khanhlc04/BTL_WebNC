@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.SignalR;
 using System.Collections.Concurrent;
 
-namespace BTLChatDemo.Hubs
+namespace BTL_WebNC.Hubs
 {
     public class ChatHub : Hub
     {
@@ -34,7 +34,7 @@ namespace BTLChatDemo.Hubs
             await Clients.Others.SendAsync("UpdateUserList", _connections.Values.ToList());
         }
 
-        public override async Task OnDisconnectedAsync(Exception exception)
+        public override async Task OnDisconnectedAsync(Exception? exception)
         {
             if (_connections.TryRemove(Context.ConnectionId, out string username))
             {

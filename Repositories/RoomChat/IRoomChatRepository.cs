@@ -1,6 +1,6 @@
-using BTLChatDemo.Models.RoomChat;
+using BTL_WebNC.Models.RoomChat;
 
-namespace BTLChatDemo.Repositories
+namespace BTL_WebNC.Repositories
 {
     public interface IRoomChatRepository
     {

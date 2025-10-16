@@ -1,0 +1,61 @@
+﻿@model BTL_WebNC.Models.Forum.ForumViewModel
+
+@{
+    ViewData["Title"] = "Diễn đàn Hỏi đáp";
+}
+
+<form asp-action="Index" method="get" class="mb-4">
+    <div class="input-group">
+        <input type="text" name="searchQuery"
+               class="form-control form-control-lg"
+               placeholder="Tìm kiếm theo tên đề tài..."
+               value="@Model.SearchQuery" />
+        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+    </div>
+</form>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Danh sách Câu hỏi</h2>
+
+    @if (Model.ShowAskButton)
+    {
+        <a asp-action="Ask" class="btn btn-success btn-lg">
+            <i class="fas fa-plus-circle"></i> Đặt Câu hỏi Mới
+        </a>
+    }
+</div>
+
+<div class="list-group">
+    @foreach (var item in Model.Questions)
+    {
+        <a asp-action="Details" asp-route-id="@item.Id" class="list-group-item list-group-item-action forum-item">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="forum-title-section">
+                    <h5 class="mb-1 text-primary">@item.Title</h5>
+                    <small class="text-muted">
+                        Bởi:
+                        <span class="fw-bold">@item.AuthorFullName</span>
+                        - @item.CreatedAt.ToString("MMM dd, yyyy")
+                    </small>
+                </div>
+
+                <div class="text-end reply-date-section">
+                    <div class="d-flex align-items-center justify-content-end">
+                        <span class="me-3">
+                            <i class="far fa-comment"></i> Replies:
+                            <span class="fw-bold fs-5 text-dark">@item.ReplyCount</span>
+                        </span>
+                        <span class="fw-bold text-info">
+                            @item.CreatedAt.ToString("MMM dd, yyyy")
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </a>
+    }
+</div>
+
+@if (!Model.Questions.Any())
+{
+    <p class="alert alert-info mt-3">Không tìm thấy câu hỏi nào phù hợp.</p>
+}

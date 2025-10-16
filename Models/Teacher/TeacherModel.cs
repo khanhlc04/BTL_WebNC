@@ -1,10 +1,10 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using BTLChatDemo.Models.Account;
-using BTLChatDemo.Models.TeacherSubject;
+using BTL_WebNC.Models.Account;
+using BTL_WebNC.Models.TeacherSubject;
 
-namespace BTLChatDemo.Models.Teacher
+namespace BTL_WebNC.Models.Teacher
 {
     [Table("Teacher")]
     public class TeacherModel
