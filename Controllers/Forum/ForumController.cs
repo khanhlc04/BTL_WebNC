@@ -1,92 +1,71 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using BTL_WebNC.Repositories;
-using BTL_WebNC.Models.Forum;
+﻿using BTL_WebNC.Repositories;
+using Microsoft.AspNetCore.Mvc;
 using BTL_WebNC.Models.Question;
-using Microsoft.AspNetCore.Authorization;
-
+using BTL_WebNC.Models.Answer;
+using Microsoft.EntityFrameworkCore;
 
 namespace BTL_WebNC.Controllers.Forum
 {
     public class ForumController : Controller
     {
         private readonly IQuestionRepository _questionRepo;
-        //private readonly IUserService _userService; // Dịch vụ tra cứu vai trò và Id người dùng
 
         public ForumController(IQuestionRepository questionRepo)
         {
             _questionRepo = questionRepo;
         }
 
-        /// <summary>
-        /// Hiển thị danh sách các câu hỏi.
-        /// </summary>
-        [HttpGet]
-        public async Task<IActionResult> Index(string searchQuery)
+        public async Task<IActionResult> Index()
         {
-            // 1. Lấy danh sách câu hỏi theo tìm kiếm
-            var summaries = await _questionRepo.SearchAsync(searchQuery);
+            var forumQuestions = await _questionRepo.GetForumQuestionsAsync();
+            return View("~/Views/Forum/Index.cshtml", forumQuestions);
+        }
+        public async Task<IActionResult> Details(int id)
+        {
+            var question = await _questionRepo.GetByIdAsync(id);
+            if (question == null) return NotFound();
 
-            // 2. Xác định vai trò để ẩn/hiện nút "Đặt câu hỏi"
-            //var currentUserId = _userService.GetCurrentAccountId();
-            //var isTeacher = await _userService.IsTeacherAsync(currentUserId);
+            return View(question);
+        }
 
-            //var viewModel = new ForumViewModel
-            //{
-            //    Questions = summaries,
-            //    SearchQuery = searchQuery,
-            //    // Yêu cầu: Nút chỉ hiện cho HỌC SINH (role khác Giáo viên)
-            //    ShowAskButton = !isTeacher
-            //};
-
+        [HttpGet]
+        public IActionResult Create()
+        {
             return View();
         }
 
-        /// <summary>
-        /// Hiển thị form để Học sinh đặt câu hỏi mới.
-        /// </summary>
-        //[HttpGet]
-        //[Authorize] // Yêu cầu đăng nhập
-        /*
-        public async Task<IActionResult> Ask()
-        {
-            var currentUserId = _userService.GetCurrentAccountId();
-            if (await _userService.IsTeacherAsync(currentUserId))
-            {
-                // Nếu là Giáo viên, chuyển hướng hoặc thông báo lỗi
-                return RedirectToAction(nameof(Index));
-            }
-
-            return View(new AskQuestionViewModel());
-        }
-
-        /// <summary>
-        /// Xử lý việc gửi câu hỏi mới.
-        /// </summary>
         [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> Ask(AskQuestionViewModel model)
+        public async Task<IActionResult> Create(QuestionModel model)
         {
-            var currentUserId = _userService.GetCurrentAccountId();
-            if (await _userService.IsTeacherAsync(currentUserId))
-            {
-                // Ngăn Giáo viên tạo câu hỏi
-                ModelState.AddModelError("", "Giáo viên không được phép đăng câu hỏi.");
-                return View(model);
-            }
-
             if (ModelState.IsValid)
             {
-                // Tạo QuestionModel và lưu vào CSDL
-                var question = new QuestionModel
-                {
-                    Content = model.Content,
-                    AccountId = currentUserId,
-                    CreatedAt = DateTime.Now
-                };
-                await _questionRepo.CreateAsync(question);
-                return RedirectToAction(nameof(Index));
+                // giả sử lấy AccountId = 1 (cần thay bằng user đang login)
+                model.AccountId = 1;
+                await _questionRepo.AddAsync(model);
+                return RedirectToAction("Index");
             }
             return View(model);
-        }*/
+        }
+
+        // Thêm câu trả lời
+        [HttpPost]
+        public async Task<IActionResult> AddReply(int QuestionId, string Content)
+        {
+            if (string.IsNullOrWhiteSpace(Content))
+            {
+                return RedirectToAction("Details", new { id = QuestionId });
+            }
+
+            var ans = new AnswerModel
+            {
+                QuestionId = QuestionId,
+                Content = Content,
+                AccountId = 1 // TODO: lấy account từ login
+            };
+
+            await _questionRepo.AddAnswerAsync(ans);
+
+            return RedirectToAction("Details", new { id = QuestionId });
+        }
     }
 }

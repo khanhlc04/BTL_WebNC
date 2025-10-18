@@ -1,61 +1,74 @@
-﻿@model BTL_WebNC.Models.Forum.ForumViewModel
+﻿@model IEnumerable<BTL_WebNC.Models.Forum.ForumQuestionViewModel>
 
 @{
-    ViewData["Title"] = "Diễn đàn Hỏi đáp";
+    ViewData["Title"] = "Danh sách câu hỏi";
 }
 
-<form asp-action="Index" method="get" class="mb-4">
-    <div class="input-group">
-        <input type="text" name="searchQuery"
-               class="form-control form-control-lg"
-               placeholder="Tìm kiếm theo tên đề tài..."
-               value="@Model.SearchQuery" />
-        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-    </div>
-</form>
-
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>Danh sách Câu hỏi</h2>
-
-    @if (Model.ShowAskButton)
-    {
-        <a asp-action="Ask" class="btn btn-success btn-lg">
-            <i class="fas fa-plus-circle"></i> Đặt Câu hỏi Mới
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary mb-0">📌 Danh sách Câu hỏi</h2>
+        <a asp-controller="Forum" asp-action="Create" class="btn btn-success">
+            ➕ Thêm câu hỏi
         </a>
-    }
-</div>
+    </div>
 
-<div class="list-group">
-    @foreach (var item in Model.Questions)
-    {
-        <a asp-action="Details" asp-route-id="@item.Id" class="list-group-item list-group-item-action forum-item">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="forum-title-section">
-                    <h5 class="mb-1 text-primary">@item.Title</h5>
+    <input type="text" id="searchBox" class="form-control mb-3" placeholder="🔍 Tìm kiếm câu hỏi..." />
+
+    <div id="questionList" class="list-group">
+        @foreach (var q in Model)
+        {
+            <div class="list-group-item d-flex justify-content-between align-items-start py-3">
+                <!-- Left: title + author/time -->
+                <div class="flex-grow-1 me-3">
+                    <a asp-controller="Forum" asp-action="Details" asp-route-id="@q.QuestionId"
+                       class="h5 d-block text-primary mb-1 text-decoration-none">@q.Content</a>
+
                     <small class="text-muted">
-                        Bởi:
-                        <span class="fw-bold">@item.AuthorFullName</span>
-                        - @item.CreatedAt.ToString("MMM dd, yyyy")
+                        Đăng bởi: @q.AuthorName • @q.CreatedAt.ToString("dd/MM/yyyy HH:mm")
                     </small>
                 </div>
 
-                <div class="text-end reply-date-section">
-                    <div class="d-flex align-items-center justify-content-end">
-                        <span class="me-3">
-                            <i class="far fa-comment"></i> Replies:
-                            <span class="fw-bold fs-5 text-dark">@item.ReplyCount</span>
-                        </span>
-                        <span class="fw-bold text-info">
-                            @item.CreatedAt.ToString("MMM dd, yyyy")
-                        </span>
-                    </div>
+                <!-- Middle: replies count -->
+                <div class="mx-3 text-center" style="min-width:90px;">
+                    <div class="text-muted small">Replies</div>
+                    <div class="fw-bold">@q.ReplyCount</div>
+                </div>
+
+                <!-- Right: last reply -->
+                <div class="text-end" style="min-width:180px;">
+                    @if (!string.IsNullOrEmpty(q.LastReplyAuthor))
+                    {
+                        <div class="fw-bold">@q.LastReplyAuthor</div>
+                        <small class="text-muted">@q.LastReplyDate?.ToString("dd/MM/yyyy HH:mm")</small>
+                    }
+                    else
+                    {
+                        <small class="text-muted">Chưa có câu trả lời</small>
+                    }
                 </div>
             </div>
-        </a>
-    }
+        }
+    </div>
 </div>
 
-@if (!Model.Questions.Any())
-{
-    <p class="alert alert-info mt-3">Không tìm thấy câu hỏi nào phù hợp.</p>
-}
+<script>
+    window.addEventListener("DOMContentLoaded", function () {
+        const searchBox = document.getElementById("searchBox");
+        const items = document.querySelectorAll("#questionList .list-group-item");
+
+        searchBox.addEventListener("input", function () {
+            const value = this.value.trim().toLowerCase();
+
+            items.forEach(item => {
+                const titleElement = item.querySelector("a");
+                const title = titleElement ? titleElement.textContent.toLowerCase() : "";
+
+                if (title.includes(value)) {
+                    item.classList.remove("d-none"); // hiện item
+                } else {
+                    item.classList.add("d-none"); // ẩn item
+                }
+            });
+        });
+    });
+</script>

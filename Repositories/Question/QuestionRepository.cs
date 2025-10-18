@@ -1,6 +1,7 @@
 ﻿using BTL_WebNC.Models.Forum;
 using BTL_WebNC.Data;
 using BTL_WebNC.Models.Question;
+using BTL_WebNC.Models.Answer;
 using Microsoft.EntityFrameworkCore;
 
 namespace BTL_WebNC.Repositories
@@ -16,8 +17,9 @@ namespace BTL_WebNC.Repositories
 
         public async Task<IEnumerable<QuestionModel>> GetAllAsync()
         {
-            return await _context
-                .Questions.Include(q => q.Account)
+            return await _context.Questions
+                .Include(q => q.Account)
+                .Include(q => q.Answers).ThenInclude(a => a.Account)
                 .Where(q => !q.Deleted)
                 .OrderByDescending(q => q.CreatedAt)
                 .ToListAsync();
@@ -25,8 +27,9 @@ namespace BTL_WebNC.Repositories
 
         public async Task<QuestionModel> GetByIdAsync(int id)
         {
-            return await _context
-                .Questions.Include(q => q.Account)
+            return await _context.Questions
+                .Include(q => q.Account)
+                .Include(q => q.Answers).ThenInclude(a => a.Account)
                 .FirstOrDefaultAsync(q => q.Id == id && !q.Deleted);
         }
 
@@ -81,6 +84,48 @@ namespace BTL_WebNC.Repositories
                 .Where(q => q.Content.Contains(searchTerm) && !q.Deleted)
                 .OrderByDescending(q => q.CreatedAt)
                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<ForumQuestionViewModel>> GetForumQuestionsAsync()
+        {
+            return await _context.Questions
+                .Include(q => q.Account)
+                .Include(q => q.Answers)
+                    .ThenInclude(a => a.Account)
+                .Where(q => !q.Deleted)
+                .Select(q => new ForumQuestionViewModel
+                {
+                    QuestionId = q.Id,
+                    Content = q.Content,
+                    AuthorName = q.Account.Email,
+                    CreatedAt = q.CreatedAt,
+                    ReplyCount = q.Answers.Count(a => !a.Deleted),
+                    LastReplyAuthor = q.Answers
+                        .Where(a => !a.Deleted)
+                        .OrderByDescending(a => a.CreatedAt)
+                        .Select(a => a.Account.Email)
+                        .FirstOrDefault(),
+                    LastReplyDate = q.Answers
+                        .Where(a => !a.Deleted)
+                        .OrderByDescending(a => a.CreatedAt)
+                        .Select(a => (DateTime?)a.CreatedAt)
+                        .FirstOrDefault()
+                })
+                .OrderByDescending(q => q.CreatedAt)
+                .ToListAsync();
+        }
+        // Thêm câu hỏi
+        public async Task AddAsync(QuestionModel q)
+        {
+            _context.Questions.Add(q);
+            await _context.SaveChangesAsync();
+        }
+
+        // Thêm trả lời
+        public async Task AddAnswerAsync(AnswerModel ans)
+        {
+            _context.Answers.Add(ans);
+            await _context.SaveChangesAsync();
         }
 
     }

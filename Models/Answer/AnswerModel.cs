@@ -32,5 +32,6 @@ namespace BTL_WebNC.Models.Answer
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public bool Deleted { get; set; } = false;
+
     }
 }

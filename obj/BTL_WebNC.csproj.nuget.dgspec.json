@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\VSCode\\LtWebNC\\BTLChatDemo\\BTL_WebNC.csproj": {}
+    "D:\\VSCode\\LtWebNC\\BTL_WebNC\\BTL_WebNC.csproj": {}
   },
   "projects": {
-    "D:\\VSCode\\LtWebNC\\BTLChatDemo\\BTL_WebNC.csproj": {
+    "D:\\VSCode\\LtWebNC\\BTL_WebNC\\BTL_WebNC.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\VSCode\\LtWebNC\\BTLChatDemo\\BTL_WebNC.csproj",
+        "projectUniqueName": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\BTL_WebNC.csproj",
         "projectName": "BTL_WebNC",
-        "projectPath": "D:\\VSCode\\LtWebNC\\BTLChatDemo\\BTL_WebNC.csproj",
+        "projectPath": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\BTL_WebNC.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "D:\\VSCode\\LtWebNC\\BTLChatDemo\\obj\\",
+        "outputPath": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

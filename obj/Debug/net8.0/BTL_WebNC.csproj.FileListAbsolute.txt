@@ -339,7 +339,6 @@ D:\VSCode\LtWebNC\BTL_WebNC\obj\Debug\net8.0\refint\BTL_WebNC.dll
 D:\VSCode\LtWebNC\BTL_WebNC\obj\Debug\net8.0\BTL_WebNC.pdb
 D:\VSCode\LtWebNC\BTL_WebNC\obj\Debug\net8.0\BTL_WebNC.genruntimeconfig.cache
 D:\VSCode\LtWebNC\BTL_WebNC\obj\Debug\net8.0\ref\BTL_WebNC.dll
-D:\VSCode\LtWebNC\BTL_WebNC\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 D:\VSCode\LtWebNC\BTLChatDemo\bin\Debug\net8.0\appsettings.Development.json
 D:\VSCode\LtWebNC\BTLChatDemo\bin\Debug\net8.0\appsettings.json
 D:\VSCode\LtWebNC\BTLChatDemo\bin\Debug\net8.0\BTL_WebNC.staticwebassets.endpoints.json
