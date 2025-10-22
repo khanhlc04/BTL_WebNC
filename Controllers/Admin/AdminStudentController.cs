@@ -1,6 +1,6 @@
-using BTLChatDemo.Models.Account;
-using BTLChatDemo.Models.Student;
-using BTLChatDemo.Repositories;
+using BTL_WebNC.Models.Account;
+using BTL_WebNC.Models.Student;
+using BTL_WebNC.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BTL_WebNC.Controllers.Admin

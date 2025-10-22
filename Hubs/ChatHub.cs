@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.SignalR;
 using System.Collections.Concurrent;
 
-namespace BTLChatDemo.Hubs
+namespace BTL_WebNC.Hubs
 {
     public class ChatHub : Hub
     {

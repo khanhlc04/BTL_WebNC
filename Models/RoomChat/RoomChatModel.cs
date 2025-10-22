@@ -1,9 +1,9 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using BTLChatDemo.Models.Account;
+using BTL_WebNC.Models.Account;
 
-namespace BTLChatDemo.Models.RoomChat
+namespace BTL_WebNC.Models.RoomChat
 {
     [Table("RoomChat")]
     public class RoomChatModel

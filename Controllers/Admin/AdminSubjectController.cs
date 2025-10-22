@@ -1,5 +1,5 @@
-using BTLChatDemo.Models.Subject;
-using BTLChatDemo.Repositories;
+using BTL_WebNC.Models.Subject;
+using BTL_WebNC.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BTL_WebNC.Controllers.Admin

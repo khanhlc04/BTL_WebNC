@@ -1,10 +1,10 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using BTLChatDemo.Models.Account;
-using BTLChatDemo.Models.Question;
+using BTL_WebNC.Models.Account;
+using BTL_WebNC.Models.Question;
 
-namespace BTLChatDemo.Models.Answer
+namespace BTL_WebNC.Models.Answer
 {
     [Table("Answer")]
     public class AnswerModel

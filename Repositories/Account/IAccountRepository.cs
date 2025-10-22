@@ -1,6 +1,6 @@
-using BTLChatDemo.Models.Account;
+using BTL_WebNC.Models.Account;
 
-namespace BTLChatDemo.Repositories
+namespace BTL_WebNC.Repositories
 {
     public interface IAccountRepository
     {

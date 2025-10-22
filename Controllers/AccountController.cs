@@ -1,11 +1,11 @@
 using System.Security.Claims;
-using BTLChatDemo.Models.Account;
-using BTLChatDemo.Repositories;
+using BTL_WebNC.Models.Account;
+using BTL_WebNC.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BTLChatDemo.Controllers
+namespace BTL_WebNC.Controllers
 {
     public class AccountController : Controller
     {

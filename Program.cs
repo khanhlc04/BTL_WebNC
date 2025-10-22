@@ -1,6 +1,6 @@
-using BTLChatDemo.Data;
-using BTLChatDemo.Extensions;
-using BTLChatDemo.Hubs;
+using BTL_WebNC.Data;
+using BTL_WebNC.Extensions;
+using BTL_WebNC.Hubs;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 

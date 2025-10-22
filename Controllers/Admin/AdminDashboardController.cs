@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace BTLChatDemo.Controllers.Admin
+namespace BTL_WebNC.Controllers.Admin
 {
     public class AdminDashboardController : Controller
     {

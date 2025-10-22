@@ -1,6 +1,6 @@
-using BTLChatDemo.Models.Document;
+using BTL_WebNC.Models.Document;
 
-namespace BTLChatDemo.Repositories
+namespace BTL_WebNC.Repositories
 {
     public interface IDocumentRepository
     {
