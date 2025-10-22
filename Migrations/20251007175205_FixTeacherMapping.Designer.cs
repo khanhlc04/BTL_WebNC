@@ -25,7 +25,7 @@ namespace BTL_WebNC.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("BTLChatDemo.Models.Account.AccountModel", b =>
+            modelBuilder.Entity("BTL_WebNC.Models.Account.AccountModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -53,7 +53,7 @@ namespace BTL_WebNC.Migrations
                     b.ToTable("Account");
                 });
 
-            modelBuilder.Entity("BTLChatDemo.Models.Answer.AnswerModel", b =>
+            modelBuilder.Entity("BTL_WebNC.Models.Answer.AnswerModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -87,7 +87,7 @@ namespace BTL_WebNC.Migrations
                     b.ToTable("Answer");
                 });
 
-            modelBuilder.Entity("BTLChatDemo.Models.Chat.ChatModel", b =>
+            modelBuilder.Entity("BTL_WebNC.Models.Chat.ChatModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -121,7 +121,7 @@ namespace BTL_WebNC.Migrations
                     b.ToTable("Chat");
                 });
 
-            modelBuilder.Entity("BTLChatDemo.Models.Document.DocumentModel", b =>
+            modelBuilder.Entity("BTL_WebNC.Models.Document.DocumentModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -156,7 +156,7 @@ namespace BTL_WebNC.Migrations
                     b.ToTable("Document");
                 });
 
-            modelBuilder.Entity("BTLChatDemo.Models.Question.QuestionModel", b =>
+            modelBuilder.Entity("BTL_WebNC.Models.Question.QuestionModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -185,7 +185,7 @@ namespace BTL_WebNC.Migrations
                     b.ToTable("Question");
                 });
 
-            modelBuilder.Entity("BTLChatDemo.Models.RoomChat.RoomChatModel", b =>
+            modelBuilder.Entity("BTL_WebNC.Models.RoomChat.RoomChatModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -212,7 +212,7 @@ namespace BTL_WebNC.Migrations
                     b.ToTable("RoomChat");
                 });
 
-            modelBuilder.Entity("BTLChatDemo.Models.Student.StudentModel", b =>
+            modelBuilder.Entity("BTL_WebNC.Models.Student.StudentModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -251,7 +251,7 @@ namespace BTL_WebNC.Migrations
                     b.ToTable("Student");
                 });
 
-            modelBuilder.Entity("BTLChatDemo.Models.Subject.SubjectModel", b =>
+            modelBuilder.Entity("BTL_WebNC.Models.Subject.SubjectModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -277,7 +277,7 @@ namespace BTL_WebNC.Migrations
                     b.ToTable("Subject");
                 });
 
-            modelBuilder.Entity("BTLChatDemo.Models.Teacher.TeacherModel", b =>
+            modelBuilder.Entity("BTL_WebNC.Models.Teacher.TeacherModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -308,7 +308,7 @@ namespace BTL_WebNC.Migrations
                     b.ToTable("Teacher");
                 });
 
-            modelBuilder.Entity("BTLChatDemo.Models.TeacherSubject.TeacherSubjectModel", b =>
+            modelBuilder.Entity("BTL_WebNC.Models.TeacherSubject.TeacherSubjectModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -334,15 +334,15 @@ namespace BTL_WebNC.Migrations
                     b.ToTable("TeacherSubject");
                 });
 
-            modelBuilder.Entity("BTLChatDemo.Models.Answer.AnswerModel", b =>
+            modelBuilder.Entity("BTL_WebNC.Models.Answer.AnswerModel", b =>
                 {
-                    b.HasOne("BTLChatDemo.Models.Account.AccountModel", "Account")
+                    b.HasOne("BTL_WebNC.Models.Account.AccountModel", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("BTLChatDemo.Models.Question.QuestionModel", "Question")
+                    b.HasOne("BTL_WebNC.Models.Question.QuestionModel", "Question")
                         .WithMany()
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -353,15 +353,15 @@ namespace BTL_WebNC.Migrations
                     b.Navigation("Question");
                 });
 
-            modelBuilder.Entity("BTLChatDemo.Models.Chat.ChatModel", b =>
+            modelBuilder.Entity("BTL_WebNC.Models.Chat.ChatModel", b =>
                 {
-                    b.HasOne("BTLChatDemo.Models.Account.AccountModel", "Receiver")
+                    b.HasOne("BTL_WebNC.Models.Account.AccountModel", "Receiver")
                         .WithMany()
                         .HasForeignKey("ReceiverId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("BTLChatDemo.Models.Account.AccountModel", "Sender")
+                    b.HasOne("BTL_WebNC.Models.Account.AccountModel", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -372,9 +372,9 @@ namespace BTL_WebNC.Migrations
                     b.Navigation("Sender");
                 });
 
-            modelBuilder.Entity("BTLChatDemo.Models.Document.DocumentModel", b =>
+            modelBuilder.Entity("BTL_WebNC.Models.Document.DocumentModel", b =>
                 {
-                    b.HasOne("BTLChatDemo.Models.Subject.SubjectModel", "Subject")
+                    b.HasOne("BTL_WebNC.Models.Subject.SubjectModel", "Subject")
                         .WithMany()
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -383,9 +383,9 @@ namespace BTL_WebNC.Migrations
                     b.Navigation("Subject");
                 });
 
-            modelBuilder.Entity("BTLChatDemo.Models.Question.QuestionModel", b =>
+            modelBuilder.Entity("BTL_WebNC.Models.Question.QuestionModel", b =>
                 {
-                    b.HasOne("BTLChatDemo.Models.Account.AccountModel", "Account")
+                    b.HasOne("BTL_WebNC.Models.Account.AccountModel", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -394,15 +394,15 @@ namespace BTL_WebNC.Migrations
                     b.Navigation("Account");
                 });
 
-            modelBuilder.Entity("BTLChatDemo.Models.RoomChat.RoomChatModel", b =>
+            modelBuilder.Entity("BTL_WebNC.Models.RoomChat.RoomChatModel", b =>
                 {
-                    b.HasOne("BTLChatDemo.Models.Account.AccountModel", "Student")
+                    b.HasOne("BTL_WebNC.Models.Account.AccountModel", "Student")
                         .WithMany()
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("BTLChatDemo.Models.Account.AccountModel", "Teacher")
+                    b.HasOne("BTL_WebNC.Models.Account.AccountModel", "Teacher")
                         .WithMany()
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -413,9 +413,9 @@ namespace BTL_WebNC.Migrations
                     b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("BTLChatDemo.Models.Student.StudentModel", b =>
+            modelBuilder.Entity("BTL_WebNC.Models.Student.StudentModel", b =>
                 {
-                    b.HasOne("BTLChatDemo.Models.Account.AccountModel", "Account")
+                    b.HasOne("BTL_WebNC.Models.Account.AccountModel", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -424,9 +424,9 @@ namespace BTL_WebNC.Migrations
                     b.Navigation("Account");
                 });
 
-            modelBuilder.Entity("BTLChatDemo.Models.Teacher.TeacherModel", b =>
+            modelBuilder.Entity("BTL_WebNC.Models.Teacher.TeacherModel", b =>
                 {
-                    b.HasOne("BTLChatDemo.Models.Account.AccountModel", "Account")
+                    b.HasOne("BTL_WebNC.Models.Account.AccountModel", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -435,15 +435,15 @@ namespace BTL_WebNC.Migrations
                     b.Navigation("Account");
                 });
 
-            modelBuilder.Entity("BTLChatDemo.Models.TeacherSubject.TeacherSubjectModel", b =>
+            modelBuilder.Entity("BTL_WebNC.Models.TeacherSubject.TeacherSubjectModel", b =>
                 {
-                    b.HasOne("BTLChatDemo.Models.Subject.SubjectModel", "Subject")
+                    b.HasOne("BTL_WebNC.Models.Subject.SubjectModel", "Subject")
                         .WithMany()
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BTLChatDemo.Models.Teacher.TeacherModel", "Teacher")
+                    b.HasOne("BTL_WebNC.Models.Teacher.TeacherModel", "Teacher")
                         .WithMany("TeacherSubjects")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -454,7 +454,7 @@ namespace BTL_WebNC.Migrations
                     b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("BTLChatDemo.Models.Teacher.TeacherModel", b =>
+            modelBuilder.Entity("BTL_WebNC.Models.Teacher.TeacherModel", b =>
                 {
                     b.Navigation("TeacherSubjects");
                 });
