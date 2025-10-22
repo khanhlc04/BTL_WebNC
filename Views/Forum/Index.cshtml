@@ -1,0 +1,74 @@
+﻿@model IEnumerable<BTL_WebNC.Models.Forum.ForumQuestionViewModel>
+
+@{
+    ViewData["Title"] = "Danh sách câu hỏi";
+}
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary mb-0">📌 Danh sách Câu hỏi</h2>
+        <a asp-controller="Forum" asp-action="Create" class="btn btn-success">
+            ➕ Thêm câu hỏi
+        </a>
+    </div>
+
+    <input type="text" id="searchBox" class="form-control mb-3" placeholder="🔍 Tìm kiếm câu hỏi..." />
+
+    <div id="questionList" class="list-group">
+        @foreach (var q in Model)
+        {
+            <div class="list-group-item d-flex justify-content-between align-items-start py-3">
+                <!-- Left: title + author/time -->
+                <div class="flex-grow-1 me-3">
+                    <a asp-controller="Forum" asp-action="Details" asp-route-id="@q.QuestionId"
+                       class="h5 d-block text-primary mb-1 text-decoration-none">@q.Content</a>
+
+                    <small class="text-muted">
+                        Đăng bởi: @q.AuthorName • @q.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                    </small>
+                </div>
+
+                <!-- Middle: replies count -->
+                <div class="mx-3 text-center" style="min-width:90px;">
+                    <div class="text-muted small">Replies</div>
+                    <div class="fw-bold">@q.ReplyCount</div>
+                </div>
+
+                <!-- Right: last reply -->
+                <div class="text-end" style="min-width:180px;">
+                    @if (!string.IsNullOrEmpty(q.LastReplyAuthor))
+                    {
+                        <div class="fw-bold">@q.LastReplyAuthor</div>
+                        <small class="text-muted">@q.LastReplyDate?.ToString("dd/MM/yyyy HH:mm")</small>
+                    }
+                    else
+                    {
+                        <small class="text-muted">Chưa có câu trả lời</small>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    window.addEventListener("DOMContentLoaded", function () {
+        const searchBox = document.getElementById("searchBox");
+        const items = document.querySelectorAll("#questionList .list-group-item");
+
+        searchBox.addEventListener("input", function () {
+            const value = this.value.trim().toLowerCase();
+
+            items.forEach(item => {
+                const titleElement = item.querySelector("a");
+                const title = titleElement ? titleElement.textContent.toLowerCase() : "";
+
+                if (title.includes(value)) {
+                    item.classList.remove("d-none"); // hiện item
+                } else {
+                    item.classList.add("d-none"); // ẩn item
+                }
+            });
+        });
+    });
+</script>

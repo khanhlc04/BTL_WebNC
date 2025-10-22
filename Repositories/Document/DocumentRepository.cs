@@ -1,5 +1,6 @@
 using BTL_WebNC.Data;
 using BTL_WebNC.Models.Document;
+using BTL_WebNC.Models.Subject;
 using Microsoft.EntityFrameworkCore;
 
 namespace BTL_WebNC.Repositories
@@ -15,7 +16,10 @@ namespace BTL_WebNC.Repositories
 
         public async Task<IEnumerable<DocumentModel>> GetAllAsync()
         {
-            return await _context.Documents.Where(d => !d.Deleted).OrderBy(d => d.Title).ToListAsync();
+            return await _context
+                .Documents.Where(d => !d.Deleted)
+                .OrderBy(d => d.Title)
+                .ToListAsync();
         }
 
         public async Task<DocumentModel?> GetByIdAsync(int id)
@@ -59,6 +63,11 @@ namespace BTL_WebNC.Repositories
                 .Documents.Where(d => d.Title.Contains(searchTerm) && !d.Deleted)
                 .OrderBy(d => d.Title)
                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<SubjectModel>> GetSubjectsAsync()
+        {
+            return await _context.Subjects.OrderBy(s => s.Name).ToListAsync();
         }
     }
 }

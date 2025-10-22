@@ -2,6 +2,7 @@ using BTL_WebNC.Models.Account;
 using BTL_WebNC.Models.Answer;
 using BTL_WebNC.Models.Chat;
 using BTL_WebNC.Models.Document;
+using BTL_WebNC.Models.Forum;
 using BTL_WebNC.Models.Question;
 using BTL_WebNC.Models.RoomChat;
 using BTL_WebNC.Models.Student;
@@ -57,11 +58,18 @@ namespace BTL_WebNC.Data
                 .HasForeignKey(q => q.AccountId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder
+                .Entity<QuestionModel>()
+                .HasMany(q => q.Answers)
+                .WithOne(a => a.Question)
+                .HasForeignKey(a => a.QuestionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             // Configure relationships for Answer
             modelBuilder
                 .Entity<AnswerModel>()
                 .HasOne(a => a.Question)
-                .WithMany()
+                .WithMany(q => q.Answers)
                 .HasForeignKey(a => a.QuestionId)
                 .OnDelete(DeleteBehavior.Cascade);
 

@@ -1,4 +1,5 @@
 using BTL_WebNC.Models.Document;
+using BTL_WebNC.Models.Subject;
 
 namespace BTL_WebNC.Repositories
 {
@@ -11,5 +12,6 @@ namespace BTL_WebNC.Repositories
         Task<bool> DeleteAsync(int id);
         Task<bool> ExistsAsync(int id);
         Task<IEnumerable<DocumentModel>> SearchAsync(string searchTerm);
+        Task<IEnumerable<SubjectModel>> GetSubjectsAsync();
     }
 }
