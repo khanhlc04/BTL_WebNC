@@ -1,0 +1,79 @@
+@model IEnumerable<BTLChatDemo.Models.Subject.SubjectModel>
+
+@{
+    ViewData["Title"] = "Danh sách môn học";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentSort = ViewData["CurrentSort"] as string;
+}
+
+<style>
+    .toolbar-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 20px;
+    }
+    .controls-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .control-row {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 8px;
+    }
+</style>
+
+<h2>Danh sách môn học</h2>
+
+<form asp-action="Index" method="get">
+    <div class="toolbar-container">
+        <div class="controls-stack">
+
+            <div class="control-row">
+                <span>Tìm kiếm:</span>
+                <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control d-inline-block w-auto" />
+                <input type="submit" value="Lọc" class="btn btn-primary" />
+            </div>
+
+            <div class="control-row">
+                <span>Sắp xếp theo:</span>
+                <select name="sortOrder" class="form-select d-inline-block w-auto" onchange="this.form.submit()">
+                    <option value="name_asc"  selected="@(currentSort == "name_asc" || string.IsNullOrEmpty(currentSort))">Tên A-Z</option>
+                    <option value="name_desc" selected="@(currentSort == "name_desc")">Tên Z-A</option>
+                    <option value="id_asc"    selected="@(currentSort == "id_asc")">ID Tăng dần</option>
+                    <option value="id_desc"   selected="@(currentSort == "id_desc")">ID Giảm dần</option>
+                </select>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên môn học</th>
+            <th>Mô tả</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>@item.Description</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr><td colspan="3" class="text-center">Không có dữ liệu phù hợp.</td></tr>
+        }
+    </tbody>
+</table>
