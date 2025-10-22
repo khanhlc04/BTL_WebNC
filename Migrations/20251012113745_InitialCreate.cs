@@ -27,19 +27,18 @@ namespace BTL_WebNC.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Document",
+                name: "Subject",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    ThumbnailUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    FileUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     Deleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Document", x => x.Id);
+                    table.PrimaryKey("PK_Subject", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -166,6 +165,29 @@ namespace BTL_WebNC.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Document",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    ThumbnailUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    FileUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SubjectId = table.Column<int>(type: "int", nullable: false),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Document", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Document_Subject_SubjectId",
+                        column: x => x.SubjectId,
+                        principalTable: "Subject",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Answer",
                 columns: table => new
                 {
@@ -190,6 +212,33 @@ namespace BTL_WebNC.Migrations
                         name: "FK_Answer_Question_QuestionId",
                         column: x => x.QuestionId,
                         principalTable: "Question",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TeacherSubject",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TeacherId = table.Column<int>(type: "int", nullable: false),
+                    SubjectId = table.Column<int>(type: "int", nullable: false),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TeacherSubject", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TeacherSubject_Subject_SubjectId",
+                        column: x => x.SubjectId,
+                        principalTable: "Subject",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TeacherSubject_Teacher_TeacherId",
+                        column: x => x.TeacherId,
+                        principalTable: "Teacher",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -219,6 +268,11 @@ namespace BTL_WebNC.Migrations
                 name: "IX_Chat_SenderId",
                 table: "Chat",
                 column: "SenderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Document_SubjectId",
+                table: "Document",
+                column: "SubjectId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Question_AccountId",
@@ -253,6 +307,16 @@ namespace BTL_WebNC.Migrations
                 table: "Teacher",
                 column: "AccountId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeacherSubject_SubjectId",
+                table: "TeacherSubject",
+                column: "SubjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeacherSubject_TeacherId",
+                table: "TeacherSubject",
+                column: "TeacherId");
         }
 
         /// <inheritdoc />
@@ -274,10 +338,16 @@ namespace BTL_WebNC.Migrations
                 name: "Student");
 
             migrationBuilder.DropTable(
-                name: "Teacher");
+                name: "TeacherSubject");
 
             migrationBuilder.DropTable(
                 name: "Question");
+
+            migrationBuilder.DropTable(
+                name: "Subject");
+
+            migrationBuilder.DropTable(
+                name: "Teacher");
 
             migrationBuilder.DropTable(
                 name: "Account");

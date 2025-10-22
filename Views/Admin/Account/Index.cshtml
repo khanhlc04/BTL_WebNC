@@ -1,0 +1,36 @@
+@{
+  ViewData["Title"] = "Quản lý tài khoản";
+  Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<h2>Quản lý tài khoản</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Email</th>
+      <th>Thao tác</th>
+    </tr>
+  </thead>
+  <tbody>
+    @if (Model != null)
+    {
+      foreach (var item in Model)
+      {
+        <tr>
+          <td>@item.Id</td>
+          <td>@item.Email</td>
+          <td>
+            <a asp-controller="AdminAccount" asp-action="DeleteAccount" asp-route-id="@item.Id"
+              class="btn btn-sm btn-danger">Xóa</a>
+          </td>
+        </tr>
+      }
+    }
+    else
+    {
+      <tr>
+        <td colspan="5">Không có dữ liệu</td>
+      </tr>
+    }
+  </tbody>
+</table>

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BTL_WebNC.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251007163647_AddDocumentTable")]
-    partial class AddDocumentTable
+    [Migration("20251012113745_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -443,8 +443,8 @@ namespace BTL_WebNC.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BTLChatDemo.Models.Account.AccountModel", "Teacher")
-                        .WithMany()
+                    b.HasOne("BTLChatDemo.Models.Teacher.TeacherModel", "Teacher")
+                        .WithMany("TeacherSubjects")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -452,6 +452,11 @@ namespace BTL_WebNC.Migrations
                     b.Navigation("Subject");
 
                     b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("BTLChatDemo.Models.Teacher.TeacherModel", b =>
+                {
+                    b.Navigation("TeacherSubjects");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,0 +1,21 @@
+@{
+  ViewData["Title"] = "Thêm câu trả lời";
+  Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<h2>Thêm câu trả lời mới</h2>
+<form method="post" asp-controller="AdminAnswer" asp-action="CreateAnswer">
+  <div class="mb-3">
+    <label for="Content" class="form-label">Nội dung câu trả lời</label>
+    <textarea class="form-control" id="Content" name="Content" required></textarea>
+  </div>
+  <div class="mb-3">
+    <label for="QuestionId" class="form-label">Câu hỏi (ID)</label>
+    <input type="number" class="form-control" id="QuestionId" name="QuestionId" required />
+  </div>
+  <div class="mb-3">
+    <label for="UserId" class="form-label">Người trả lời (ID)</label>
+    <input type="number" class="form-control" id="UserId" name="UserId" required />
+  </div>
+  <button type="submit" class="btn btn-success">Tạo mới</button>
+  <a asp-controller="AdminAnswer" asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</form>

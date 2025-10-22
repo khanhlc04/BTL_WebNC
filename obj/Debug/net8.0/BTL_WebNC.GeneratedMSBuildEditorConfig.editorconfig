@@ -30,6 +30,30 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Web NC/BTL_WebNC/Views/Admin/Account/DeleteAccount.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQWNjb3VudFxEZWxldGVBY2NvdW50LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Account/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQWNjb3VudFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Answer/CreateAnswer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQW5zd2VyXENyZWF0ZUFuc3dlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Answer/DeleteAnswer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQW5zd2VyXERlbGV0ZUFuc3dlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Answer/EditAnswer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQW5zd2VyXEVkaXRBbnN3ZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web NC/BTL_WebNC/Views/Admin/Answer/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQW5zd2VyXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Web NC/BTL_WebNC/Views/Admin/Dashboard/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRGFzaGJvYXJkXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
