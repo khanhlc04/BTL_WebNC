@@ -3,16 +3,44 @@
   "WorkspaceRootPath": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|d:\\vscode\\ltwebnc\\btl_webnc\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|solutionrelative:controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|d:\\vscode\\ltwebnc\\btl_webnc\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|solutionrelative:controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|d:\\vscode\\ltwebnc\\btl_webnc\\views\\forum\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|solutionrelative:views\\forum\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|d:\\vscode\\ltwebnc\\btl_webnc\\controllers\\forum\\forumcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|solutionrelative:controllers\\forum\\forumcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|d:\\vscode\\ltwebnc\\btl_webnc\\views\\forum\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|solutionrelative:views\\forum\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|d:\\vscode\\ltwebnc\\btl_webnc\\controllers\\forum\\forumcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|solutionrelative:controllers\\forum\\forumcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|d:\\vscode\\ltwebnc\\btl_webnc\\views\\forum\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|solutionrelative:views\\forum\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|d:\\vscode\\ltwebnc\\btl_webnc\\controllers\\document\\studentdocumentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|solutionrelative:controllers\\document\\studentdocumentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|d:\\vscode\\ltwebnc\\btl_webnc\\controllers\\admin\\adminteachercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|solutionrelative:controllers\\admin\\adminteachercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|d:\\vscode\\ltwebnc\\btl_webnc\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|d:\\vscode\\ltwebnc\\btl_webnc\\models\\forum\\forumquestionviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|solutionrelative:models\\forum\\forumquestionviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|d:\\vscode\\ltwebnc\\btl_webnc\\models\\forum\\forumquestion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -29,10 +57,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|d:\\vscode\\ltwebnc\\btl_webnc\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|solutionrelative:data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|d:\\vscode\\ltwebnc\\btl_webnc\\models\\forum\\forumquestionviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{20507FAD-91F5-2E55-53CE-DAB78F3468C4}|BTL_WebNC.csproj|solutionrelative:models\\forum\\forumquestionviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,8 +66,49 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ForumController.cs",
+              "DocumentMoniker": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Controllers\\Forum\\ForumController.cs",
+              "RelativeDocumentMoniker": "Controllers\\Forum\\ForumController.cs",
+              "ToolTip": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Controllers\\Forum\\ForumController.cs",
+              "RelativeToolTip": "Controllers\\Forum\\ForumController.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAQwCQAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-18T07:53:00.817Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Views\\Forum\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Forum\\Index.cshtml",
+              "ToolTip": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Views\\Forum\\Index.cshtml",
+              "RelativeToolTip": "Views\\Forum\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-18T07:08:18.173Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
+              "ToolTip": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-18T16:03:32.033Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
@@ -54,35 +119,59 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ForumController.cs",
-              "DocumentMoniker": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Controllers\\Forum\\ForumController.cs",
-              "RelativeDocumentMoniker": "Controllers\\Forum\\ForumController.cs",
-              "ToolTip": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Controllers\\Forum\\ForumController.cs",
-              "RelativeToolTip": "Controllers\\Forum\\ForumController.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAqwC0AAAAFAAAAAAAAAA==",
+              "DocumentIndex": 7,
+              "Title": "AdminTeacherController.cs",
+              "DocumentMoniker": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Controllers\\Admin\\AdminTeacherController.cs",
+              "RelativeDocumentMoniker": "Controllers\\Admin\\AdminTeacherController.cs",
+              "ToolTip": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Controllers\\Admin\\AdminTeacherController.cs",
+              "RelativeToolTip": "Controllers\\Admin\\AdminTeacherController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-18T07:53:00.817Z",
-              "IsPinned": true,
+              "WhenOpened": "2025-10-18T15:46:35.064Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Views\\Forum\\Index.cshtml",
-              "RelativeDocumentMoniker": "Views\\Forum\\Index.cshtml",
-              "ToolTip": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Views\\Forum\\Index.cshtml",
-              "RelativeToolTip": "Views\\Forum\\Index.cshtml",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAACgAAABNAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-10-18T07:08:18.173Z",
-              "IsPinned": true,
+              "DocumentIndex": 1,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AccountController.cs",
+              "ToolTip": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "Controllers\\AccountController.cs",
+              "ViewState": "AgIAAFAAAAAAAAAAAAAgwGoAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-18T15:46:11.042Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAAADUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-18T15:43:59.434Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Views\\Forum\\Create.cshtml",
+              "RelativeDocumentMoniker": "Views\\Forum\\Create.cshtml",
+              "ToolTip": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Views\\Forum\\Create.cshtml",
+              "RelativeToolTip": "Views\\Forum\\Create.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-18T15:41:08.427Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
               "Title": "QuestionRepository.cs",
               "DocumentMoniker": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Repositories\\Question\\QuestionRepository.cs",
               "RelativeDocumentMoniker": "Repositories\\Question\\QuestionRepository.cs",
@@ -90,12 +179,11 @@
               "RelativeToolTip": "Repositories\\Question\\QuestionRepository.cs",
               "ViewState": "AgIAAGcAAAAAAAAAAAAAwH8AAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-18T08:22:52.614Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-18T08:22:52.614Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 13,
               "Title": "AppDbContext.cs",
               "DocumentMoniker": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Data\\AppDbContext.cs",
               "RelativeDocumentMoniker": "Data\\AppDbContext.cs",
@@ -103,12 +191,37 @@
               "RelativeToolTip": "Data\\AppDbContext.cs",
               "ViewState": "AgIAABkAAAAAAAAAAAAowC8AAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-18T08:21:53.737Z",
+              "WhenOpened": "2025-10-18T08:21:53.737Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Details.cshtml",
+              "DocumentMoniker": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Views\\Forum\\Details.cshtml",
+              "RelativeDocumentMoniker": "Views\\Forum\\Details.cshtml",
+              "ToolTip": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Views\\Forum\\Details.cshtml",
+              "RelativeToolTip": "Views\\Forum\\Details.cshtml",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAADMAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-18T07:53:43.996Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
+              "Title": "StudentDocumentController.cs",
+              "DocumentMoniker": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Controllers\\Document\\StudentDocumentController.cs",
+              "RelativeDocumentMoniker": "Controllers\\Document\\StudentDocumentController.cs",
+              "ToolTip": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Controllers\\Document\\StudentDocumentController.cs",
+              "RelativeToolTip": "Controllers\\Document\\StudentDocumentController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-18T15:46:36.461Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
               "Title": "ForumQuestion.cs",
               "DocumentMoniker": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Models\\Forum\\ForumQuestion.cs",
               "RelativeDocumentMoniker": "Models\\Forum\\ForumQuestion.cs",
@@ -116,12 +229,11 @@
               "RelativeToolTip": "Models\\Forum\\ForumQuestion.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-18T08:21:37.724Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-18T08:21:37.724Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 11,
               "Title": "IQuestionRepository.cs",
               "DocumentMoniker": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Repositories\\Question\\IQuestionRepository.cs",
               "RelativeDocumentMoniker": "Repositories\\Question\\IQuestionRepository.cs",
@@ -129,33 +241,19 @@
               "RelativeToolTip": "Repositories\\Question\\IQuestionRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-18T08:01:04.006Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-18T08:01:04.006Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "ForumQuestionViewModel.cs",
               "DocumentMoniker": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Models\\Forum\\ForumQuestionViewModel.cs",
               "RelativeDocumentMoniker": "Models\\Forum\\ForumQuestionViewModel.cs",
               "ToolTip": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Models\\Forum\\ForumQuestionViewModel.cs",
               "RelativeToolTip": "Models\\Forum\\ForumQuestionViewModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-18T08:00:04.981Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Details.cshtml",
-              "DocumentMoniker": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Views\\Forum\\Details.cshtml",
-              "RelativeDocumentMoniker": "Views\\Forum\\Details.cshtml",
-              "ToolTip": "D:\\VSCode\\LtWebNC\\BTL_WebNC\\Views\\Forum\\Details.cshtml",
-              "RelativeToolTip": "Views\\Forum\\Details.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACAAAAAOAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-10-18T07:53:43.996Z",
               "EditorCaption": ""
             }
           ]

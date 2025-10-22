@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using BTL_WebNC.Models.Question;
 using BTL_WebNC.Models.Answer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace BTL_WebNC.Controllers.Forum
@@ -9,10 +10,12 @@ namespace BTL_WebNC.Controllers.Forum
     public class ForumController : Controller
     {
         private readonly IQuestionRepository _questionRepo;
+        private readonly IAnswerRepository _answerRepo;
 
-        public ForumController(IQuestionRepository questionRepo)
+        public ForumController(IQuestionRepository questionRepo, IAnswerRepository answerRepo)
         {
             _questionRepo = questionRepo;
+            _answerRepo = answerRepo;
         }
 
         public async Task<IActionResult> Index()
@@ -35,35 +38,49 @@ namespace BTL_WebNC.Controllers.Forum
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(QuestionModel model)
+        public async Task<IActionResult> Create(string Content)
         {
-            if (ModelState.IsValid)
+            if (string.IsNullOrWhiteSpace(Content))
             {
-                // giả sử lấy AccountId = 1 (cần thay bằng user đang login)
-                model.AccountId = 1;
-                await _questionRepo.AddAsync(model);
-                return RedirectToAction("Index");
+                ModelState.AddModelError("", "Nội dung câu hỏi không được để trống");
+                return View();
             }
-            return View(model);
+
+            var userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value);
+
+            var question = new QuestionModel
+            {
+                Content = Content,
+                AccountId = userId,
+                CreatedAt = DateTime.Now
+            };
+
+            await _questionRepo.CreateAsync(question);
+            return RedirectToAction("Index");
         }
 
         // Thêm câu trả lời
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddReply(int QuestionId, string Content)
         {
             if (string.IsNullOrWhiteSpace(Content))
             {
+                TempData["Error"] = "Nội dung trả lời không được để trống!";
                 return RedirectToAction("Details", new { id = QuestionId });
             }
 
-            var ans = new AnswerModel
+            var userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value);
+
+            var answer = new AnswerModel
             {
                 QuestionId = QuestionId,
                 Content = Content,
-                AccountId = 1 // TODO: lấy account từ login
+                AccountId = userId,
+                CreatedAt = DateTime.Now
             };
 
-            await _questionRepo.AddAnswerAsync(ans);
+            await _answerRepo.CreateAsync(answer);
 
             return RedirectToAction("Details", new { id = QuestionId });
         }
