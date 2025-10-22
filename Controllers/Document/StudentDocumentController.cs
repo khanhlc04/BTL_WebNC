@@ -1,19 +1,19 @@
-﻿using BTL_WebNC.Models.Document;
+﻿using System.Net.Http;
+using BTL_WebNC.Models.Document;
 using BTL_WebNC.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Http;
-
 
 namespace BTL_WebNC.Controllers.Document
 {
     public class StudentDocumentController : Controller
     {
-
         private readonly IDocumentRepository _documentRepo;
+
         public StudentDocumentController(IDocumentRepository documentRepo)
         {
             _documentRepo = documentRepo;
         }
+
         //public async Task<IActionResult> Index()
         //{
         //    var documents = await _documentRepo.GetAllAsync() ?? new List<DocumentModel>(); ;
@@ -21,14 +21,15 @@ namespace BTL_WebNC.Controllers.Document
         //    return View("~/Views/Document/Document.cshtml", documents);
         //}
 
-
         public async Task<IActionResult> Index(string searchTerm, List<int>? subjectIds)
         {
             var documents = await _documentRepo.GetAllAsync();
 
             if (!string.IsNullOrEmpty(searchTerm))
             {
-                documents = documents.Where(d => d.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
+                documents = documents.Where(d =>
+                    d.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+                );
             }
 
             if (subjectIds != null && subjectIds.Any())
@@ -45,6 +46,7 @@ namespace BTL_WebNC.Controllers.Document
 
             return View("~/Views/Document/Document.cshtml", documents);
         }
+
         public async Task<IActionResult> Download(int id)
         {
             var document = await _documentRepo.GetByIdAsync(id);
@@ -57,7 +59,10 @@ namespace BTL_WebNC.Controllers.Document
                 using (var httpClient = new HttpClient())
                 {
                     var fileBytes = await httpClient.GetByteArrayAsync(document.FileUrl);
-                    var safeTitle = string.Join("_", document.Title.Split(Path.GetInvalidFileNameChars()));
+                    var safeTitle = string.Join(
+                        "_",
+                        document.Title.Split(Path.GetInvalidFileNameChars())
+                    );
                     var fileName = $"{safeTitle}.pdf";
 
                     return File(fileBytes, "application/pdf", fileName);
@@ -67,4 +72,3 @@ namespace BTL_WebNC.Controllers.Document
         }
     }
 }
-
