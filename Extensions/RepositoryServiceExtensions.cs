@@ -1,7 +1,7 @@
-using BTLChatDemo.Repositories;
+using BTL_WebNC.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BTLChatDemo.Extensions
+namespace BTL_WebNC.Extensions
 {
     public static class RepositoryServiceExtensions
     {

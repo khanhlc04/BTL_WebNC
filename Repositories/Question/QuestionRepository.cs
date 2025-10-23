@@ -1,8 +1,8 @@
-using BTLChatDemo.Data;
-using BTLChatDemo.Models.Question;
+using BTL_WebNC.Data;
+using BTL_WebNC.Models.Question;
 using Microsoft.EntityFrameworkCore;
 
-namespace BTLChatDemo.Repositories
+namespace BTL_WebNC.Repositories
 {
     public class QuestionRepository : IQuestionRepository
     {

@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BTLChatDemo.Models.Account
+namespace BTL_WebNC.Models.Account
 {
     [Table("Account")]
     public class AccountModel

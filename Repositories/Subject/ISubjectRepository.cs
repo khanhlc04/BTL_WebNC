@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using BTLChatDemo.Models.Subject;
+using BTL_WebNC.Models.Subject;
 
-namespace BTLChatDemo.Repositories
+namespace BTL_WebNC.Repositories
 {
     public interface ISubjectRepository
     {

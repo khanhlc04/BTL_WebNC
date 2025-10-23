@@ -1,16 +1,16 @@
-using BTLChatDemo.Models.Account;
-using BTLChatDemo.Models.Answer;
-using BTLChatDemo.Models.Chat;
-using BTLChatDemo.Models.Document;
-using BTLChatDemo.Models.Question;
-using BTLChatDemo.Models.RoomChat;
-using BTLChatDemo.Models.Student;
-using BTLChatDemo.Models.Subject;
-using BTLChatDemo.Models.Teacher;
-using BTLChatDemo.Models.TeacherSubject;
+using BTL_WebNC.Models.Account;
+using BTL_WebNC.Models.Answer;
+using BTL_WebNC.Models.Chat;
+using BTL_WebNC.Models.Document;
+using BTL_WebNC.Models.Question;
+using BTL_WebNC.Models.RoomChat;
+using BTL_WebNC.Models.Student;
+using BTL_WebNC.Models.Subject;
+using BTL_WebNC.Models.Teacher;
+using BTL_WebNC.Models.TeacherSubject;
 using Microsoft.EntityFrameworkCore;
 
-namespace BTLChatDemo.Data
+namespace BTL_WebNC.Data
 {
     public class AppDbContext : DbContext
     {

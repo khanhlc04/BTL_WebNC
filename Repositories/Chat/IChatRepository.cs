@@ -1,6 +1,6 @@
-using BTLChatDemo.Models.Chat;
+using BTL_WebNC.Models.Chat;
 
-namespace BTLChatDemo.Repositories
+namespace BTL_WebNC.Repositories
 {
     public interface IChatRepository
     {

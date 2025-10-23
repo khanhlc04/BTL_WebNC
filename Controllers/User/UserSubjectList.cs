@@ -1,4 +1,4 @@
-using BTLChatDemo.Repositories;
+using BTL_WebNC.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BTL_WebNC.Controllers
