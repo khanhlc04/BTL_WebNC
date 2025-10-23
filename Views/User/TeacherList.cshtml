@@ -1,0 +1,116 @@
+@model IEnumerable<BTL_WebNC.Models.Teacher.TeacherModel>
+
+@{
+    ViewData["Title"] = "Danh sách giảng viên";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentSort = ViewData["CurrentSort"] as string;
+    var isStudent = (bool)(ViewData["IsStudent"] ?? false);
+}
+
+<style>
+    .toolbar-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 20px;
+    }
+    .controls-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .control-row {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 8px;
+    }
+</style>
+
+<h2>Danh sách giảng viên</h2>
+
+<form asp-action="Index" method="get">
+    <div class="toolbar-container">
+        <div class="controls-stack">
+
+            <div class="control-row">
+                <span>Tìm kiếm theo tên:</span>
+                <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control d-inline-block w-auto" />
+                <input type="submit" value="Lọc" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Reset</a>
+            </div>
+
+            <div class="control-row">
+                <span>Lọc theo môn học:</span>
+                <select name="subjectId" class="form-select d-inline-block w-auto" onchange="this.form.submit()">
+                    <option value="">-- Tất cả môn học --</option>
+                    @if (ViewBag.Subjects != null)
+                    {
+                        foreach (var subject in (SelectList)ViewBag.Subjects)
+                        {
+                            <option value="@subject.Value" selected="@(subject.Selected)">@subject.Text</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="control-row">
+                <span>Sắp xếp theo:</span>
+                <select name="sortOrder" class="form-select d-inline-block w-auto" onchange="this.form.submit()">
+                    <option value="id_asc"    selected="@(currentSort == "id_asc")">ID Tăng dần</option>
+                    <option value="id_desc"   selected="@(currentSort == "id_desc")">ID Giảm dần</option>
+                    <option value="name_asc"  selected="@(currentSort == "name_asc")">Họ tên A-Z</option>
+                    <option value="name_desc" selected="@(currentSort == "name_desc")">Họ tên Z-A</option>
+                </select>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+<table class="table table-striped align-middle">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Họ tên</th>
+            <th>Email</th>
+            <th>Môn học dạy</th>
+            <th>Thao tác</th> </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.FullName</td>
+                    <td>@item.Email</td>
+                    <td>
+                        @if (item.TeacherSubjects != null && item.TeacherSubjects.Count > 0)
+                        {
+                            @string.Join(", ", item.TeacherSubjects.Select(ts => ts.Subject?.Name ?? "N/A"))
+                        }
+                        else
+                        {
+                            <span>Chưa đăng ký môn học</span>
+                        }
+                    </td>
+                    <td>
+                        @if (isStudent)
+                        {
+                            <a asp-controller="Chat" asp-action="Index" asp-route-recipientId="@item.Id" class="btn btn-success btn-sm">
+                                Chat
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" class="text-center">Không có dữ liệu phù hợp.</td>
+            </tr>
+        }
+    </tbody>
+</table>
