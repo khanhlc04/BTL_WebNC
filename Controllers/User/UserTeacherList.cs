@@ -1,7 +1,7 @@
+using System.Security.Claims;
 using BTL_WebNC.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Security.Claims;
 
 namespace BTL_WebNC.Controllers.User
 {
@@ -16,11 +16,16 @@ namespace BTL_WebNC.Controllers.User
             _subjectRepo = subjectRepo;
         }
 
-        public async Task<IActionResult> Index(string sortOrder, string searchString, int? subjectId)
+        public async Task<IActionResult> Index(
+            string sortOrder,
+            string searchString,
+            int? subjectId
+        )
         {
             var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
 
-            bool isStudent = !string.IsNullOrEmpty(userEmail) && userEmail.EndsWith("@students.hou.edu.vn");
+            bool isStudent =
+                !string.IsNullOrEmpty(userEmail) && userEmail.EndsWith("@students.hou.edu.vn");
 
             ViewData["IsStudent"] = isStudent;
 
@@ -36,12 +41,16 @@ namespace BTL_WebNC.Controllers.User
 
             if (subjectId.HasValue && subjectId > 0)
             {
-                teachers = teachers.Where(t => t.TeacherSubjects.Any(ts => ts.SubjectId == subjectId.Value)).ToList();
+                teachers = teachers
+                    .Where(t => t.TeacherSubjects.Any(ts => ts.SubjectId == subjectId.Value))
+                    .ToList();
             }
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                teachers = teachers.Where(t => t.FullName.ToLower().Contains(searchString.ToLower())).ToList();
+                teachers = teachers
+                    .Where(t => t.FullName.ToLower().Contains(searchString.ToLower()))
+                    .ToList();
             }
 
             switch (currentSortOrder)
@@ -59,7 +68,7 @@ namespace BTL_WebNC.Controllers.User
                     teachers = teachers.OrderBy(t => t.Id).ToList();
                     break;
             }
-            
+
             return View("~/Views/User/TeacherList.cshtml", teachers);
         }
     }

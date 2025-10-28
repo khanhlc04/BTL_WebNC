@@ -17,18 +17,21 @@ namespace BTL_WebNC.Models.Document
         [StringLength(255)]
         public string Title { get; set; }
 
-        [Required]
         [StringLength(500)]
-        public string ThumbnailUrl { get; set; }
+        public string? ThumbnailPath { get; set; } // Đường dẫn file thumbnail
 
         [Required]
-        public string FileUrl { get; set; }
+        [StringLength(500)]
+        public string FilePath { get; set; } // Đường dẫn file tài liệu
+
+        [StringLength(100)]
+        public string? FileName { get; set; } // Tên file gốc
 
         [Required]
         public int SubjectId { get; set; }
 
         [ForeignKey("SubjectId")]
-        public virtual SubjectModel Subject { get; set; }
+        public virtual SubjectModel? Subject { get; set; }
 
         public bool Deleted { get; set; } = false;
     }

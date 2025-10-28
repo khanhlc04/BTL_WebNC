@@ -50,10 +50,7 @@ namespace BTL_WebNC.Controllers
                     {
                         new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()),
                         new Claim(ClaimTypes.Email, account.Email),
-                        new Claim(
-                            ClaimTypes.Role,
-                            account.Email == "admin@gmail.com" ? "Admin" : "User"
-                        ),
+                        new Claim(ClaimTypes.Role, account.Role),
                     };
 
                     var claimsIdentity = new ClaimsIdentity(
@@ -74,7 +71,7 @@ namespace BTL_WebNC.Controllers
                         authProperties
                     );
 
-                    if (account.Email == "admin@gmail.com")
+                    if (account.Role == "Admin")
                     {
                         return RedirectToAction("Index", "AdminDashboard");
                     }

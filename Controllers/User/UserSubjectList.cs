@@ -23,7 +23,9 @@ namespace BTL_WebNC.Controllers
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                subjects = subjects.Where(s => s.Name.ToLower().Contains(searchString.ToLower())).ToList();
+                subjects = subjects
+                    .Where(s => s.Name.ToLower().Contains(searchString.ToLower()))
+                    .ToList();
             }
 
             switch (currentSortOrder)

@@ -1,9 +1,11 @@
 using BTL_WebNC.Models.Subject;
 using BTL_WebNC.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BTL_WebNC.Controllers.Admin
 {
+    [Authorize(Roles = "Admin")]
     public class AdminSubjectController : Controller
     {
         private readonly ISubjectRepository _subjectRepo;
@@ -19,46 +21,70 @@ namespace BTL_WebNC.Controllers.Admin
             return View("~/Views/Admin/Subject/Index.cshtml", subjects);
         }
 
-        public IActionResult CreateSubject() => View("~/Views/Admin/Subject/CreateSubject.cshtml");
-
-        [HttpPost]
-        public async Task<IActionResult> CreateSubject(string Name, string Description)
-        {
-            var model = new SubjectModel { Name = Name, Description = Description };
-            await _subjectRepo.CreateAsync(model);
-            return RedirectToAction("Index");
-        }
-
-        public async Task<IActionResult> EditSubject(int id)
+        [HttpGet]
+        public async Task<IActionResult> GetSubject(int id)
         {
             var subject = await _subjectRepo.GetByIdAsync(id);
-            return View("~/Views/Admin/Subject/EditSubject.cshtml", subject);
+            if (subject == null)
+                return NotFound(new { success = false, message = "Không tìm thấy môn học" });
+
+            return Json(new { success = true, data = subject });
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditSubject(int Id, string Name, string Description)
+        public async Task<IActionResult> CreateSubject(
+            [FromForm] string name,
+            [FromForm] string description
+        )
         {
-            var model = await _subjectRepo.GetByIdAsync(Id);
-            if (model != null)
+            try
             {
-                model.Name = Name;
-                model.Description = Description;
-                await _subjectRepo.UpdateAsync(model);
+                var subject = new SubjectModel { Name = name, Description = description };
+                await _subjectRepo.CreateAsync(subject);
+                return Json(new { success = true, message = "Tạo môn học thành công" });
             }
-            return RedirectToAction("Index");
-        }
-
-        public async Task<IActionResult> DeleteSubject(int id)
-        {
-            var subject = await _subjectRepo.GetByIdAsync(id);
-            return View("~/Views/Admin/Subject/DeleteSubject.cshtml", subject);
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteSubjectConfirmed(int id)
+        public async Task<IActionResult> UpdateSubject(
+            [FromForm] int id,
+            [FromForm] string name,
+            [FromForm] string description
+        )
         {
-            await _subjectRepo.DeleteAsync(id);
-            return RedirectToAction("Index");
+            try
+            {
+                var subject = new SubjectModel
+                {
+                    Id = id,
+                    Name = name,
+                    Description = description,
+                };
+                await _subjectRepo.UpdateAsync(subject);
+                return Json(new { success = true, message = "Cập nhật môn học thành công" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteSubject([FromForm] int id)
+        {
+            try
+            {
+                await _subjectRepo.DeleteAsync(id);
+                return Json(new { success = true, message = "Xóa môn học thành công" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
+            }
         }
     }
 }

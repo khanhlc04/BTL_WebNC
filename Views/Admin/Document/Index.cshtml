@@ -1,15 +1,20 @@
 @{
   ViewData["Title"] = "Quản lý tài liệu";
   Layout = "~/Views/Shared/_AdminLayout.cshtml";
+  var subjects = ViewBag.Subjects;
 }
+
 <h2>Quản lý tài liệu</h2>
-<table class="table table-striped">
+
+<button class="btn btn-primary mb-3" onclick="openCreateModal()">Thêm tài liệu</button>
+
+<table class="table table-striped" id="documentTable">
   <thead>
     <tr>
       <th>ID</th>
       <th>Tiêu đề</th>
       <th>Thumbnail</th>
-      <th>File URL</th>
+      <th>Tên file</th>
       <th>Môn học</th>
       <th>Thao tác</th>
     </tr>
@@ -19,25 +24,25 @@
     {
         foreach (var item in Model)
         {
-            <tr>
+            <tr data-id="@item.Id">
                 <td>@item.Id</td>
                 <td>@item.Title</td>
                 <td>
-                  @if (!string.IsNullOrEmpty(item.ThumbnailUrl))
+                  @if (!string.IsNullOrEmpty(item.ThumbnailPath))
                   {
-                    <img src="@item.ThumbnailUrl" alt="Thumbnail" style="max-width:80px;max-height:80px;" />
+                    <img src="/@item.ThumbnailPath" alt="Thumbnail" style="max-width:80px;max-height:80px;" />
                   }
                 </td>
                 <td>
-                  @if (!string.IsNullOrEmpty(item.FileUrl))
+                  @if (!string.IsNullOrEmpty(item.FileName))
                   {
-                    <a href="@item.FileUrl" target="_blank">@item.FileUrl</a>
+                    <a href="/AdminDocument/DownloadFile?id=@item.Id">@item.FileName</a>
                   }
                 </td>
-                <td>@item.SubjectId</td>
+                <td>@(item.Subject?.Name ?? "")</td>
                 <td>
-                    <a asp-controller="AdminDocument" asp-action="EditDocument" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Sửa</a>
-                    <a asp-controller="AdminDocument" asp-action="DeleteDocument" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Xóa</a>
+                    <button class="btn btn-sm btn-warning" onclick="openEditModal(@item.Id)">Sửa</button>
+                    <button class="btn btn-sm btn-danger" onclick="deleteDocument(@item.Id)">Xóa</button>
                 </td>
             </tr>
         }
@@ -48,4 +53,239 @@
     }
   </tbody>
 </table>
-<a asp-controller="AdminDocument" asp-action="CreateDocument" class="btn btn-primary">Thêm tài liệu</a>
+
+<!-- Modal Thêm/Sửa -->
+<div class="modal fade" id="documentModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle">Thêm tài liệu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="documentForm" enctype="multipart/form-data">
+          <input type="hidden" id="documentId" />
+          
+          <div class="mb-3">
+            <label for="title" class="form-label">Tiêu đề <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="title" required />
+          </div>
+          
+          <div class="mb-3">
+            <label for="thumbnailFile" class="form-label">Thumbnail (Ảnh)</label>
+            <input type="file" class="form-control" id="thumbnailFile" accept="image/*" />
+            <small class="text-muted">Chấp nhận: JPG, PNG, GIF</small>
+            <div id="thumbnailPreview" class="mt-2"></div>
+          </div>
+          
+          <div class="mb-3">
+            <label for="documentFile" class="form-label">File tài liệu <span class="text-danger">*</span></label>
+            <input type="file" class="form-control" id="documentFile" required />
+            <small class="text-muted">Chấp nhận: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, ZIP</small>
+            <div id="fileInfo" class="mt-2"></div>
+          </div>
+          
+          <div class="mb-3">
+            <label for="subjectId" class="form-label">Môn học <span class="text-danger">*</span></label>
+            <select id="subjectId" class="form-control" required>
+                <option value="">-- Chọn môn học --</option>
+                @if (subjects != null)
+                {
+                    foreach (var s in subjects)
+                    {
+                        <option value="@s.Id">@s.Name</option>
+                    }
+                }
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+        <button type="button" class="btn btn-primary" onclick="saveDocument()" id="btnSave">
+          <span class="spinner-border spinner-border-sm d-none" id="loadingSpinner"></span>
+          Lưu
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+<script>
+let currentModal;
+let isEditMode = false;
+
+// Khởi tạo modal
+document.addEventListener('DOMContentLoaded', function() {
+    currentModal = new bootstrap.Modal(document.getElementById('documentModal'));
+    
+    // Preview thumbnail
+    document.getElementById('thumbnailFile').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('thumbnailPreview').innerHTML = 
+                    `<img src="${e.target.result}" style="max-width:200px;max-height:200px;" class="img-thumbnail" />`;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+    
+    // Show file info
+    document.getElementById('documentFile').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const sizeInMB = (file.size / (1024 * 1024)).toFixed(2);
+            document.getElementById('fileInfo').innerHTML = 
+                `<small class="text-info">File: ${file.name} (${sizeInMB} MB)</small>`;
+        }
+    });
+});
+
+// Mở modal tạo mới
+function openCreateModal() {
+    isEditMode = false;
+    document.getElementById('modalTitle').textContent = 'Thêm tài liệu';
+    document.getElementById('documentForm').reset();
+    document.getElementById('documentId').value = '';
+    document.getElementById('thumbnailPreview').innerHTML = '';
+    document.getElementById('fileInfo').innerHTML = '';
+    document.getElementById('documentFile').required = true;
+    currentModal.show();
+}
+
+// Mở modal chỉnh sửa
+function openEditModal(id) {
+    isEditMode = true;
+    document.getElementById('modalTitle').textContent = 'Sửa tài liệu';
+    document.getElementById('documentForm').reset();
+    document.getElementById('thumbnailPreview').innerHTML = '';
+    document.getElementById('fileInfo').innerHTML = '';
+    document.getElementById('documentFile').required = false;
+    
+    // Lấy thông tin document
+    fetch(`/AdminDocument/GetDocument?id=${id}`)
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                const doc = result.data;
+                document.getElementById('documentId').value = doc.id;
+                document.getElementById('title').value = doc.title;
+                document.getElementById('subjectId').value = doc.subjectId;
+                
+                // Hiển thị thumbnail hiện tại
+                if (doc.thumbnailPath) {
+                    document.getElementById('thumbnailPreview').innerHTML = 
+                        `<img src="/${doc.thumbnailPath}" style="max-width:200px;max-height:200px;" class="img-thumbnail" />
+                         <p class="text-muted mt-1">Thumbnail hiện tại</p>`;
+                }
+                
+                // Hiển thị thông tin file hiện tại
+                if (doc.fileName) {
+                    document.getElementById('fileInfo').innerHTML = 
+                        `<small class="text-info">File hiện tại: ${doc.fileName}</small>`;
+                }
+                
+                currentModal.show();
+            } else {
+                alert(result.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Có lỗi xảy ra khi tải dữ liệu');
+        });
+}
+
+// Lưu document (tạo mới hoặc cập nhật)
+function saveDocument() {
+    const form = document.getElementById('documentForm');
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+    
+    // Show loading
+    const btnSave = document.getElementById('btnSave');
+    const spinner = document.getElementById('loadingSpinner');
+    btnSave.disabled = true;
+    spinner.classList.remove('d-none');
+    
+    const formData = new FormData();
+    
+    if (isEditMode) {
+        formData.append('id', document.getElementById('documentId').value);
+    }
+    
+    formData.append('title', document.getElementById('title').value);
+    formData.append('subjectId', document.getElementById('subjectId').value);
+    
+    // Thêm file thumbnail nếu có
+    const thumbnailFile = document.getElementById('thumbnailFile').files[0];
+    if (thumbnailFile) {
+        formData.append('thumbnailFile', thumbnailFile);
+    }
+    
+    // Thêm file tài liệu nếu có
+    const documentFile = document.getElementById('documentFile').files[0];
+    if (documentFile) {
+        formData.append('documentFile', documentFile);
+    }
+    
+    const url = isEditMode ? '/AdminDocument/UpdateDocument' : '/AdminDocument/CreateDocument';
+    
+    fetch(url, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(result => {
+        btnSave.disabled = false;
+        spinner.classList.add('d-none');
+        
+        if (result.success) {
+            currentModal.hide();
+            location.reload();
+        } else {
+            alert(result.message);
+        }
+    })
+    .catch(error => {
+        btnSave.disabled = false;
+        spinner.classList.add('d-none');
+        console.error('Error:', error);
+        alert('Có lỗi xảy ra');
+    });
+}
+
+// Xóa document
+function deleteDocument(id) {
+    if (!confirm('Bạn có chắc chắn muốn xóa tài liệu này? File sẽ bị xóa vĩnh viễn!')) {
+        return;
+    }
+    
+    fetch('/AdminDocument/DeleteDocument', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(id)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            alert(result.message);
+            document.querySelector(`tr[data-id="${id}"]`).remove();
+        } else {
+            alert(result.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Có lỗi xảy ra');
+    });
+}
+</script>
+}

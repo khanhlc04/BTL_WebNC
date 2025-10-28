@@ -17,7 +17,7 @@ namespace BTL_WebNC.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.9")
+                .HasAnnotation("ProductVersion", "9.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -41,6 +41,10 @@ namespace BTL_WebNC.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -129,15 +133,19 @@ namespace BTL_WebNC.Migrations
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FileUrl")
+                    b.Property<string>("FileName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("FilePath")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<int>("SubjectId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ThumbnailUrl")
-                        .IsRequired()
+                    b.Property<string>("ThumbnailPath")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -340,7 +348,7 @@ namespace BTL_WebNC.Migrations
                         .IsRequired();
 
                     b.HasOne("BTL_WebNC.Models.Question.QuestionModel", "Question")
-                        .WithMany()
+                        .WithMany("Answers")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -449,6 +457,11 @@ namespace BTL_WebNC.Migrations
                     b.Navigation("Subject");
 
                     b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("BTL_WebNC.Models.Question.QuestionModel", b =>
+                {
+                    b.Navigation("Answers");
                 });
 
             modelBuilder.Entity("BTL_WebNC.Models.Teacher.TeacherModel", b =>

@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,6 +19,10 @@ namespace BTL_WebNC.Models.Account
         [Required]
         [StringLength(255)]
         public string Password { get; set; }
+
+        [Required]
+        [DefaultValue("User")]
+        public string Role { get; set; } = "User";
 
         public bool Deleted { get; set; } = false;
     }

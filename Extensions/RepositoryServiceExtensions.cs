@@ -18,6 +18,8 @@ namespace BTL_WebNC.Extensions
             services.AddScoped<IDocumentRepository, DocumentRepository>();
             services.AddScoped<ISubjectRepository, SubjectRepository>();
             services.AddScoped<ITeacherSubjectRepository, TeacherSubjectRepository>();
+            // File helper for uploads
+            services.AddScoped<Helpers.IFileHelper, Helpers.FileHelper>();
 
             return services;
         }

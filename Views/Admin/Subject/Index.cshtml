@@ -3,6 +3,9 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 <h2>Quản lý môn học</h2>
+
+<button class="btn btn-primary mb-3" onclick="openCreateModal()">Thêm môn học</button>
+
 <table class="table table-striped">
     <thead>
         <tr>
@@ -17,13 +20,13 @@
         {
             foreach (var item in Model)
             {
-                <tr>
+                <tr data-id="@item.Id">
                     <td>@item.Id</td>
                     <td>@item.Name</td>
                     <td>@item.Description</td>
                     <td>
-                        <a asp-controller="AdminSubject" asp-action="EditSubject" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Sửa</a>
-                        <a asp-controller="AdminSubject" asp-action="DeleteSubject" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Xóa</a>
+                        <button class="btn btn-sm btn-warning" onclick="openEditModal(@item.Id)">Sửa</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteSubject(@item.Id)">Xóa</button>
                     </td>
                 </tr>
             }
@@ -34,4 +37,158 @@
         }
     </tbody>
 </table>
-<a asp-controller="AdminSubject" asp-action="CreateSubject" class="btn btn-primary">Thêm môn học</a>
+
+<!-- Modal Thêm/Sửa -->
+<div class="modal fade" id="subjectModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle">Thêm môn học</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="subjectForm" enctype="multipart/form-data">
+          <input type="hidden" id="subjectId" />
+          
+          <div class="mb-3">
+            <label for="name" class="form-label">Tên môn học <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="name" required />
+          </div>
+    
+          <div class="mb-3">
+            <label for="description" class="form-label">Mô tả <span class="text-danger">*</span></label>
+            <textarea class="form-control" id="description" rows="3" required></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+        <button type="button" class="btn btn-primary" onclick="saveSubject()" id="btnSave">
+          <span class="spinner-border spinner-border-sm d-none" id="loadingSpinner"></span>
+          Lưu
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+  <script>
+    let currentModal;
+    let isEditMode = false;
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        currentModal = new bootstrap.Modal(document.getElementById('subjectModal'));
+    });
+
+    function openCreateModal() {
+      isEditMode = false;
+      document.getElementById('modalTitle').textContent = 'Thêm môn học';
+      document.getElementById('subjectForm').reset();
+      document.getElementById('subjectId').value = '';
+      currentModal.show();
+    }
+
+    function saveSubject() {
+        const form = document.getElementById('subjectForm');
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+        
+        // Show loading
+        const btnSave = document.getElementById('btnSave');
+        const spinner = document.getElementById('loadingSpinner');
+        btnSave.disabled = true;
+        spinner.classList.remove('d-none');
+        
+        const formData = new FormData();
+        
+        if (isEditMode) {
+            formData.append('id', document.getElementById('subjectId').value);
+        }
+
+        formData.append('name', document.getElementById('name').value);
+        formData.append('description', document.getElementById('description').value);
+
+        const url = isEditMode ? '/AdminSubject/UpdateSubject' : '/AdminSubject/CreateSubject';
+
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(result => {
+            btnSave.disabled = false;
+            spinner.classList.add('d-none');
+            
+            if (result.success) {
+                currentModal.hide();
+                location.reload();
+            } else {
+                alert(result.message);
+            }
+        })
+        .catch(error => {
+            btnSave.disabled = false;
+            spinner.classList.add('d-none');
+            console.error('Error:', error);
+            alert('Có lỗi xảy ra');
+        });
+    }
+
+    function openEditModal(id) {
+        isEditMode = true;
+        document.getElementById('subjectForm').reset();
+        document.getElementById('subjectId').value = '';
+        currentModal.show();
+        
+        // Lấy thông tin document
+        fetch(`/AdminSubject/GetSubject?id=${id}`)
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    const doc = result.data;
+                    document.getElementById('subjectId').value = doc.id;
+                    document.getElementById('name').value = doc.name;
+                    document.getElementById('description').value = doc.description;
+
+                    currentModal.show();
+                } else {
+                    alert(result.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Có lỗi xảy ra khi tải dữ liệu');
+            });
+    }
+
+    function deleteSubject(id) {
+      if (!confirm('Bạn có chắc chắn muốn xóa môn học này? Môn học sẽ bị xóa vĩnh viễn!')) {
+          return;
+      }
+      
+      fetch('/AdminSubject/DeleteSubject', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(id)
+      })
+      .then(response => response.json())
+      .then(result => {
+          if (result.success) {
+              alert(result.message);
+              document.querySelector(`tr[data-id="${id}"]`).remove();
+          } else {
+              alert(result.message);
+          }
+      })
+      .catch(error => {
+          console.error('Error:', error);
+          alert('Có lỗi xảy ra');
+      });
+  }
+  </script>
+}

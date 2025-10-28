@@ -3,6 +3,9 @@
   Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 <h2>Quản lý sinh viên</h2>
+
+<button class="btn btn-primary mb-3" onclick="openCreateModal()">Thêm sinh viên</button>
+
 <table class="table table-striped">
   <thead>
     <tr>
@@ -19,17 +22,15 @@
     {
       foreach (var item in Model)
       {
-        <tr>
+        <tr data-id="@item.Id">
           <td>@item.Id</td>
           <td>@item.FullName</td>
           <td>@item.Email</td>
           <td>@item.StudentCode</td>
           <td>@item.AccountId</td>
           <td>
-            <a asp-controller="AdminStudent" asp-action="EditStudent" asp-route-id="@item.Id"
-              class="btn btn-sm btn-warning">Sửa</a>
-            <a asp-controller="AdminStudent" asp-action="DeleteStudent" asp-route-id="@item.Id"
-              class="btn btn-sm btn-danger">Xóa</a>
+            <button class="btn btn-sm btn-warning" onclick="openEditModal(@item.Id)">Sửa</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteStudent(@item.Id)">Xóa</button>
           </td>
         </tr>
       }
@@ -42,4 +43,175 @@
     }
   </tbody>
 </table>
-<a asp-controller="AdminStudent" asp-action="CreateStudent" class="btn btn-primary">Thêm sinh viên</a>
+
+<!-- Modal Thêm/Sửa -->
+<div class="modal fade" id="studentModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle">Thêm sinh viên</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="studentForm" enctype="multipart/form-data">
+          <input type="hidden" id="studentId" />
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+            <input type="email" class="form-control" id="email" required />
+          </div>
+
+          <div class="mb-3">
+            <label for="studentCode" class="form-label">Mã sinh viên <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="studentCode" required />
+          </div>
+
+          <div class="mb-3">
+            <label for="fullName" class="form-label">Tên sinh viên <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="fullName" required />
+          </div>
+    
+          <div class="mb-3" id="passwordDiv">
+            <label for="password" class="form-label">Mật khẩu <span class="text-danger">*</span></label>
+            <input type="password" class="form-control" id="password" required />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+        <button type="button" class="btn btn-primary" onclick="saveStudent()" id="btnSave">
+          <span class="spinner-border spinner-border-sm d-none" id="loadingSpinner"></span>
+          Lưu
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+  <script>
+    let currentModal;
+    let isEditMode = false;
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        currentModal = new bootstrap.Modal(document.getElementById('studentModal'));
+    });
+
+    function openCreateModal() {
+      isEditMode = false;
+      document.getElementById('modalTitle').textContent = 'Thêm sinh viên';
+      document.getElementById('studentForm').reset();
+      document.getElementById('studentId').value = '';
+      document.getElementById('passwordDiv').classList.remove('d-none'); 
+      currentModal.show();
+    }
+
+    function saveStudent() {
+        const form = document.getElementById('studentForm');
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+        
+        // Show loading
+        const btnSave = document.getElementById('btnSave');
+        const spinner = document.getElementById('loadingSpinner');
+        btnSave.disabled = true;
+        spinner.classList.remove('d-none');
+        
+        const formData = new FormData();
+        
+        if (isEditMode) {
+            formData.append('id', document.getElementById('studentId').value);
+        }
+
+        formData.append('email', document.getElementById('email').value);
+        formData.append('studentCode', document.getElementById('studentCode').value);
+        formData.append('fullName', document.getElementById('fullName').value);
+        if (!isEditMode) formData.append('password', document.getElementById('password').value);
+
+        const url = isEditMode ? '/AdminStudent/UpdateStudent' : '/AdminStudent/CreateStudent';
+
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(result => {
+            btnSave.disabled = false;
+            spinner.classList.add('d-none');
+            
+            if (result.success) {
+                currentModal.hide();
+                location.reload();
+            } else {
+                alert(result.message);
+            }
+        })
+        .catch(error => {
+            btnSave.disabled = false;
+            spinner.classList.add('d-none');
+            console.error('Error:', error);
+            alert('Có lỗi xảy ra');
+        });
+    }
+
+    function openEditModal(id) {
+        isEditMode = true;
+        document.getElementById('studentForm').reset();
+        document.getElementById('studentId').value = '';
+        document.getElementById('modalTitle').textContent = 'Sửa thông tin sinh viên';
+        document.getElementById('passwordDiv').classList.add('d-none'); 
+
+        currentModal.show();
+        
+        // Lấy thông tin document
+        fetch(`/AdminStudent/GetStudent?id=${id}`)
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    const doc = result.data;
+                    document.getElementById('studentId').value = doc.id;
+                    document.getElementById('email').value = doc.email;
+                    document.getElementById('studentCode').value = doc.studentCode;
+                    document.getElementById('fullName').value = doc.fullName;
+
+                    currentModal.show();
+                } else {
+                    alert(result.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Có lỗi xảy ra khi tải dữ liệu');
+            });
+    }
+
+    function deleteStudent(id) {
+      if (!confirm('Bạn có chắc chắn muốn xóa sinh viên này? Sinh viên sẽ bị xóa vĩnh viễn!')) {
+          return;
+      }
+
+      fetch('/AdminStudent/DeleteStudent', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(id)
+      })
+      .then(response => response.json())
+      .then(result => {
+          if (result.success) {
+              alert(result.message);
+              document.querySelector(`tr[data-id="${id}"]`).remove();
+          } else {
+              alert(result.message);
+          }
+      })
+      .catch(error => {
+          console.error('Error:', error);
+          alert('Có lỗi xảy ra');
+      });
+  }
+  </script>
+}

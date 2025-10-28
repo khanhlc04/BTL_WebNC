@@ -1,120 +1,242 @@
-﻿<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+﻿@model IEnumerable<BTL_WebNC.Models.Document.DocumentModel>
+@{
+    ViewData["Title"] = "Tài liệu học tập";
+}
 
-@model IEnumerable<BTL_WebNC.Models.Document.DocumentModel>
+<div class="container mt-4">
+    <h2>Tài liệu học tập</h2>
+    
+    <!-- Search & Filter Form -->
+    <form method="get" asp-action="Index" class="mb-4">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="text" 
+                           name="searchTerm" 
+                           class="form-control" 
+                           placeholder="Tìm kiếm tài liệu..." 
+                           value="@ViewBag.SearchTerm" />
+                    <button class="btn btn-primary" type="submit">
+                        <i class="bi bi-search"></i> Tìm kiếm
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <select name="subjectIds" class="form-select" multiple>
+                    <option value="">-- Tất cả môn học --</option>
+                    @if (ViewBag.Subjects != null)
+                    {
+                        foreach (var subject in ViewBag.Subjects)
+                        {
+                            var isSelected = ViewBag.SelectedSubjects.Contains(subject.Id);
+                            <option value="@subject.Id" selected="@isSelected">@subject.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+    </form>
 
-@* Thanh tìm kiếm ngang *@
-<div class="row mb-3">
-    <div class="col-12">
-        <form method="get" asp-action="Index" class="d-flex">
-            <input type="text" id="searchInput" name="searchTerm" value="@ViewBag.SearchTerm"
-                   class="form-control me-2" placeholder="🔍 Tìm kiếm tài liệu..." />
-            
-        </form>
+    <p class="text-muted">Tìm thấy <strong>@ViewBag.Count</strong> tài liệu</p>
+
+    <!-- Documents Grid -->
+    <div class="row">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var doc in Model)
+            {
+                <div class="col-md-4 col-lg-3 mb-4">
+                    <div class="card h-100 document-card">
+                        <!-- Thumbnail -->
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" 
+                             style="height: 200px;">
+                            @if (!string.IsNullOrEmpty(doc.ThumbnailPath))
+                            {
+                                <img src="/@doc.ThumbnailPath" 
+                                     alt="@doc.Title" 
+                                     class="img-fluid" 
+                                     style="max-height: 100%; max-width: 100%; object-fit: cover;" />
+                            }
+                            else
+                            {
+                                <i class="bi bi-file-earmark-text" style="font-size: 4rem; color: #ccc;"></i>
+                            }
+                        </div>
+                        
+                        <!-- Card Body -->
+                        <div class="card-body">
+                            <h6 class="card-title" title="@doc.Title">
+                                @(doc.Title.Length > 50 ? doc.Title.Substring(0, 50) + "..." : doc.Title)
+                            </h6>
+                            
+                            @if (!string.IsNullOrEmpty(doc.FileName))
+                            {
+                                <p class="card-text small text-muted">
+                                    <i class="bi bi-file-earmark"></i> @doc.FileName
+                                </p>
+                            }
+                            
+                            <div class="d-flex gap-2">
+                                <!-- Nút Download -->
+                                <a href="@Url.Action("Download", "StudentDocument", new { id = doc.Id })" 
+                                   class="btn btn-sm btn-primary flex-fill"
+                                   title="Tải xuống">
+                                    <i class="bi bi-download"></i> Tải về
+                                </a>
+                                
+                                <!-- Nút View (nếu là PDF hoặc ảnh) -->
+                               @{
+                                    // lấy đường dẫn file an toàn
+                                    var filePath = doc.FilePath ?? "";
+                                    // dùng System.IO.Path để lấy extension
+                                    var ext = System.IO.Path.GetExtension(filePath)?.ToLowerInvariant() ?? "";
+                                    // danh sách extension cho phép xem trước
+                                    var viewableExts = new[] { ".pdf", ".jpg", ".jpeg", ".png", ".gif" };
+                                    // kiểm tra bằng Enumerable.Contains (tránh phụ thuộc using)
+                                    var canView = System.Linq.Enumerable.Contains(viewableExts, ext);
+                                }
+                                
+                                @if (canView)
+                                {
+                                    <button class="btn btn-sm btn-outline-secondary" 
+                                            onclick="viewDocument(@doc.Id)"
+                                            title="Xem trước">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                }
+                                
+                                <!-- Nút Info -->
+                                <button class="btn btn-sm btn-outline-info" 
+                                        onclick="showDocInfo(@doc.Id)"
+                                        title="Thông tin">
+                                    <i class="bi bi-info-circle"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> Không tìm thấy tài liệu nào.
+                </div>
+            </div>
+        }
     </div>
 </div>
 
-<div class="row">
-    <!-- Bộ lọc môn học (accordion bên trái) -->
-    <div class="col-md-3">
-        <div class="accordion" id="subjectFilter">
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingSubjects">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSubjects">
-                        📂 Lọc theo môn học
-                    </button>
-                </h2>
-                <div id="collapseSubjects" class="accordion-collapse collapse" data-bs-parent="#subjectFilter">
-                    <div class="accordion-body">
-                        <form method="get" asp-action="Index">
-                            @foreach (var subject in ViewBag.Subjects)
-                            {
-                                <div class="form-check">
-                                    <input type="checkbox"
-                                           name="subjectIds"
-                                           value="@subject.Id"
-                                           class="form-check-input subject-checkbox"
-                                    @(((List<int>)ViewBag.SelectedSubjects).Contains(subject.Id) ? "checked" : "") />
-                                    <label class="form-check-label">@subject.Name</label>
-                                </div>
-                            }
-                            
-                        </form>
+<!-- Modal xem file -->
+<div class="modal fade" id="viewModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xem tài liệu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" style="height: 70vh;">
+                <iframe id="fileViewer" style="width: 100%; height: 100%; border: none;"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal thông tin file -->
+<div class="modal fade" id="infoModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thông tin tài liệu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="docInfo">
+                <div class="text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Danh sách tài liệu -->
-    <div class="col-md-9">
-        @if (Model == null || !Model.Any())
-        {
-            <p class="text-muted">Không có tài liệu nào.</p>
-        }
-        else
-        {
-            <div class="row" id="documentList">
-                @foreach (var doc in Model)
-                {
-                    <div class="col-md-4 mb-4 doc-card" data-subjectid="@doc.SubjectId">
-                        <div class="card shadow-sm h-100">
-                            <!-- Ảnh: giữ tỉ lệ gốc, không cắt -->
-                            <a href="@doc.FileUrl" target="_blank">
-                                <div style="height:200px; background-color:#f8f9fa; display:flex; align-items:center; justify-content:center;">
-                                    <img src="@doc.ThumbnailUrl"
-                                         alt="@doc.Title"
-                                         style="max-height:100%; max-width:100%; object-fit:contain;" />
-                                </div>
-                            </a>
-
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <!-- Tiêu đề căn giữa -->
-                                    <h6 class="card-title mb-0 text-center flex-grow-1">
-                                        <a href="@doc.FileUrl" target="_blank" class="text-decoration-none d-block">
-                                            @doc.Title
-                                        </a>
-                                    </h6>
-
-                                    <!-- Icon tải xuống bên phải -->
-                                    <a href="@Url.Action("Download", "StudentDocument", new { id = doc.Id })"
-                                       class="btn btn-sm btn-outline-success ms-2"
-                                       title="Tải xuống">
-                                        <i class="bi bi-download"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-
-        }
-    </div>
 </div>
 
+@section Scripts {
 <script>
-    const searchInput = document.getElementById("searchInput");
-    const checkboxes = document.querySelectorAll(".subject-checkbox");
+let viewModal, infoModal;
 
-    function filterDocuments() {
-        const keyword = searchInput.value.toLowerCase();
-        const checkedSubjects = Array.from(checkboxes)
-                                    .filter(cb => cb.checked)
-                                    .map(cb => cb.value);
+document.addEventListener('DOMContentLoaded', function() {
+    viewModal = new bootstrap.Modal(document.getElementById('viewModal'));
+    infoModal = new bootstrap.Modal(document.getElementById('infoModal'));
+});
 
-        document.querySelectorAll(".doc-card").forEach(card => {
-            const title = card.querySelector(".card-title").innerText.toLowerCase();
-            const subjectId = card.getAttribute("data-subjectid");
+function viewDocument(id) {
+    const iframe = document.getElementById('fileViewer');
+    iframe.src = '/StudentDocument/View?id=' + id;
+    viewModal.show();
+}
 
-            const matchKeyword = title.includes(keyword);
-            const matchSubject = checkedSubjects.length === 0 || checkedSubjects.includes(subjectId);
-
-            card.style.display = (matchKeyword && matchSubject) ? "" : "none";
+function showDocInfo(id) {
+    const infoDiv = document.getElementById('docInfo');
+    infoDiv.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"></div></div>';
+    
+    fetch(`/StudentDocument/GetFileInfo?id=${id}`)
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                const doc = result.data;
+                infoDiv.innerHTML = `
+                    <table class="table">
+                        <tr>
+                            <th>Tiêu đề:</th>
+                            <td>${doc.title}</td>
+                        </tr>
+                        <tr>
+                            <th>Tên file:</th>
+                            <td>${doc.fileName}</td>
+                        </tr>
+                        <tr>
+                            <th>Kích thước:</th>
+                            <td>${doc.fileSize}</td>
+                        </tr>
+                        <tr>
+                            <th>Định dạng:</th>
+                            <td>${doc.extension}</td>
+                        </tr>
+                    </table>
+                    <div class="text-center">
+                        <a href="/StudentDocument/Download?id=${doc.id}" class="btn btn-primary">
+                            <i class="bi bi-download"></i> Tải xuống
+                        </a>
+                    </div>
+                `;
+            } else {
+                infoDiv.innerHTML = `<div class="alert alert-danger">${result.message}</div>`;
+            }
+        })
+        .catch(error => {
+            infoDiv.innerHTML = '<div class="alert alert-danger">Có lỗi xảy ra</div>';
         });
-    }
-
-    // Gắn sự kiện cho input và checkbox
-    searchInput.addEventListener("keyup", filterDocuments);
-    checkboxes.forEach(cb => cb.addEventListener("change", filterDocuments));
+    
+    infoModal.show();
+}
 </script>
+
+<style>
+.document-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.document-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.card-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+</style>
+}

@@ -2,10 +2,12 @@ using BTL_WebNC.Models.Account;
 using BTL_WebNC.Models.Teacher;
 using BTL_WebNC.Models.TeacherSubject;
 using BTL_WebNC.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BTL_WebNC.Controllers.Admin
 {
+    [Authorize(Roles = "Admin")]
     public class AdminTeacherController : Controller
     {
         private readonly ITeacherRepository _teacherRepo;
@@ -31,105 +33,157 @@ namespace BTL_WebNC.Controllers.Admin
         {
             var teachers = await _teacherRepo.GetAllAsync();
 
+            var subjects = await _subjectRepo.GetAllAsync();
+            ViewBag.Subjects = subjects;
+
             return View("~/Views/Admin/Teacher/Index.cshtml", teachers);
         }
 
-        public async Task<IActionResult> CreateTeacher()
+        [HttpGet]
+        public async Task<IActionResult> GetTeacher(int id)
         {
-            ViewBag.Subjects = await _subjectRepo.GetAllAsync();
-            return View("~/Views/Admin/Teacher/CreateTeacher.cshtml");
+            var teacher = await _teacherRepo.GetByIdAsync(id);
+            if (teacher == null)
+                return NotFound(new { success = false, message = "Không tìm thấy giảng viên" });
+
+            return Json(new { success = true, data = teacher });
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateTeacher(
-            string FullName,
-            string Email,
-            string Password,
-            List<int> SubjectIds
+            [FromForm] string fullName,
+            [FromForm] string email,
+            [FromForm] string password,
+            [FromForm] List<int> subjects
         )
         {
-            var account = new AccountModel { Email = Email, Password = Password };
-            var createdAccount = await _accountRepo.CreateAsync(account);
-
-            var teacher = new TeacherModel
+            try
             {
-                FullName = FullName,
-                Email = Email,
-                AccountId = createdAccount.Id,
-            };
-            var createdTeacher = await _teacherRepo.CreateAsync(teacher);
+                var existingAccount = await _accountRepo.GetByEmailAsync(email);
+                if (existingAccount != null)
+                {
+                    return Json(new { success = false, message = "Email đã được sử dụng" });
+                }
 
-            foreach (var subjectId in SubjectIds)
+                var account = new AccountModel
+                {
+                    Email = email,
+                    Password = password,
+                    Role = "User",
+                    Deleted = false,
+                };
+                await _accountRepo.CreateAsync(account);
+
+                var teacher = new TeacherModel
+                {
+                    FullName = fullName,
+                    Email = email,
+                    AccountId = account.Id,
+                };
+                await _teacherRepo.CreateAsync(teacher);
+
+                Console.WriteLine(
+                    $"Created teacher Id={teacher.Id}, subjects={(subjects != null ? string.Join(',', subjects) : "null")}"
+                );
+
+                if (subjects != null)
+                {
+                    foreach (var subjectId in subjects)
+                    {
+                        Console.WriteLine(
+                            $"Creating TeacherSubject -> TeacherId={teacher.Id}, SubjectId={subjectId}"
+                        );
+                        var teacherSubject = new TeacherSubjectModel
+                        {
+                            TeacherId = teacher.Id,
+                            SubjectId = subjectId,
+                        };
+                        await _teacherSubjectRepo.CreateAsync(teacherSubject);
+                    }
+                }
+
+                return Json(new { success = true, message = "Tạo giảng viên thành công" });
+            }
+            catch (Exception ex)
             {
-                await _teacherSubjectRepo.CreateAsync(
-                    new TeacherSubjectModel { TeacherId = createdTeacher.Id, SubjectId = subjectId }
+                return BadRequest(
+                    new
+                    {
+                        success = false,
+                        message = ex.Message,
+                        detail = ex.InnerException?.Message,
+                        trace = ex.ToString(),
+                    }
                 );
             }
-
-            return RedirectToAction("Index");
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> EditTeacher(int id)
-        {
-            var teacher = await _teacherRepo.GetByIdAsync(id);
-            if (teacher == null)
-                return NotFound();
-
-            var subjects = await _subjectRepo.GetAllAsync();
-            var selectedSubjectIds = (await _teacherSubjectRepo.GetByTeacherIdAsync(id))
-                .Select(ts => ts.SubjectId)
-                .ToList();
-
-            ViewBag.Subjects = subjects;
-            ViewBag.SelectedSubjectIds = selectedSubjectIds;
-
-            return View("~/Views/Admin/Teacher/EditTeacher.cshtml", teacher);
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditTeacher(
-            int id,
-            string FullName,
-            string Email,
-            List<int> SubjectIds
+        public async Task<IActionResult> UpdateTeacher(
+            [FromForm] int id,
+            [FromForm] string fullName,
+            [FromForm] string email,
+            [FromForm] List<int> subjects
         )
         {
-            var teacher = await _teacherRepo.GetByIdAsync(id);
-            if (teacher == null)
-                return NotFound();
-
-            teacher.FullName = FullName;
-            teacher.Email = Email;
-            await _teacherRepo.UpdateAsync(teacher);
-
-            var existingSubjects = await _teacherSubjectRepo.GetByTeacherIdAsync(id);
-            foreach (var ts in existingSubjects)
+            try
             {
-                await _teacherSubjectRepo.DeleteAsync(ts.Id);
-            }
+                var teacher = new TeacherModel
+                {
+                    Id = id,
+                    FullName = fullName,
+                    Email = email,
+                };
+                await _teacherRepo.UpdateAsync(teacher);
 
-            foreach (var subjectId in SubjectIds ?? new List<int>())
+                var account = await _accountRepo.GetByEmailAsync(email);
+
+                if (account != null)
+                {
+                    account.Email = email;
+                    await _accountRepo.UpdateAsync(account);
+                }
+
+                // Cập nhật môn học cho giảng viên
+                var existingSubjects = await _teacherSubjectRepo.GetByTeacherIdAsync(id);
+                foreach (var es in existingSubjects)
+                {
+                    await _teacherSubjectRepo.DeleteAsync(es.Id);
+                }
+
+                if (subjects != null && subjects.Count > 0)
+                {
+                    foreach (var subjectId in subjects)
+                    {
+                        var teacherSubject = new TeacherSubjectModel
+                        {
+                            TeacherId = teacher.Id,
+                            SubjectId = subjectId,
+                        };
+                        await _teacherSubjectRepo.CreateAsync(teacherSubject);
+                    }
+                }
+
+                return Json(new { success = true, message = "Cập nhật giảng viên thành công" });
+            }
+            catch (Exception ex)
             {
-                await _teacherSubjectRepo.CreateAsync(
-                    new TeacherSubjectModel { TeacherId = id, SubjectId = subjectId }
-                );
+                return BadRequest(new { success = false, message = ex.Message });
             }
-
-            return RedirectToAction("Index");
-        }
-
-        public async Task<IActionResult> DeleteTeacher(int id)
-        {
-            var teacher = await _teacherRepo.GetByIdAsync(id);
-            return View("~/Views/Admin/Teacher/DeleteTeacher.cshtml", teacher);
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteTeacherConfirmed(int id)
+        public async Task<IActionResult> DeleteTeacher([FromForm] int id)
         {
-            await _teacherRepo.DeleteAsync(id);
-            return RedirectToAction("Index");
+            try
+            {
+                await _teacherRepo.DeleteAsync(id);
+                return Json(new { success = true, message = "Xóa giảng viên thành công" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
+            }
         }
     }
 }
