@@ -1,8 +1,8 @@
-﻿using BTL_WebNC.Repositories;
-using Microsoft.AspNetCore.Mvc;
+﻿using BTL_WebNC.Models.Answer;
 using BTL_WebNC.Models.Question;
-using BTL_WebNC.Models.Answer;
+using BTL_WebNC.Repositories;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BTL_WebNC.Controllers.Forum
@@ -23,10 +23,12 @@ namespace BTL_WebNC.Controllers.Forum
             var forumQuestions = await _questionRepo.GetForumQuestionsAsync();
             return View("~/Views/Forum/Index.cshtml", forumQuestions);
         }
+
         public async Task<IActionResult> Details(int id)
         {
             var question = await _questionRepo.GetByIdAsync(id);
-            if (question == null) return NotFound();
+            if (question == null)
+                return NotFound();
 
             return View(question);
         }
@@ -46,13 +48,15 @@ namespace BTL_WebNC.Controllers.Forum
                 return View();
             }
 
-            var userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value);
+            var userId = int.Parse(
+                User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value
+            );
 
             var question = new QuestionModel
             {
                 Content = Content,
                 AccountId = userId,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.Now,
             };
 
             await _questionRepo.CreateAsync(question);
@@ -70,14 +74,16 @@ namespace BTL_WebNC.Controllers.Forum
                 return RedirectToAction("Details", new { id = QuestionId });
             }
 
-            var userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value);
+            var userId = int.Parse(
+                User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value
+            );
 
             var answer = new AnswerModel
             {
                 QuestionId = QuestionId,
                 Content = Content,
                 AccountId = userId,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.Now,
             };
 
             await _answerRepo.CreateAsync(answer);

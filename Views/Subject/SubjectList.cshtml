@@ -1,9 +1,8 @@
-@model IEnumerable<BTL_WebNC.Models.Subject.SubjectModel>
-
 @{
     ViewData["Title"] = "Danh sách môn học";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var currentSort = ViewData["CurrentSort"] as string;
+    var currentSort = ViewData["CurrentSort"];
+    var subjects = ViewBag.Subjects;
 }
 
 <style>
@@ -34,10 +33,10 @@
             <div class="control-row">
                 <span>Tìm kiếm:</span>
                 <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control d-inline-block w-auto" />
-                <input type="submit" value="Lọc" class="btn btn-primary" />
+                @* <input type="submit" value="Lọc" class="btn btn-primary" />  *@
             </div>
 
-            <div class="control-row">
+            @* <div class="control-row">
                 <span>Sắp xếp theo:</span>
                 <select name="sortOrder" class="form-select d-inline-block w-auto" onchange="this.form.submit()">
                     <option value="name_asc"  selected="@(currentSort == "name_asc" || string.IsNullOrEmpty(currentSort))">Tên A-Z</option>
@@ -45,7 +44,7 @@
                     <option value="id_asc"    selected="@(currentSort == "id_asc")">ID Tăng dần</option>
                     <option value="id_desc"   selected="@(currentSort == "id_desc")">ID Giảm dần</option>
                 </select>
-            </div>
+            </div> *@
 
         </div>
     </div>
@@ -60,17 +59,16 @@
         </tr>
     </thead>
     <tbody>
-        @if (Model != null && Model.Any())
+    @if (subjects != null) {
+        @foreach (var item in subjects)
         {
-            foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.Id</td>
-                    <td>@item.Name</td>
+            <tr>
+                <td>@item.Id</td>
+                <td><a href="@Url.Action("Details", "Subject", new { id = item.Id })">@item.Name</a></td>
                     <td>@item.Description</td>
-                </tr>
-            }
+            </tr>
         }
+    }
         else
         {
             <tr><td colspan="3" class="text-center">Không có dữ liệu phù hợp.</td></tr>

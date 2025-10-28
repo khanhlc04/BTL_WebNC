@@ -5,15 +5,21 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BTL_WebNC.Controllers.User
 {
-    public class UserTeacherController : Controller
+    public class TeacherController : Controller
     {
         private readonly ITeacherRepository _teacherRepo;
         private readonly ISubjectRepository _subjectRepo;
+        private readonly ITeacherSubjectRepository _teacherSubjectRepo;
 
-        public UserTeacherController(ITeacherRepository teacherRepo, ISubjectRepository subjectRepo)
+        public TeacherController(
+            ITeacherRepository teacherRepo,
+            ISubjectRepository subjectRepo,
+            ITeacherSubjectRepository teacherSubjectRepo
+        )
         {
             _teacherRepo = teacherRepo;
             _subjectRepo = subjectRepo;
+            _teacherSubjectRepo = teacherSubjectRepo;
         }
 
         public async Task<IActionResult> Index(
@@ -69,7 +75,30 @@ namespace BTL_WebNC.Controllers.User
                     break;
             }
 
-            return View("~/Views/User/TeacherList.cshtml", teachers);
+            return View("~/Views/Teacher/TeacherList.cshtml", teachers);
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var teacher = await _teacherRepo.GetByIdAsync(id);
+            if (teacher == null)
+                return NotFound();
+
+            // get subject links for this teacher
+            var tsLinks = await _teacherSubjectRepo.GetByTeacherIdAsync(id);
+            var subjectIds = tsLinks.Select(ts => ts.SubjectId).Distinct().ToList();
+
+            var subjects = new List<BTL_WebNC.Models.Subject.SubjectModel>();
+            foreach (var sid in subjectIds)
+            {
+                var s = await _subjectRepo.GetByIdAsync(sid);
+                if (s != null)
+                    subjects.Add(s);
+            }
+
+            ViewBag.Teacher = teacher;
+            ViewBag.Subjects = subjects;
+            return View("~/Views/Teacher/TeacherDetails.cshtml");
         }
     }
 }

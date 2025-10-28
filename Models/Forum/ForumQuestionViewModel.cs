@@ -12,5 +12,4 @@
         public string? LastReplyAuthor { get; set; }
         public DateTime? LastReplyDate { get; set; }
     }
-
 }

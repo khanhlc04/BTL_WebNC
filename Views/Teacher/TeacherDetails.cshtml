@@ -1,0 +1,44 @@
+@{
+    var teacher = ViewBag.Teacher;
+    var subjects = ViewBag.Subjects;
+
+    ViewData["Title"] = teacher?.FullName ?? "Danh sách môn học của giảng viên";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Giảng viên: @(teacher?.FullName ?? "-")</h2>
+<p>Email: @(teacher?.Email ?? "-")</p>
+
+<h3>Môn học</h3>
+@if (subjects != null)
+{
+    <table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên môn học</th>
+            <th>Mô tả</th>
+        </tr>
+    </thead>
+    <tbody>
+    @if (subjects != null) {
+        @foreach (var item in subjects)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td><a href="@Url.Action("Details", "Subject", new { id = item.Id })">@item.Name</a></td>
+                    <td>@item.Description</td>
+            </tr>
+        }
+    }
+        else
+        {
+            <tr><td colspan="3" class="text-center">Không có dữ liệu phù hợp.</td></tr>
+        }
+    </tbody>
+</table>
+}
+else
+{
+    <div>Giảng viên chưa đăng ký môn học nào.</div>
+}

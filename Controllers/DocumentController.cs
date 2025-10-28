@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BTL_WebNC.Controllers.Document
 {
-    public class StudentDocumentController : Controller
+    public class DocumentController : Controller
     {
         private readonly IDocumentRepository _documentRepo;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public StudentDocumentController(
+        public DocumentController(
             IDocumentRepository documentRepo,
             IWebHostEnvironment webHostEnvironment
         )

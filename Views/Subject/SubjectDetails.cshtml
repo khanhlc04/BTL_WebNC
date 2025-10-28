@@ -1,0 +1,76 @@
+@{
+    var subject = ViewBag.Subject;
+    var documents = ViewBag.Documents;
+    var teachers = ViewBag.Teachers;
+
+    ViewData["Title"] = subject?.Name ?? "Chi tiết môn học";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .detail-container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    .section { margin-top: 28px; }
+    .section-header { display:flex; justify-content:space-between; align-items:center; }
+    .section-title { font-size:20px; font-weight:600; }
+    .view-all { font-size:14px; color:#667eea; text-decoration:none; }
+
+    .card-grid { display:flex; flex-wrap:wrap; gap:16px; margin-top:16px; }
+    .card { background:#fff; border-radius:8px; padding:12px; box-shadow:0 2px 8px rgba(0,0,0,0.06); flex:1 1 calc(25% - 16px); min-width:200px; text-decoration:none; color:inherit; }
+    .card h4 { margin:0 0 8px 0; font-size:16px; }
+    .card p { margin:0; color:#555; font-size:14px; }
+
+    @@media (max-width:768px) { .card { flex:1 1 100%; } }
+</style>
+
+<div class="detail-container">
+    <h1>@(subject?.Name ?? "-")</h1>
+    <p>@(string.IsNullOrWhiteSpace(subject?.Description) ? "Không có mô tả cho môn học này." : subject.Description)</p>
+
+    <div class="section">
+        <div class="section-header">
+            <div class="section-title">Tài liệu</div>
+            <a class="view-all" href="@Url.Action("Index", "Document", new { subjectIds = subject?.Id })">Xem tất cả</a>
+        </div>
+
+        <div class="card-grid">
+            @if (documents != null)
+            {
+                foreach (var doc in documents)
+                {
+                    <a class="card" href="@Url.Action("View", "Document", new { id = doc.Id })">
+                        <h4>@doc.Title</h4>
+                        <p>@(string.IsNullOrWhiteSpace(doc.FileName) ? doc.FilePath : doc.FileName)</p>
+                    </a>
+                }
+            }
+            else
+            {
+                <div>Không có tài liệu cho môn học này.</div>
+            }
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <div class="section-title">Giảng viên</div>
+            <a class="view-all" href="@Url.Action("Index", "Teacher", new { subjectId = subject?.Id })">Xem tất cả</a>
+        </div>
+
+        <div class="card-grid">
+            @if (teachers != null)
+            {
+                foreach (var t in teachers)
+                {
+                    <a class="card" href="@Url.Action("Details", "Teacher", new { id = t.Id })">
+                        <h4>@t.FullName</h4>
+                        <p>@t.Email</p>
+                    </a>
+                }
+            }
+            else
+            {
+                <div>Chưa có giảng viên cho môn học này.</div>
+            }
+        </div>
+    </div>
+</div>
