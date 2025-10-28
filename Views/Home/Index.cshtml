@@ -1,8 +1,291 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cổng Tư Vấn Học Tập | Khoa CNTT - HOU</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --light-bg: #f8f9fa;
+        }
+        .hero-section {
+            background-color: #e3f2fd;
+            color: #333;
+            padding: 100px 0;
+            background-image: url('placeholder-bg.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        .service-card {
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            border-left: 5px solid var(--primary-color);
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        }
+        .icon-large {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+        .cta-footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 50px 0;
+        }
+        .expert-card img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+        }
+        .full-width-section {
+            padding: 50px 0; 
+        }
+        .info-link-card {
+            border: none;
+            background-color: transparent;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+        .info-link-card:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+    <header class="hero-section text-center">
+        <div class="container"> 
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-3">
+                        Cổng tư vấn học tập trực tuyến khoa công nghệ thông tin   Trường đại học mở Hà Nội
+                    </h1>
+                    <p class="lead mb-4">
+                        Kết nối nhanh chóng với các Giảng viên và Cố vấn chuyên môn của Khoa CNTT HOU.
+                    </p>
+
+                    <div class="row mt-5 text-dark">
+                        <div class="col-4">
+                            <h2 class="fw-bold text-primary">36000+</h2>
+                            <p class="text-secondary">Câu hỏi được giải đáp</p>
+                        </div>
+                        <div class="col-4">
+                            <h2 class="fw-bold text-primary">36+</h2>
+                            <p class="text-secondary">Cố vấn chuyên môn</p>
+                        </div>
+                        <div class="col-4">
+                            <h2 class="fw-bold text-primary">6</h2>
+                            <p class="text-secondary">Lĩnh vực tư vấn</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-5 bg-light full-width-section">
+        <div class="container-fluid"> 
+            <h2 class="text-center mb-5 fw-bold">Dịch vụ Tư vấn Chính</h2>
+            <div class="row g-4 justify-content-center px-4"> 
+                
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="card p-3 shadow-sm h-100 service-card">
+                        <div class="card-body">
+                            <i class="bi bi-book-half icon-large mb-3"></i>
+                            <h5 class="card-title fw-bold">Hỗ trợ Học phần & Tài liệu</h5>
+                            <p class="card-text text-secondary">Tổng hợp FAQs, đề cương, và tài liệu tham khảo cho từng môn học CNTT.</p>
+                            <a href="#" class="btn btn-link p-0">Xem chi tiết <i class="bi bi-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="card p-3 shadow-sm h-100 service-card">
+                        <div class="card-body">
+                            <i class="bi bi-compass icon-large mb-3"></i>
+                            <h5 class="card-title fw-bold">Chương trình đào tạo</h5>
+                            <p class="card-text text-secondary">Khung chương trình và danh mục học phần - CTĐT cải tiến năm 2022.</p>
+                            <a href="http://www.fithou.edu.vn/Article.aspx?aid=2112&cid=3" class="btn btn-link p-0">Xem chi tiết <i class="bi bi-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="card p-3 shadow-sm h-100 service-card">
+                        <div class="card-body">
+                            <i class="bi bi-person-workspace icon-large mb-3"></i>
+                            <h5 class="card-title fw-bold">Gặp gỡ Cố vấn (Giảng viên)</h5>
+                            <p class="card-text text-secondary">Đặt câu hỏi trực tuyến 1-1 với các Giảng viên và chuyên gia hàng đầu của Khoa.</p>
+                            <a asp-controller="UserTeacher" class="btn btn-link p-0">Đặt câu hỏi ngay <i class="bi bi-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="card p-3 shadow-sm h-100 service-card">
+                        <div class="card-body">
+                            <i class="bi bi-calendar-event icon-large mb-3"></i>
+                            <h5 class="card-title fw-bold">Tin tức & Sự kiện</h5>
+                            <p class="card-text text-secondary">Cập nhật nhanh nhất các thông báo học thuật, sự kiện, workshop công nghệ của Khoa.</p>
+                            <a href="http://www.fithou.edu.vn/Category.aspx?cid=1" class="btn btn-link p-0">Xem thêm <i class="bi bi-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 full-width-section">
+        <div class="container"> 
+            <h2 class="text-center mb-4 fw-bold text-primary">Thông tin Học vụ & Cơ hội</h2>
+            <p class="text-center mb-5 text-secondary">Các liên kết nhanh đến tài liệu, quy định và cơ hội nghề nghiệp quan trọng.</p>
+
+            <div class="row g-4 text-center">
+                
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <a href="http://www.fithou.edu.vn/Category.aspx?cid=4" class="card info-link-card h-100 p-3 text-decoration-none text-dark shadow-sm">
+                        <i class="bi bi-bullseye fs-1 mb-2"></i>
+                        <h6 class="fw-bold mb-0">Tin Hoạt động</h6>
+                    </a>
+                </div>
+
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <a href="http://www.fithou.edu.vn/Category.aspx?cid=14" class="card info-link-card h-100 p-3 text-decoration-none text-dark shadow-sm">
+                        <i class="bi bi-list-columns-reverse fs-1 mb-2"></i>
+                        <h6 class="fw-bold mb-0">Kế hoạch Giảng dạy</h6>
+                    </a>
+                </div>
+
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <a href="http://www.fithou.edu.vn/Category.aspx?cid=12" class="card info-link-card h-100 p-3 text-decoration-none text-dark shadow-sm">
+                        <i class="bi bi-file-earmark-ruled fs-1 mb-2"></i>
+                        <h6 class="fw-bold mb-0">Quy định & Biểu mẫu</h6>
+                    </a>
+                </div>
+
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <a href="http://www.fithou.edu.vn/Category.aspx?cid=11" class="card info-link-card h-100 p-3 text-decoration-none text-dark shadow-sm">
+                        <i class="bi bi-mortarboard fs-1 mb-2"></i>
+                        <h6 class="fw-bold mb-0">Thông tin Tốt nghiệp</h6>
+                    </a>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <a href="http://www.fithou.edu.vn/Category.aspx?cid=7" class="btn btn-warning btn-lg fw-bold shadow-sm">
+                        <i class="bi bi-briefcase me-2"></i> Cổng Thông tin Tuyển dụng
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 full-width-section bg-light">
+        <div class="container-fluid">
+            <h2 class="text-center mb-5 fw-bold">Gặp gỡ các Cố vấn tiêu biểu</h2>
+            <div class="row g-4 justify-content-center px-4">
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="card text-center p-3 shadow-sm h-100">
+                        <div class="text-center mb-3">
+                            <img src="https://scontent.fhan5-10.fna.fbcdn.net/v/t39.30808-6/481498484_10162123503454210_9143605894504387149_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=6E6BHxVqdgoQ7kNvwFRmrn_&_nc_oc=AdlXEz0ibmxOHQfy1T7SPtJvAG2wjVvKJ_fH7DVKUcrsN7xfaQqe6XXNono8YMtVr8E&_nc_zt=23&_nc_ht=scontent.fhan5-10.fna&_nc_gid=hpIOVEMOceTu6L6gGTesXg&oh=00_AfeZtAb8eitMtu3hhd8OyTOlGOEgl8F8VMLfoLXlZl8HTg&oe=69069CC0" class="rounded-circle expert-card img-thumbnail" alt="Giảng viên 2">
+                        </div>
+                        <h5 class="card-title fw-bold">TS. Mai Thúy Hà</h5>
+                        <p class="card-text text-muted">Chuyên môn: Công nghệ phần mềm</p>
+                        <a href="#" class="btn btn-outline-primary btn-sm mt-2">Chat</a>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="card text-center p-3 shadow-sm h-100">
+                        <div class="text-center mb-3">
+                            <img src="https://scontent.fhan5-6.fna.fbcdn.net/v/t39.30808-1/468443242_10161784167944876_4376091322567369065_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=105&ccb=1-7&_nc_sid=1d2534&_nc_ohc=deXuwwTNDikQ7kNvwEIhr7g&_nc_oc=AdnQf2EcynLXmQcvXUyoEgQR4Z8r5c3dmuKhk3xWAIemId9Ef8z7p5az7kCsyUbgmX8&_nc_zt=24&_nc_ht=scontent.fhan5-6.fna&_nc_gid=nyU_RosoypX2FwI-jzuyAw&oh=00_AffQOA3rHXsq5hSUTZrlG-3Y-SfXlvkPYExAdDQ7bGk-EA&oe=690165B8" class="rounded-circle expert-card img-thumbnail" alt="Giảng viên 2">
+                        </div>
+                        <h5 class="card-title fw-bold">TS. Lê Hữu Dũng</h5>
+                        <p class="card-text text-muted">Chuyên môn: Công nghệ phần mềm</p>
+                        <a href="#" class="btn btn-outline-primary btn-sm mt-2">Chat</a>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="card text-center p-3 shadow-sm h-100">
+                        <div class="text-center mb-3">
+                            <img src="https://scontent.fhan5-9.fna.fbcdn.net/v/t39.30808-6/536269626_31970962469169646_4165438547447736688_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=apBcFlNHatUQ7kNvwEeWhd8&_nc_oc=Adlarf6wEodHdb77mPh5WeY-eeNnxGDmxJk6b6yTuTk2Hiu6rNlIb3RGR8oc8pl_8Q4&_nc_zt=23&_nc_ht=scontent.fhan5-9.fna&_nc_gid=Ws1wDMLKrEX3Bp39X424LQ&oh=00_Afe3WUmtpyQuT2BM8hse5Vv7q4rn1NICWX59G80jaOT6FQ&oe=69017573" class="rounded-circle expert-card img-thumbnail" alt="Giảng viên 3">
+                        </div>
+                        <h5 class="card-title fw-bold">TS. Đinh Tuấn Long</h5>
+                        <p class="card-text text-muted">Chuyên môn: Công nghệ Đa phương tiện</p>
+                        <a href="#" class="btn btn-outline-primary btn-sm mt-2">Chat</a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                 <a asp-controller="UserTeacher" class="btn btn-secondary btn-lg">Xem tất cả Cố vấn <i class="bi bi-people-fill"></i></a>
+            </div>
+        </div>
+    </section>
+    
+    <section class="cta-footer text-center">
+        <div class="container"> 
+            <h2 class="fw-bold">Cần trợ giúp ngay?</h2>
+            <p class="lead mb-4">Nhận hỗ trợ tức thì kết nối trực tiếp với phòng ban hỗ trợ học vụ của Khoa.</p>
+            <a href="mailto:cntt@hou.edu.vn" class="btn btn-outline-light btn-lg shadow-sm">
+                <i class="bi bi-envelope me-2"></i> Gửi Email Hỗ trợ
+            </a>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-white-50 py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <h5 class="text-white">Khoa CNTT - HOU</h5>
+                    <p>Cổng thông tin & hỗ trợ học tập chính thức cho sinh viên Khoa Công nghệ Thông tin.</p>
+                    <a href="#" class="text-white-50 me-2"><i class="bi bi-facebook fs-4"></i></a>
+                    <a href="#" class="text-white-50 me-2"><i class="bi bi-youtube fs-4"></i></a>
+                </div>
+                
+                <div class="col-md-3 mb-3">
+                    <h5 class="text-white">Học vụ & Đào tạo</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="http://www.fithou.edu.vn/Category.aspx?cid=3" class="text-white-50 text-decoration-none">Tin Đào tạo</a></li>
+                        <li><a href="http://www.fithou.edu.vn/Category.aspx?cid=14" class="text-white-50 text-decoration-none">Kế hoạch Giảng dạy</a></li>
+                        <li><a href="http://www.fithou.edu.vn/Category.aspx?cid=12" class="text-white-50 text-decoration-none">Quy định & Biểu mẫu</a></li>
+                        <li><a href="http://www.fithou.edu.vn/Category.aspx?cid=11" class="text-white-50 text-decoration-none">Tốt nghiệp</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-3 mb-3">
+                    <h5 class="text-white">Hỗ trợ & Việc làm</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="http://www.fithou.edu.vn/Article.aspx?aid=2112&cid=3" class="text-white-50 text-decoration-none">Thông tin Chuyên ngành</a></li>
+                        <li><a href="http://www.fithou.edu.vn/Category.aspx?cid=13" class="text-white-50 text-decoration-none">NCKH</a></li>
+                        <li><a href="http://www.fithou.edu.vn/Category.aspx?cid=7" class="text-white-50 text-decoration-none">Tin Tuyển dụng</a></li>
+                        <li><a href="http://www.fithou.edu.vn/Contact.aspx" class="text-white-50 text-decoration-none">Liên hệ</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-3 mb-3">
+                    <h5 class="text-white">Liên hệ Văn phòng</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-geo-alt me-2"></i> 96 Định Công - Hà Nội</li>
+                        <li><i class="bi bi-telephone me-2"></i> (+84)024 36649347</li>
+                        <li><i class="bi bi-envelope me-2"></i> cntt@hou.edu.vn</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-3 border-secondary">
+            <div class="text-center">
+                <p class="mb-0">2025 Khoa CNTT - Trường Đại học Mở Hà Nội.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
