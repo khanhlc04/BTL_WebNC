@@ -1,8 +1,9 @@
+@using System.Linq
+@using System.Collections.Generic
 @{
     ViewData["Title"] = "Danh sách môn học";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var currentSort = ViewData["CurrentSort"];
-    var subjects = ViewBag.Subjects;
+    var subjects = ViewBag.Subjects as IEnumerable<BTL_WebNC.Models.Subject.SubjectModel> ?? Enumerable.Empty<BTL_WebNC.Models.Subject.SubjectModel>();
 }
 
 <style>
@@ -50,28 +51,27 @@
     </div>
 </form>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Tên môn học</th>
-            <th>Mô tả</th>
-        </tr>
-    </thead>
-    <tbody>
-    @if (subjects != null) {
-        @foreach (var item in subjects)
+<div class="subject-grid">
+    @if (subjects != null && subjects.Any())
+    {
+        foreach (var item in subjects)
         {
-            <tr>
-                <td>@item.Id</td>
-                <td><a href="@Url.Action("Details", "Subject", new { id = item.Id })">@item.Name</a></td>
-                    <td>@item.Description</td>
-            </tr>
+            <a class="subject-card" href="@Url.Action("Details", "Subject", new { id = item.Id })">
+                <h4>@item.Name</h4>
+                <p class="muted">@item.Description</p>
+            </a>
         }
     }
-        else
-        {
-            <tr><td colspan="3" class="text-center">Không có dữ liệu phù hợp.</td></tr>
-        }
-    </tbody>
-</table>
+    else
+    {
+        <div class="text-center">Không có dữ liệu phù hợp.</div>
+    }
+</div>
+
+<style>
+    .subject-grid { display:flex; flex-wrap:wrap; gap:16px; }
+    .subject-card { background:#fff; border-radius:8px; padding:16px; box-shadow:0 2px 8px rgba(0,0,0,0.06); text-decoration:none; color:inherit; flex:1 1 calc(25% - 16px); min-width:220px; }
+    .subject-card h4 { margin:0 0 8px 0; }
+    .subject-card .muted { color:#666; font-size:14px; }
+    @@media (max-width:768px) { .subject-card { flex:1 1 100%; } }
+</style>

@@ -69,7 +69,7 @@ namespace BTL_WebNC.Controllers.Admin
                 {
                     Email = email,
                     Password = password,
-                    Role = "User",
+                    Role = "Teacher",
                     Deleted = false,
                 };
                 await _accountRepo.CreateAsync(account);

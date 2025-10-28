@@ -1,115 +1,53 @@
 @model IEnumerable<BTL_WebNC.Models.Teacher.TeacherModel>
+@using System.Security.Claims
 
 @{
     ViewData["Title"] = "Danh sách giảng viên";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var currentSort = ViewData["CurrentSort"] as string;
-    var isStudent = (bool)(ViewData["IsStudent"] ?? false);
+    var currentSort = ViewData["CurrentSort"] as string ?? string.Empty;
+    var userEmail = User.FindFirst(ClaimTypes.Email)?.Value ?? string.Empty;
+    var isStudent = userEmail.EndsWith("@students.hou.edu.vn");
 }
 
 <style>
-    .toolbar-container {
-        display: flex;
-        justify-content: flex-end;
-        margin-bottom: 20px;
-    }
-    .controls-stack {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-    .control-row {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        gap: 8px;
-    }
+    .teacher-grid { display:flex; flex-wrap:wrap; gap:16px; }
+    .teacher-card { background:#fff; border-radius:8px; padding:12px; box-shadow:0 2px 8px rgba(0,0,0,0.06); flex:1 1 calc(25% - 16px); min-width:220px; position:relative; text-decoration:none; color:inherit; }
+    .teacher-card h4 { margin:0 0 8px 0; font-size:16px; }
+    .teacher-card p { margin:0; color:#555; font-size:14px; }
+    .chat-btn { position:absolute; right:8px; top:8px; }
+    @@media (max-width:768px) { .teacher-card { flex:1 1 100%; } }
 </style>
 
 <h2>Danh sách giảng viên</h2>
 
-<form asp-action="Index" method="get">
-    <div class="toolbar-container">
-        <div class="controls-stack">
+<div class="teacher-grid">
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+            <div class="teacher-card">
+                @if (isStudent)
+                {
+                    <a class="btn btn-sm btn-success chat-btn" href="@Url.Action("Index", "Chat", new { recipientId = item.AccountId })">Chat</a>
+                }
 
-            <div class="control-row">
-                <span>Tìm kiếm theo tên:</span>
-                <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control d-inline-block w-auto" />
-                <input type="submit" value="Lọc" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-secondary">Reset</a>
-            </div>
-
-            <div class="control-row">
-                <span>Lọc theo môn học:</span>
-                <select name="subjectId" class="form-select d-inline-block w-auto" onchange="this.form.submit()">
-                    <option value="">-- Tất cả môn học --</option>
-                    @if (ViewBag.Subjects != null)
+                <h4><a href="@Url.Action("Details", "Teacher", new { id = item.Id })">@item.FullName</a></h4>
+                <p>@(item.Email ?? "-")</p>
+                <p style="margin-top:8px; color:#888; font-size:13px;">Môn: 
+                    @if (item.TeacherSubjects != null && item.TeacherSubjects.Any())
                     {
-                        foreach (var subject in (SelectList)ViewBag.Subjects)
-                        {
-                            <option value="@subject.Value" selected="@(subject.Selected)">@subject.Text</option>
-                        }
+                        @string.Join(", ", item.TeacherSubjects.Select(ts => ts.Subject?.Name ?? "N/A"))
                     }
-                </select>
+                    else
+                    {
+                        <span>Chưa đăng ký môn học</span>
+                    }
+                </p>
             </div>
-
-            @* <div class="control-row">
-                <span>Sắp xếp theo:</span>
-                <select name="sortOrder" class="form-select d-inline-block w-auto" onchange="this.form.submit()">
-                    <option value="id_asc"    selected="@(currentSort == "id_asc")">ID Tăng dần</option>
-                    <option value="id_desc"   selected="@(currentSort == "id_desc")">ID Giảm dần</option>
-                    <option value="name_asc"  selected="@(currentSort == "name_asc")">Họ tên A-Z</option>
-                    <option value="name_desc" selected="@(currentSort == "name_desc")">Họ tên Z-A</option>
-                </select>
-            </div> *@
-        </div>
-    </div>
-</form>
-
-<table class="table table-striped align-middle">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Họ tên</th>
-            <th>Email</th>
-            <th>Môn học dạy</th>
-            <th>Thao tác</th> </tr>
-    </thead>
-    <tbody>
-        @if (Model != null && Model.Any())
-        {
-            foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.Id</td>
-                    <td><a href="@Url.Action("Details", "Teacher", new { id = item.Id })">@item.FullName</a></td>
-                    <td>@item.Email</td>
-                    <td>
-                        @if (item.TeacherSubjects != null && item.TeacherSubjects.Count > 0)
-                        {
-                            @string.Join(", ", item.TeacherSubjects.Select(ts => ts.Subject?.Name ?? "N/A"))
-                        }
-                        else
-                        {
-                            <span>Chưa đăng ký môn học</span>
-                        }
-                    </td>
-                    <td>
-                        @if (isStudent)
-                        {
-                            <a asp-controller="Chat" asp-action="Index" asp-route-recipientId="@item.Id" class="btn btn-success btn-sm">
-                                Chat
-                            </a>
-                        }
-                    </td>
-                </tr>
-            }
         }
-        else
-        {
-            <tr>
-                <td colspan="5" class="text-center">Không có dữ liệu phù hợp.</td>
-            </tr>
-        }
-    </tbody>
-</table>
+    }
+    else
+    {
+        <div>Không có giảng viên phù hợp.</div>
+    }
+</div>

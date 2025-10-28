@@ -1,0 +1,64 @@
+@using BTL_WebNC.Models.RoomChat
+@using System.Linq
+@using System.Security.Claims
+@{
+    ViewData["Title"] = "Chat Rooms";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var rooms = ViewBag.Rooms as IEnumerable<BTL_WebNC.Models.RoomChat.RoomChatModel> ?? System.Linq.Enumerable.Empty<BTL_WebNC.Models.RoomChat.RoomChatModel>();
+    var roomsDetailed = ViewBag.RoomsDetailed as IEnumerable<dynamic> ?? Enumerable.Empty<dynamic>();
+
+    // parse current user's account id from claims (if present)
+    var currentAccountId = 0;
+    var idClaim = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    if (!string.IsNullOrEmpty(idClaim)) int.TryParse(idClaim, out currentAccountId);
+}
+
+<h2>Cuộc trò chuyện</h2>
+
+@if (roomsDetailed.Any())
+{
+    <div class="list-group">
+        @foreach (var item in roomsDetailed)
+        {
+            var r = item.Room as RoomChatModel;
+            var last = item.LastMessage as BTL_WebNC.Models.Chat.ChatModel;
+            var otherAccountId = (r.StudentId == currentAccountId ? r.TeacherId : r.StudentId);
+            <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-start" href="@Url.Action("Room", "Chat", new { otherAccountId = otherAccountId })">
+                <div class="ms-2 me-auto">
+                    @if (r.Student != null && r.Teacher != null)
+                    {
+                        <div><strong>@(r.Student.Email == User?.FindFirst(ClaimTypes.Email)?.Value ? r.Teacher.Email : r.Student.Email)</strong></div>
+                    }
+                    else
+                    {
+                        <div><strong>Phòng @r.Id</strong></div>
+                    }
+                    <div class="small text-muted">
+                        @if (last != null)
+                        {
+                            @((last.Sender?.Email ?? "") + ": " + last.Message)
+                        }
+                        else
+                        {
+                            <text><em>Chưa có tin nhắn</em></text>
+                        }
+                    </div>
+                </div>
+                <span class="badge bg-secondary rounded-pill">
+                    @if (last != null)
+                    {
+                        @last.CreatedAt.ToString("g")
+                    }
+                    else
+                    {
+                        <text>-</text>
+                    }
+                </span>
+            </a>
+        }
+    </div>
+}
+else
+{
+    <div>Không có cuộc trò chuyện.</div>
+}

@@ -57,7 +57,7 @@ namespace BTL_WebNC.Controllers.Admin
                 {
                     Email = email,
                     Password = password,
-                    Role = "User",
+                    Role = "Student",
                     Deleted = false,
                 };
                 var createdAccount = await _accountRepo.CreateAsync(account);

@@ -1,0 +1,105 @@
+@using BTL_WebNC.Models.Chat
+@{
+    var room = ViewBag.Room;
+    var messages = ViewBag.Messages as IEnumerable<BTL_WebNC.Models.Chat.ChatModel> ?? Enumerable.Empty<BTL_WebNC.Models.Chat.ChatModel>();
+    var other = ViewBag.Other;
+    var currentEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? "";
+
+    ViewData["Title"] = other?.Email ?? "Chat";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="chat-container">
+    <h3>Chat với: @(other?.Email ?? "-")</h3>
+    <div id="messages" style="border:1px solid #ddd; padding:12px; height:300px; overflow:auto; background:#fafafa;">
+        @foreach (var m in messages)
+        {
+            var senderEmail = m.Sender?.Email ?? "";
+            var isMine = !string.IsNullOrEmpty(senderEmail) && string.Equals(senderEmail, currentEmail, StringComparison.OrdinalIgnoreCase);
+            <div class="message @(isMine ? "mine" : "other")" style="margin-bottom:8px;">
+                <div style="display:flex; justify-content:@(isMine ? "flex-end" : "flex-start");">
+                    <div style="max-width:80%; background:@(isMine ? "#e6ffe6" : "#fff"); padding:8px; border-radius:8px;">
+                        <div style="font-weight:600; font-size:0.95rem;">@(isMine ? "You" : senderEmail)</div>
+                        <div style="margin-top:6px;">@m.Message</div>
+                        <div><small class="text-muted">@m.CreatedAt.ToString("g")</small></div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div style="margin-top:12px; display:flex; gap:8px;">
+        <input id="messageInput" type="text" class="form-control" placeholder="Gõ tin nhắn..." />
+        <button id="sendBtn" class="btn btn-primary">Gửi</button>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.10/signalr.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl('/chatHub')
+            .build();
+
+        // disable send until connected
+        const sendBtn = document.getElementById('sendBtn');
+        if (sendBtn) sendBtn.disabled = true;
+
+        connection.start().then(function () {
+            console.log('SignalR connected');
+            if (sendBtn) sendBtn.disabled = false;
+            if ('@currentEmail' && '@currentEmail'.length > 0) {
+                connection.invoke('JoinChat', '@currentEmail').catch(function (err) { console.error('JoinChat failed', err.toString()); });
+            }
+        }).catch(function (err) {
+            console.error('SignalR connection error:', err.toString());
+        });
+
+        connection.on('ReceivePrivateMessage', function (user, message) {
+            // user = sender email
+            const msgDiv = document.getElementById('messages');
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = `
+                <div class="message other" style="margin-bottom:8px;">
+                <div style="display:flex; justify-content:flex-start">
+                    <div style="max-width:80%; background:#fff; padding:8px; border-radius:8px;">
+                        <div style="font-weight:600; font-size:0.95rem;">${user}</div>
+                        <div style="margin-top:6px;">${message}</div>
+                        <div><small class="text-muted">${new Date().toLocaleString()}</small></div>
+                    </div>
+                </div>
+                </div>
+            `;
+            msgDiv.appendChild(wrapper);
+            msgDiv.scrollTop = msgDiv.scrollHeight;
+        });
+
+        if (sendBtn) {
+            sendBtn.addEventListener('click', function () {
+                const input = document.getElementById('messageInput');
+                const text = input.value.trim();
+                if (!text) return;
+                connection.invoke('SendPrivateMessage', '@currentEmail', '@(other?.Email ?? "")', text)
+                    .then(function () {
+                      const msgDiv = document.getElementById('messages');
+                      const wrapper = document.createElement('div');
+                       wrapper.innerHTML = `
+                        <div class="message mine" style="margin-bottom:8px;">
+                        <div style="display:flex; justify-content:flex-end">
+                            <div style="max-width:80%; background:#e6ffe6; padding:8px; border-radius:8px;">
+                                <div style="font-weight:600; font-size:0.95rem;">You</div>
+                                <div style="margin-top:6px;">${text}</div>
+                                <div><small class="text-muted">${new Date().toLocaleString()}</small></div>
+                            </div>
+                        </div>
+                        </div>
+                    `;
+                    msgDiv.appendChild(wrapper);
+                    msgDiv.scrollTop = msgDiv.scrollHeight;
+                    })
+                    .catch(function (err) { console.error('SendPrivateMessage failed:', err.toString()); });
+                input.value = '';
+            });
+        }
+    </script>
+}

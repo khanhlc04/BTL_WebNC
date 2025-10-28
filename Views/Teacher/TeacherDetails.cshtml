@@ -1,6 +1,8 @@
+@using System.Linq
+@using System.Collections.Generic
 @{
-    var teacher = ViewBag.Teacher;
-    var subjects = ViewBag.Subjects;
+    var teacher = ViewBag.Teacher as BTL_WebNC.Models.Teacher.TeacherModel;
+    var subjects = ViewBag.Subjects as IEnumerable<BTL_WebNC.Models.Subject.SubjectModel> ?? Enumerable.Empty<BTL_WebNC.Models.Subject.SubjectModel>();
 
     ViewData["Title"] = teacher?.FullName ?? "Danh sách môn học của giảng viên";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,35 +12,27 @@
 <p>Email: @(teacher?.Email ?? "-")</p>
 
 <h3>Môn học</h3>
-@if (subjects != null)
+@if (subjects != null && subjects.Any())
 {
-    <table class="table table-striped">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Tên môn học</th>
-            <th>Mô tả</th>
-        </tr>
-    </thead>
-    <tbody>
-    @if (subjects != null) {
+    <div class="subject-grid">
         @foreach (var item in subjects)
         {
-            <tr>
-                <td>@item.Id</td>
-                <td><a href="@Url.Action("Details", "Subject", new { id = item.Id })">@item.Name</a></td>
-                    <td>@item.Description</td>
-            </tr>
+            <a class="subject-card" href="@Url.Action("Details", "Subject", new { id = item.Id })">
+                <h4>@item.Name</h4>
+                <p class="muted">@item.Description</p>
+            </a>
         }
-    }
-        else
-        {
-            <tr><td colspan="3" class="text-center">Không có dữ liệu phù hợp.</td></tr>
-        }
-    </tbody>
-</table>
+    </div>
 }
 else
 {
     <div>Giảng viên chưa đăng ký môn học nào.</div>
 }
+
+<style>
+    .subject-grid { display:flex; flex-wrap:wrap; gap:16px; margin-top:12px; }
+    .subject-card { background:#fff; border-radius:8px; padding:12px; box-shadow:0 2px 8px rgba(0,0,0,0.06); flex:1 1 calc(25% - 16px); min-width:200px; text-decoration:none; color:inherit; }
+    .subject-card h4 { margin:0 0 8px 0; font-size:16px; }
+    .subject-card .muted { color:#666; font-size:14px; }
+    @@media (max-width:768px) { .subject-card { flex:1 1 100%; } }
+</style>
