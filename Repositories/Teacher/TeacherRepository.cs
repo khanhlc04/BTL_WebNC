@@ -26,8 +26,16 @@ namespace BTL_WebNC.Repositories
         public async Task<TeacherModel> GetByIdAsync(int id)
         {
             return await _context
-                .Teachers.Include(t => t.Account)
-                .FirstOrDefaultAsync(t => t.Id == id && !t.Deleted);
+                .Teachers.Where(t => t.Id == id && !t.Deleted)
+                .Select(t => new TeacherModel
+                {
+                    Id = t.Id,
+                    FullName = t.FullName,
+                    Email = t.Email,
+                    Account = t.Account,
+                    TeacherSubjects = t.TeacherSubjects.Where(ts => !ts.Deleted).ToList(),
+                })
+                .FirstOrDefaultAsync();
         }
 
         public async Task<TeacherModel> GetByAccountIdAsync(int accountId)

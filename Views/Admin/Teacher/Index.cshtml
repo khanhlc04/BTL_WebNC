@@ -91,7 +91,7 @@
 
           <div class="mb-3" id="passwordDiv">
             <label for="password" class="form-label">Mật khẩu <span class="text-danger">*</span></label>
-            <input type="password" class="form-control" id="password" required />
+            <input name="password" type="password" class="form-control" id="password" required />
           </div>
         </form>
       </div>
@@ -120,7 +120,14 @@
       document.getElementById('modalTitle').textContent = 'Thêm giảng viên';
       document.getElementById('teacherForm').reset();
       document.getElementById('teacherId').value = '';
-      document.getElementById('passwordDiv').classList.remove('d-none'); 
+      
+       
+      const pwdDiv = document.getElementById('passwordDiv');
+      const pwdInput = document.getElementById('password');
+      pwdDiv.classList.remove('d-none');
+      pwdInput.required = true;
+      pwdInput.disabled = false;
+    
       currentModal.show();
     }
 
@@ -182,7 +189,12 @@
         document.getElementById('teacherForm').reset();
         document.getElementById('teacherId').value = '';
         document.getElementById('modalTitle').textContent = 'Sửa thông tin giảng viên';
-        document.getElementById('passwordDiv').classList.add('d-none'); 
+        
+        const pwdDiv = document.getElementById('passwordDiv');
+        const pwdInput = document.getElementById('password');
+        pwdDiv.classList.add('d-none');
+        pwdInput.required = false;
+        pwdInput.disabled = true;
 
         currentModal.show();
         
@@ -197,9 +209,10 @@
                     document.getElementById('fullName').value = doc.fullName;
 
                     const sel = document.getElementById('subject');
-                    const selected = Array.isArray(doc.subjects) ? doc.subjects.map(String) : (doc.subject ? [String(doc.subject)] : []);
+                    const selected = Array.isArray(doc.teacherSubjects) ? doc.teacherSubjects.map(s => s.subjectId) : [];
+
                     Array.from(sel.options).forEach(o => {
-                        o.selected = selected.includes(o.value);
+                        o.selected = selected.includes(parseInt(o.value));
                     });
                     document.getElementById('fullName').value = doc.fullName;
 

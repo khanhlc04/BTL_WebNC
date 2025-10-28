@@ -73,7 +73,7 @@
     
           <div class="mb-3" id="passwordDiv">
             <label for="password" class="form-label">Mật khẩu <span class="text-danger">*</span></label>
-            <input type="password" class="form-control" id="password" required />
+            <input type="password" class="form-control" id="password" name="password" required />
           </div>
         </form>
       </div>
@@ -102,7 +102,13 @@
       document.getElementById('modalTitle').textContent = 'Thêm sinh viên';
       document.getElementById('studentForm').reset();
       document.getElementById('studentId').value = '';
-      document.getElementById('passwordDiv').classList.remove('d-none'); 
+      
+      const pwdDiv = document.getElementById('passwordDiv');
+      const pwdInput = document.getElementById('password');
+      pwdDiv.classList.remove('d-none');
+      pwdInput.required = true;
+      pwdInput.disabled = false;
+
       currentModal.show();
     }
 
@@ -161,7 +167,12 @@
         document.getElementById('studentForm').reset();
         document.getElementById('studentId').value = '';
         document.getElementById('modalTitle').textContent = 'Sửa thông tin sinh viên';
-        document.getElementById('passwordDiv').classList.add('d-none'); 
+        
+        const pwdDiv = document.getElementById('passwordDiv');
+        const pwdInput = document.getElementById('password');
+        pwdDiv.classList.add('d-none');
+        pwdInput.required = false;
+        pwdInput.disabled = true;
 
         currentModal.show();
         
