@@ -4,6 +4,9 @@ using BTL_WebNC.Repositories;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
 namespace BTL_WebNC.Controllers.Document
 {
     public class DocumentController : Controller
@@ -20,79 +23,46 @@ namespace BTL_WebNC.Controllers.Document
             _webHostEnvironment = webHostEnvironment;
         }
 
+        // Action Index (trang chính, trả về view đầy đủ)
         public async Task<IActionResult> Index(string searchTerm, List<int>? subjectIds)
         {
-            var documents = await _documentRepo.GetAllAsync();
-
-            // Lọc theo search term
-            if (!string.IsNullOrEmpty(searchTerm))
-            {
-                documents = documents.Where(d =>
-                    d.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
-                    || (
-                        d.FileName != null
-                        && d.FileName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
-                    )
-                );
-            }
-
-            // Lọc theo môn học
-            if (subjectIds != null && subjectIds.Any())
-            {
-                documents = documents.Where(d => subjectIds.Contains(d.SubjectId));
-            }
+            var documentList = subjectIds ?? new List<int>();
+            var documents = await GetFilteredDocumentsAsync(searchTerm, documentList);
 
             ViewBag.Count = documents.Count();
             ViewBag.SearchTerm = searchTerm;
-            ViewBag.SelectedSubjects = subjectIds ?? new List<int>();
-
-            var subjects = await _documentRepo.GetSubjectsAsync();
-            ViewBag.Subjects = subjects;
+            ViewBag.SelectedSubjects = documentList;
+            ViewBag.Subjects = await _documentRepo.GetSubjectsAsync();
 
             return View("~/Views/Document/Document.cshtml", documents);
+        }
+
+        // Action FilterDocuments (dùng cho AJAX, trả về PartialView)
+        [HttpGet]
+        public async Task<IActionResult> FilterDocuments(string searchTerm, [FromQuery] List<int> subjectIds)
+        {
+            var documents = await GetFilteredDocumentsAsync(searchTerm, subjectIds);
+
+            return PartialView("~/Views/Document/DocumentListPartial.cshtml", documents);
         }
 
         // Download file tài liệu
         public async Task<IActionResult> Download(int id)
         {
             var document = await _documentRepo.GetByIdAsync(id);
-
             if (document == null || string.IsNullOrEmpty(document.FilePath))
                 return NotFound("Không tìm thấy tài liệu");
 
-            // Đường dẫn file đầy đủ
             var filePath = Path.Combine(_webHostEnvironment.WebRootPath, document.FilePath);
 
-            // Kiểm tra file có tồn tại không
             if (!System.IO.File.Exists(filePath))
                 return NotFound("File không tồn tại");
 
-            try
-            {
-                // Đọc file vào memory
-                var memory = new MemoryStream();
-                using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-                {
-                    await stream.CopyToAsync(memory);
-                }
-                memory.Position = 0;
+            // Tự động chọn kiểu nội dung dựa theo file
+            var contentType = GetContentType(filePath) ?? "application/octet-stream";
+            var fileName = Path.GetFileName(filePath);
 
-                // Lấy tên file an toàn
-                var fileName = !string.IsNullOrEmpty(document.FileName)
-                    ? document.FileName
-                    : GetSafeFileName(document.Title, Path.GetExtension(filePath));
-
-                // Lấy content type
-                var contentType = GetContentType(filePath);
-
-                // Trả về file để download
-                return File(memory, contentType, fileName);
-            }
-            catch (Exception ex)
-            {
-                // Log error nếu cần
-                return StatusCode(500, "Lỗi khi tải file: " + ex.Message);
-            }
+            return PhysicalFile(filePath, contentType, fileName);
         }
 
         // Xem file online (cho PDF, image)
@@ -130,6 +100,9 @@ namespace BTL_WebNC.Controllers.Document
             if (document == null)
                 return NotFound(new { success = false, message = "Không tìm thấy tài liệu" });
 
+            if (string.IsNullOrEmpty(document.FilePath))
+                return NotFound(new { success = false, message = "Tài liệu không có file." });
+
             var filePath = Path.Combine(_webHostEnvironment.WebRootPath, document.FilePath);
 
             if (!System.IO.File.Exists(filePath))
@@ -156,22 +129,54 @@ namespace BTL_WebNC.Controllers.Document
             );
         }
 
+        // Helper private để tái sử dụng logic filter
+        private async Task<IEnumerable<DocumentModel>> GetFilteredDocumentsAsync(string searchTerm, List<int> subjectIds)
+        {
+            var documents = await _documentRepo.GetAllAsync() ?? new List<DocumentModel>();
+
+            // Lọc theo search term (Logic từ File 2, tốt hơn)
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                documents = documents.Where(d =>
+                    d.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+                    || (
+                        d.FileName != null
+                        && d.FileName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+                    )
+                );
+            }
+
+            // Lọc theo môn học
+            if (subjectIds != null && subjectIds.Any())
+            {
+                documents = documents.Where(d => subjectIds.Contains(d.SubjectId));
+            }
+
+            return documents;
+        }
+
+        // Helper để lấy tên file an toàn
         private string GetSafeFileName(string title, string extension)
         {
-            // Loại bỏ ký tự không hợp lệ
             var invalidChars = Path.GetInvalidFileNameChars();
             var safeTitle = string.Join(
                 "_",
                 title.Split(invalidChars, StringSplitOptions.RemoveEmptyEntries)
             );
 
-            // Giới hạn độ dài tên file
             if (safeTitle.Length > 100)
                 safeTitle = safeTitle.Substring(0, 100);
+
+            // Đảm bảo extension có dấu chấm
+            if (!string.IsNullOrEmpty(extension) && !extension.StartsWith("."))
+            {
+                extension = "." + extension;
+            }
 
             return safeTitle + extension;
         }
 
+        // Helper để lấy Content Type
         private string GetContentType(string path)
         {
             var types = new Dictionary<string, string>
@@ -179,17 +184,11 @@ namespace BTL_WebNC.Controllers.Document
                 // Documents
                 { ".pdf", "application/pdf" },
                 { ".doc", "application/vnd.ms-word" },
-                {
-                    ".docx",
-                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                },
+                { ".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document" },
                 { ".xls", "application/vnd.ms-excel" },
                 { ".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" },
                 { ".ppt", "application/vnd.ms-powerpoint" },
-                {
-                    ".pptx",
-                    "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-                },
+                { ".pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation" },
                 // Archives
                 { ".zip", "application/zip" },
                 { ".rar", "application/x-rar-compressed" },

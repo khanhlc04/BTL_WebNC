@@ -4,52 +4,323 @@
     ViewData["Title"] = "Chi tiết câu hỏi";
 }
 
-<div class="container mt-4">
-    <h2 class="mb-3 text-primary">📖 Chi tiết câu hỏi</h2>
+<style>
+    .answer-card {
+        transition: transform 0.2s;
+    }
+
+        .answer-card:hover {
+            transform: translateY(-2px);
+        }
+
+    .preview-content {
+        min-height: 100px;
+        max-height: 200px;
+        overflow-y: auto;
+        background: #f8f9fa;
+        padding: 1rem;
+        border-radius: 0.375rem;
+    }
+
+    .char-count {
+        font-size: 0.875rem;
+    }
+
+        .char-count.warning {
+            color: #ffc107;
+        }
+
+        .char-count.danger {
+            color: #dc3545;
+        }
+</style>
+
+<div class="container py-4">
+    <div class="mb-4 d-flex justify-content-between align-items-center">
+        <h2 class="text-primary mb-0">
+            <i class="bi bi-chat-text"></i> Chi tiết câu hỏi
+        </h2>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Quay lại danh sách
+        </a>
+    </div>
 
     <!-- Question -->
-    <div class="card shadow-sm mb-4">
+    <div class="card shadow-sm mb-4 border-primary border-2">
         <div class="card-body">
-            <h4 class="card-title">@Model.Content</h4>
-            <p class="text-muted">Đăng bởi: <strong>@Model.Account.Email</strong> • @Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</p>
+            <div class="d-flex align-items-start">
+                <div class="me-3">
+                    <div class="border rounded-circle p-2 text-primary">
+                        <i class="bi bi-person-circle" style="font-size: 2rem;"></i>
+                    </div>
+                </div>
+                <div class="flex-grow-1">
+                    <h4 class="card-title mb-3">@Model.Content</h4>
+                    <div class="text-muted">
+                        <i class="bi bi-person"></i> @Model.Account.Email
+                        <span class="mx-2">•</span>
+                        <i class="bi bi-clock"></i> @Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Replies -->
-    <h5 class="mb-3">💬 Các câu trả lời (@Model.Answers.Count(a => !a.Deleted))</h5>
-    @if (Model.Answers.Any(a => !a.Deleted))
-    {
-        <div class="list-group">
-            @foreach (var ans in Model.Answers.Where(a => !a.Deleted).OrderByDescending(a => a.CreatedAt))
+    <!-- Replies Section -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-light">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="bi bi-chat-square-text"></i>
+                    Các câu trả lời <span class="badge bg-primary">@Model.Answers.Count(a => !a.Deleted)</span>
+                </h5>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="sortNewest">
+                        <i class="bi bi-sort-down"></i> Mới nhất
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="sortOldest">
+                        <i class="bi bi-sort-up"></i> Cũ nhất
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body" id="answersList">
+            @if (Model.Answers.Any(a => !a.Deleted))
             {
-                <div class="list-group-item">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h6 class="mb-1">@ans.Account.Email</h6>
-                        <small class="text-muted">@ans.CreatedAt.ToString("dd/MM/yyyy HH:mm")</small>
+                foreach (var ans in Model.Answers.Where(a => !a.Deleted).OrderByDescending(a => a.CreatedAt))
+                {
+                    <div class="answer-card card mb-3" data-timestamp="@ans.CreatedAt.Ticks">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    <div class="border rounded-circle p-2">
+                                        <i class="bi bi-person"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h6 class="mb-0">@ans.Account.Email</h6>
+                                        <small class="text-muted">
+                                            <i class="bi bi-clock"></i> @ans.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                                        </small>
+                                    </div>
+                                    <p class="mb-0">@ans.Content</p>
+                                </div>
+                            </div>
+                        </div>S
                     </div>
-                    <p class="mb-1">@ans.Content</p>
+                }
+            }
+            else
+            {
+                <div class="text-center py-4">
+                    <i class="bi bi-chat-square text-muted" style="font-size: 2rem;"></i>
+                    <p class="text-muted mt-2">Chưa có câu trả lời nào. Hãy là người đầu tiên trả lời!</p>
                 </div>
             }
         </div>
-    }
-    else
-    {
-        <p class="text-muted">Chưa có câu trả lời nào.</p>
-    }
+    </div>
 
     <!-- Add reply -->
-    <div class="mt-4">
-        <h5>✍️ Thêm trả lời</h5>
-        <form asp-action="AddReply" method="post">
-            <input type="hidden" name="QuestionId" value="@Model.Id" />
-            <div class="mb-3">
-                <textarea name="Content" class="form-control" rows="3" placeholder="Nhập câu trả lời..."></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Gửi trả lời</button>
-        </form>
-    </div>
+    <div class="card shadow-sm">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">
+                <i class="bi bi-pencil"></i> Thêm trả lời
+            </h5>
+        </div>
+        <div class="card-body">
+            <form asp-action="AddReply" method="post" id="replyForm">
+                <input type="hidden" name="QuestionId" value="@Model.Id" />
+                <div class="mb-3">
+                    <textarea name="Content" id="replyContent" class="form-control"
+                              rows="4" placeholder="Nhập câu trả lời của bạn..."
+                              required minlength="10"></textarea>
+                    <div class="d-flex justify-content-between mt-2">
+                        <div class="char-count">
+                            <span id="charCount">0</span> ký tự
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="showPreview">
+                            <label class="form-check-label" for="showPreview">
+                                Xem trước
+                            </label>
+                        </div>
+                    </div>
+                </div>
 
-    <div class="mt-3">
-        <a asp-action="Index" class="btn btn-outline-secondary">⬅️ Quay lại danh sách</a>
+                <div id="previewArea" class="mb-3 d-none">
+                    <label class="form-label">Xem trước:</label>
+                    <div class="preview-content" id="preview"></div>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-send"></i> Gửi trả lời
+                    </button>
+                    <button type="reset" class="btn btn-outline-secondary" id="resetBtn">
+                        <i class="bi bi-x-circle"></i> Xóa
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const answersList = document.getElementById('answersList');
+            const answers = Array.from(document.querySelectorAll('.answer-card'));
+            const sortNewest = document.getElementById('sortNewest');
+            const sortOldest = document.getElementById('sortOldest');
+            const replyContent = document.getElementById('replyContent');
+            const charCount = document.getElementById('charCount');
+            const showPreview = document.getElementById('showPreview');
+            const previewArea = document.getElementById('previewArea');
+            const preview = document.getElementById('preview');
+            const replyForm = document.getElementById('replyForm');
+
+            // Sorting with AJAX
+            function loadSortedAnswers(sortOrder) {
+                $.ajax({
+                    url: '@Url.Action("GetSortedAnswers", "Forum")',
+                    type: 'GET',
+                    data: {
+                        questionId: @Model.Id,
+                        sortOrder: sortOrder
+                    },
+                    success: function(response) {
+                        // Lưu trữ animation state
+                        const currentAnswers = Array.from(answersList.children);
+                        currentAnswers.forEach(ans => {
+                            ans.style.transition = 'all 0.3s ease';
+                            ans.style.opacity = '0';
+                            ans.style.transform = 'translateY(-10px)';
+                        });
+
+                        // Sau khi animation fade out hoàn tất
+                        setTimeout(() => {
+                            // Cập nhật nội dung
+                            answersList.innerHTML = response;
+
+                            // Animation fade in cho câu trả lời mới
+                            const newAnswers = Array.from(answersList.children);
+                            newAnswers.forEach((ans, index) => {
+                                ans.style.opacity = '0';
+                                ans.style.transform = 'translateY(10px)';
+                                setTimeout(() => {
+                                    ans.style.transition = 'all 0.3s ease';
+                                    ans.style.opacity = '1';
+                                    ans.style.transform = 'translateY(0)';
+                                }, index * 100); // Stagger effect
+                            });
+                        }, 300);
+                    },
+                    error: function() {
+                        alert('Có lỗi xảy ra khi sắp xếp câu trả lời');
+                    }
+                });
+            }
+
+            sortNewest.addEventListener('click', () => {
+                sortNewest.classList.add('active');
+                sortOldest.classList.remove('active');
+                loadSortedAnswers('desc');
+            });
+
+            sortOldest.addEventListener('click', () => {
+                sortOldest.classList.add('active');
+                sortNewest.classList.remove('active');
+                loadSortedAnswers('asc');
+            });
+
+            // Character count and validation
+            replyContent.addEventListener('input', function() {
+                const length = this.value.length;
+                charCount.textContent = length;
+
+                const charCountDiv = charCount.parentElement;
+                charCountDiv.classList.remove('text-muted', 'warning', 'danger');
+
+                if (length < 10) {
+                    charCountDiv.classList.add('danger');
+                } else if (length > 1000) {
+                    charCountDiv.classList.add('warning');
+                } else {
+                    charCountDiv.classList.add('text-muted');
+                }
+            });
+
+            // Preview toggle
+            showPreview.addEventListener('change', function() {
+                previewArea.classList.toggle('d-none', !this.checked);
+                if (this.checked) {
+                    preview.textContent = replyContent.value;
+                }
+            });
+
+            // Live preview update
+            replyContent.addEventListener('input', function() {
+                if (showPreview.checked) {
+                    preview.textContent = this.value;
+                }
+            });
+
+            // Form validation and AJAX submit
+            replyForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (replyContent.value.length < 10) {
+                    alert('Câu trả lời phải có ít nhất 10 ký tự!');
+                    return;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("AddReplyAjax", "Forum")',
+                    type: 'POST',
+                    data: {
+                        questionId: @Model.Id,
+                        content: replyContent.value
+                    },
+                    success: function(response) {
+                        // Thêm câu trả lời mới vào đầu danh sách
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = response;
+                        const newAnswer = tempDiv.firstElementChild;
+
+                        answersList.insertBefore(newAnswer, answersList.firstChild);
+
+                        // Reset form và preview
+                        replyContent.value = '';
+                        charCount.textContent = '0';
+                        preview.textContent = '';
+                        showPreview.checked = false;
+                        previewArea.classList.add('d-none');
+
+                        // Animation cho câu trả lời mới
+                        newAnswer.style.opacity = '0';
+                        newAnswer.style.transform = 'translateY(-20px)';
+                        setTimeout(() => {
+                            newAnswer.style.transition = 'all 0.5s ease';
+                            newAnswer.style.opacity = '1';
+                            newAnswer.style.transform = 'translateY(0)';
+                        }, 10);
+                    },
+                    error: function(xhr) {
+                        alert('Có lỗi xảy ra: ' + xhr.responseText);
+                    }
+                });
+            });
+
+            // Reset button: reset char count and preview
+            document.getElementById('resetBtn').addEventListener('click', function() {
+                charCount.textContent = '0';
+                charCount.parentElement.classList.remove('warning', 'danger');
+                charCount.parentElement.classList.add('text-muted');
+                preview.textContent = '';
+                previewArea.classList.add('d-none');
+                showPreview.checked = false;
+            });
+        });
+    </script>
+}

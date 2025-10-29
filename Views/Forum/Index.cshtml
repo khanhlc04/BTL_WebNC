@@ -4,71 +4,451 @@
     ViewData["Title"] = "Danh sách câu hỏi";
 }
 
-<div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-primary mb-0">📌 Danh sách Câu hỏi</h2>
-        <a asp-controller="Forum" asp-action="Create" class="btn btn-success">
-            ➕ Thêm câu hỏi
-        </a>
+<style>
+    .question-item {
+        cursor: pointer;
+        transition: box-shadow 0.2s, transform 0.2s;
+        background-color: #fff;
+        border: none !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        margin-bottom: 1rem;
+        padding: 1.25rem;
+        border-bottom: 1px solid #dee2e6 !important;
+    }
+
+        .question-item:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            background-color: #f8f9fa;
+        }
+
+    .question-link {
+        color: inherit;
+        transition: color 0.2s;
+        pointer-events: none;
+    }
+
+    .replies-badge {
+        background: #f8f9fa;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        transition: all 0.2s;
+    }
+
+    .has-replies {
+        background: #e9ecef;
+        transform: scale(1.05);
+    }
+
+    .search-highlight {
+        background-color: #fff3cd;
+        padding: 0 2px;
+        margin: 0 -2px;
+        border-radius: 2px;
+        display: inline-block;
+    }
+
+    .question-item:hover .replies-badge {
+        transform: scale(1.1);
+    }
+</style>
+
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h2 class="text-primary mb-0">
+                <i class="bi bi-chat-right-text"></i> Diễn đàn hỏi đáp
+            </h2>
+        </div>
+        <div class="col-md-6 text-md-end">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createQuestionModal">
+                <i class="bi bi-plus-circle"></i> Thêm câu hỏi mới
+            </button>
+        </div>
     </div>
 
-    <input type="text" id="searchBox" class="form-control mb-3" placeholder="🔍 Tìm kiếm câu hỏi..." />
-
-    <div id="questionList" class="list-group">
-        @foreach (var q in Model)
-        {
-            <div class="list-group-item d-flex justify-content-between align-items-start py-3">
-                <!-- Left: title + author/time -->
-                <div class="flex-grow-1 me-3">
-                    <a asp-controller="Forum" asp-action="Details" asp-route-id="@q.QuestionId"
-                       class="h5 d-block text-primary mb-1 text-decoration-none">@q.Content</a>
-
-                    <small class="text-muted">
-                        Đăng bởi: @q.AuthorName • @q.CreatedAt.ToString("dd/MM/yyyy HH:mm")
-                    </small>
+    <!-- Create Question Modal -->
+    <div class="modal fade" id="createQuestionModal" tabindex="-1" aria-labelledby="createQuestionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-primary" id="createQuestionModalLabel">
+                        <i class="bi bi-plus-circle"></i> Tạo câu hỏi mới
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <div class="modal-body">
+                    <form id="questionForm" onsubmit="submitQuestion(event)">
+                        <div class="mb-4">
+                            <label class="form-label">
+                                <i class="bi bi-pencil"></i> Nội dung câu hỏi
+                            </label>
+                            <textarea id="questionContent" name="Content"
+                                      class="form-control" rows="6"
+                                      placeholder="Nhập nội dung câu hỏi của bạn..."
+                                      required minlength="20"></textarea>
 
-                <!-- Middle: replies count -->
-                <div class="mx-3 text-center" style="min-width:90px;">
-                    <div class="text-muted small">Replies</div>
-                    <div class="fw-bold">@q.ReplyCount</div>
-                </div>
+                            <div class="d-flex justify-content-between mt-2">
+                                <div class="char-count text-muted">
+                                    <span id="charCount">0</span>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="showPreview">
+                                    <label class="form-check-label" for="showPreview">
+                                        Xem trước câu hỏi
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
 
-                <!-- Right: last reply -->
-                <div class="text-end" style="min-width:180px;">
-                    @if (!string.IsNullOrEmpty(q.LastReplyAuthor))
-                    {
-                        <div class="fw-bold">@q.LastReplyAuthor</div>
-                        <small class="text-muted">@q.LastReplyDate?.ToString("dd/MM/yyyy HH:mm")</small>
-                    }
-                    else
-                    {
-                        <small class="text-muted">Chưa có câu trả lời</small>
-                    }
+                        <div id="previewArea" class="mb-4 d-none">
+                            <label class="form-label">
+                                <i class="bi bi-eye"></i> Xem trước:
+                            </label>
+                            <div class="preview-content" id="preview"></div>
+                        </div>
+
+                        <div class="guidelines mb-4">
+                            <h6 class="mb-2">
+                                <i class="bi bi-info-circle"></i> Hướng dẫn đặt câu hỏi hiệu quả:
+                            </h6>
+                            <ul class="mb-0 small">
+                                <li>Đặt câu hỏi rõ ràng, ngắn gọn và dễ hiểu</li>
+                                <li>Mô tả chi tiết vấn đề bạn đang gặp phải</li>
+                                <li>Kiểm tra lỗi chính tả trước khi đăng</li>
+                                <li>Tránh sử dụng các ký tự đặc biệt không cần thiết</li>
+                            </ul>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                <i class="bi bi-x"></i> Hủy
+                            </button>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-send"></i> Đăng câu hỏi
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <div class="position-relative">
+            <input type="text" id="searchBox" class="form-control form-control-lg shadow-sm"
+                   placeholder="Tìm kiếm câu hỏi..."
+                   style="padding-left: 3rem; padding-right: 3rem; border-radius: 50px; background-color: #f8f9fa;" />
+            <i class="bi bi-search position-absolute"
+               style="left: 1.25rem; top: 50%; transform: translateY(-50%); color: #6c757d;"></i>
+            <button type="button" id="clearSearch"
+                    class="btn position-absolute d-none align-items-center"
+                    style="right: 0.5rem; top: 50%; transform: translateY(-50%);
+                           height: 35px; border-radius: 20px;
+                           background: #e9ecef; border: none;
+                           padding: 0 15px;"
+                    title="Xóa tìm kiếm">
+                <i class="bi bi-x-lg" style="font-size: 1.2rem; color: #495057;"></i>
+                <span style="margin-left: 5px; color: #495057;">Xóa</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="questionList" class="list-group">
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5">
+                <i class="bi bi-chat-square-text text-muted" style="font-size: 3rem;"></i>
+                <p class="text-muted mt-3">Chưa có câu hỏi nào. Hãy là người đầu tiên đặt câu hỏi!</p>
+                <a asp-controller="Forum" asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Tạo câu hỏi
+                </a>
+            </div>
+        }
+        else
+        {
+            foreach (var q in Model)
+            {
+                <div class="list-group-item question-item"
+                     onclick="window.location.href='@Url.Action("Details", "Forum", new { id = q.QuestionId })'">
+                    <div class="row align-items-center">
+                        <!-- Question content -->
+                        <div class="col-md-7">
+                            <h5 class="mb-1">
+                                <span class="question-link text-decoration-none">
+                                    @q.Content
+                                </span>
+                            </h5>
+                            <div class="text-muted small">
+                                <i class="bi bi-person-circle"></i> @q.AuthorName
+                                <span class="mx-1">•</span>
+                                <i class="bi bi-clock"></i> @q.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                            </div>
+                        </div>
+
+                        <!-- Replies -->
+                        <div class="col-md-2 text-center">
+                            <div class="replies-badge @(q.ReplyCount > 0 ? "has-replies" : "")">
+                                <div class="h4 mb-0">@q.ReplyCount</div>
+                                <div class="small">Trả lời</div>
+                            </div>
+                        </div>
+
+                        <!-- Last reply -->
+                        <div class="col-md-3 text-end">
+                            @if (!string.IsNullOrEmpty(q.LastReplyAuthor))
+                            {
+                                <div>
+                                    <i class="bi bi-reply-fill text-primary"></i>
+                                    <span class="fw-medium">@q.LastReplyAuthor</span>
+                                </div>
+                                <small class="text-muted">
+                                    <i class="bi bi-clock"></i> @q.LastReplyDate?.ToString("dd/MM/yyyy HH:mm")
+                                </small>
+                            }
+                            else
+                            {
+                                <span class="text-muted">
+                                    <i class="bi bi-chat-square"></i> Chưa có câu trả lời
+                                </span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
         }
     </div>
 </div>
 
 <script>
-    window.addEventListener("DOMContentLoaded", function () {
-        const searchBox = document.getElementById("searchBox");
-        const items = document.querySelectorAll("#questionList .list-group-item");
+    // Modal form handling
+        // Modal form handling
+    function submitQuestion(event) {
+        event.preventDefault();
+        const content = document.getElementById('questionContent').value.trim(); // ✅ giữ lại .trim()
 
-        searchBox.addEventListener("input", function () {
-            const value = this.value.trim().toLowerCase();
+        if (content.length < 20) {
+            alert('Câu hỏi phải có ít nhất 20 ký tự!');
+            return;
+        }
 
-            items.forEach(item => {
-                const titleElement = item.querySelector("a");
-                const title = titleElement ? titleElement.textContent.toLowerCase() : "";
+        // Submit form using AJAX
+        $.ajax({
+            url: '@Url.Action("Create", "Forum")',
+            type: 'POST',
+            data: { Content: content },
+            success: function(response) {
+                $('#createQuestionModal').modal('hide');
+                location.reload();
+            },
+            error: function(xhr) {
+                alert('Có lỗi xảy ra khi đăng câu hỏi. Vui lòng thử lại!');
+            }
+        });
+    }
 
-                if (title.includes(value)) {
-                    item.classList.remove("d-none"); // hiện item
-                } else {
-                    item.classList.add("d-none"); // ẩn item
+    // Modal content handling
+    document.addEventListener('DOMContentLoaded', function() {
+        const questionContent = document.getElementById('questionContent');
+        const charCount = document.getElementById('charCount');
+        const showPreview = document.getElementById('showPreview');
+        const previewArea = document.getElementById('previewArea');
+        const preview = document.getElementById('preview');
+        const modal = document.getElementById('createQuestionModal');
+
+        function updateCharCount() {
+            const length = questionContent.value.trim().length;
+
+            charCount.textContent = `${length} ký tự`;
+
+            charCount.classList.remove('text-danger', 'text-muted');
+            if (length < 20) {
+                charCount.classList.add('text-danger');
+            } else {
+                charCount.classList.add('text-muted');
+            }
+
+            if (showPreview.checked) {
+                preview.textContent = questionContent.value;
+            }
+        }
+
+        updateCharCount();
+
+        questionContent.addEventListener('input', updateCharCount);
+
+        showPreview.addEventListener('change', function() {
+            previewArea.classList.toggle('d-none', !this.checked);
+            if (this.checked) {
+                preview.textContent = questionContent.value;
+            }
+        });
+
+        // Reset form khi đóng modal
+        modal.addEventListener('hidden.bs.modal', function() {
+            document.getElementById('questionForm').reset();
+            previewArea.classList.add('d-none');
+            showPreview.checked = false;
+            updateCharCount();
+        });
+    });
+
+
+    // Search functionality
+    document.addEventListener("DOMContentLoaded", function () {
+    const searchBox = document.getElementById("searchBox");
+    const clearBtn = document.getElementById("clearSearch");
+    let searchTimeout;
+    // Save original server-rendered list so we can restore it when query is empty
+    const questionListEl = document.getElementById('questionList');
+    const originalListHtml = questionListEl ? questionListEl.innerHTML : '';
+    toggleClearButton();
+
+        function escapeRegExp(string) {
+            return string.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&');
+        }
+
+        // (Removed client-side DOM filtering - now using AJAX server search)
+
+        function filterQuestions() {
+            const value = searchBox.value.trim();
+
+            // If query is empty, restore original server-rendered list to avoid unnecessary AJAX
+            const questionList = document.getElementById('questionList');
+            if (value === "") {
+                questionList.innerHTML = originalListHtml;
+                return;
+            }
+
+            // Show loading state
+            const loadingHtml = `<div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Đang tìm kiếm...</span>
+                </div>
+                <p class="text-muted mt-3">Đang tìm kiếm...</p>
+            </div>`;
+            questionList.innerHTML = loadingHtml;
+
+            // Make AJAX call
+            $.ajax({
+                url: '@Url.Action("SearchQuestions", "Forum")',
+                type: 'GET',
+                data: { query: value },
+                success: function(questions) {
+                    if (!questions || questions.length === 0) {
+                        // Non-empty query but no results -> show not found
+                        questionList.innerHTML = `
+                            <div class="text-center py-5">
+                                <i class="bi bi-search text-muted" style="font-size: 3rem;"></i>
+                                <p class="text-muted mt-3">Không tìm thấy câu hỏi nào phù hợp.</p>
+                            </div>`;
+                        return;
+                    }
+
+                    questionList.innerHTML = questions.map(q => `
+                        <div class="list-group-item question-item"
+                             onclick="window.location.href='@Url.Action("Details", "Forum")/${q.questionId}'">
+                            <div class="row align-items-center">
+                                <div class="col-md-7">
+                                    <h5 class="mb-1">
+                                        <span class="question-link text-decoration-none">
+                                            ${highlightSearchText(q.content, value)}
+                                        </span>
+                                    </h5>
+                                    <div class="text-muted small">
+                                        <i class="bi bi-person-circle"></i> ${q.authorName}
+                                        <span class="mx-1">•</span>
+                                        <i class="bi bi-clock"></i> ${formatDate(q.createdAt)}
+                                    </div>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <div class="replies-badge ${q.replyCount > 0 ? 'has-replies' : ''}">
+                                        <div class="h4 mb-0">${q.replyCount}</div>
+                                        <div class="small">Trả lời</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 text-end">
+                                    ${q.lastReplyAuthor ? `
+                                        <div>
+                                            <i class="bi bi-reply-fill text-primary"></i>
+                                            <span class="fw-medium">${q.lastReplyAuthor}</span>
+                                        </div>
+                                        <small class="text-muted">
+                                            <i class="bi bi-clock"></i> ${formatDate(q.lastReplyDate)}
+                                        </small>
+                                    ` : `
+                                        <span class="text-muted">
+                                            <i class="bi bi-chat-square"></i> Chưa có câu trả lời
+                                        </span>
+                                    `}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+
+                    // Animate items in
+                    const newItems = questionList.querySelectorAll('.question-item');
+                    newItems.forEach((item, index) => {
+                        item.style.opacity = '0';
+                        item.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            item.style.transition = 'all 0.3s ease';
+                            item.style.opacity = '1';
+                            item.style.transform = 'translateY(0)';
+                        }, index * 100);
+                    });
+                },
+                error: function() {
+                    questionList.innerHTML = `
+                        <div class="text-center py-5">
+                            <i class="bi bi-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
+                            <p class="text-danger mt-3">Đã xảy ra lỗi khi tìm kiếm. Vui lòng thử lại.</p>
+                        </div>`;
                 }
             });
+        }
+
+        // Helper functions
+        function highlightSearchText(text, search) {
+            if (!search) return text;
+            const regex = new RegExp(`(${escapeRegExp(search)})`, 'gi');
+            return text.replace(regex, '<span class="search-highlight">$1</span>');
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('vi-VN', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+        // Debounced search with AJAX
+        searchBox.addEventListener("input", function() {
+            clearTimeout(searchTimeout);
+            toggleClearButton();
+            searchTimeout = setTimeout(() => {
+                filterQuestions();
+            }, 300);
+        });
+        // Clear search and toggle button visibility
+        function toggleClearButton() {
+            if (searchBox.value) {
+                clearBtn.classList.remove('d-none');
+                clearBtn.classList.add('d-flex');
+            } else {
+                clearBtn.classList.remove('d-flex');
+                clearBtn.classList.add('d-none');
+            }
+        }
+
+        clearBtn.addEventListener("click", function() {
+            searchBox.value = "";
+            toggleClearButton();
+            filterQuestions();
+            searchBox.focus();
         });
     });
 </script>

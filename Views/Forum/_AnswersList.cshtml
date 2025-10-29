@@ -1,0 +1,6 @@
+﻿@model IEnumerable<BTL_WebNC.Models.Answer.AnswerModel>
+
+@foreach (var ans in Model.Where(a => !a.Deleted))
+{
+    <partial name="_AnswerPartial" model="ans" />
+}
