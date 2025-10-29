@@ -9,10 +9,10 @@ namespace BTL_WebNC.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 var role = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
-                if (role == "Admin")
-                {
-                    return RedirectToAction("Index", "AdminDashboard");
-                }
+                // if (role == "Admin")
+                // {
+                //     return RedirectToAction("Index", "AdminDashboard");
+                // }
                 return View("~/Views/Home/Index.cshtml");
             }
             return RedirectToAction("Login", "Account");
