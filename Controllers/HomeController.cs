@@ -15,7 +15,8 @@ namespace BTL_WebNC.Controllers
                 }
                 return View("~/Views/Home/Index.cshtml");
             }
-            return RedirectToAction("Login", "Account");
+
+            return View("~/Views/Home/Index.cshtml");
         }
     }
 }
