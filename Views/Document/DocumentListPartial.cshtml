@@ -17,13 +17,15 @@ else
 
                 <a href="@Url.Action("View", "Document", new { id = doc.Id })" target="_blank" class="text-decoration-none">
                     <div class="doc-thumb">
-                        <img src="@doc.ThumbnailPath" alt="@doc.Title" style="max-height:100%; max-width:100%; object-fit:contain;" />
+                        <img src="@doc.ThumbnailPath" alt="@doc.Title"
+                            style="max-height:100%; max-width:100%; object-fit:contain;" />
                     </div>
                 </a>
 
                 <div class="card-body d-flex flex-column">
                     <h6 class="card-title doc-title mb-1 text-truncate">
-                        <a href="@Url.Action("View", "Document", new { id = doc.Id })" target="_blank" class="text-decoration-none text-dark" title="@doc.Title">@doc.Title</a>
+                        <a href="@Url.Action("View", "Document", new { id = doc.Id })" target="_blank"
+                            class="text-decoration-none text-dark" title="@doc.Title">@doc.Title</a>
                     </h6>
 
                     @if (!string.IsNullOrEmpty(doc.FileName))
@@ -39,32 +41,28 @@ else
                         <div>
                             @{
                                 // Kiểm tra xem file có phải là PDF không
-                                bool isPdf = doc.FilePath != null && doc.FilePath.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase);
+                                bool isPdf = doc.FilePath != null && doc.FilePath.EndsWith(".pdf",
+                                StringComparison.OrdinalIgnoreCase);
                             }
 
                             @if (isPdf)
                             {
-                                <a href="javascript:void(0);"
-                                   class="btn btn-sm btn-outline-primary me-2"
-                                   data-bs-toggle="modal"
-                                   data-bs-target="#documentPreviewModal"
-                                   data-src="@Url.Action("View", "Document", new { id = doc.Id })"
-                                   title="Xem trước (popup)">
+                                <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary me-2" data-bs-toggle="modal"
+                                    data-bs-target="#documentPreviewModal"
+                                    data-src="@Url.Action("View", "Document", new { id = doc.Id })" title="Xem trước (popup)">
                                     <i class="bi bi-eye"></i>
                                 </a>
                             }
                             else
                             {
-                                <a href="@Url.Action("View", "Document", new { id = doc.Id })"
-                                   target="_blank"
-                                   class="btn btn-sm btn-outline-primary me-2"
-                                   data-bs-toggle="tooltip"
-                                   title="Xem trước">
+                                <a href="@Url.Action("View", "Document", new { id = doc.Id })" target="_blank"
+                                    class="btn btn-sm btn-outline-primary me-2" data-bs-toggle="tooltip" title="Xem trước">
                                     <i class="bi bi-eye"></i>
                                 </a>
                             }
 
-                            <a href="@Url.Action("Download", "Document", new { id = doc.Id })" class="btn btn-sm btn-outline-success" data-bs-toggle="tooltip" title="Tải xuống">
+                            <a href="@Url.Action("Download", "Document", new { id = doc.Id })"
+                                class="btn btn-sm btn-outline-success" data-bs-toggle="tooltip" title="Tải xuống">
                                 <i class="bi bi-download"></i>
                             </a>
                         </div>

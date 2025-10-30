@@ -6,7 +6,7 @@
     /* Small UI polish */
     .card-hover:hover {
         transform: translateY(-6px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
     }
 
     .doc-thumb {
@@ -40,7 +40,8 @@
 
         <div class="input-group w-50">
             <span class="input-group-text"><i class="bi bi-search"></i></span>
-            <input type="text" id="searchInput" name="searchTerm" value="@ViewBag.SearchTerm" class="form-control" placeholder="Tìm kiếm tài liệu..." />
+            <input type="text" id="searchInput" name="searchTerm" value="@ViewBag.SearchTerm" class="form-control"
+                placeholder="Tìm kiếm tài liệu..." />
             <button type="button" id="clearSearch" class="btn btn-outline-secondary" title="Xóa">
                 <i class="bi bi-x-lg"></i>
             </button>
@@ -52,7 +53,8 @@
             <div class="accordion" id="subjectFilter">
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="headingSubjects">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSubjects">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseSubjects">
                             <i class="bi bi-folder2-open me-2"></i> Lọc theo môn học
                         </button>
                     </h2>
@@ -64,7 +66,9 @@
                                 {
                                     var isChecked = ((List<int>)ViewBag.SelectedSubjects).Contains(subject.Id);
                                     <div class="form-check mb-2">
-                                        <input type="checkbox" name="subjectIds" value="@subject.Id" class="form-check-input subject-checkbox" @(isChecked ? "checked" : "") id="sub-@subject.Id" />
+                                        <input type="checkbox" name="subjectIds" value="@subject.Id"
+                                            class="form-check-input subject-checkbox" @(isChecked ? "checked" : "")
+                                            id="sub-@subject.Id" />
                                         <label class="form-check-label" for="sub-@subject.Id">@subject.Name</label>
                                     </div>
                                 }
@@ -145,11 +149,11 @@
                 .catch(error => {
                     console.error('Lỗi khi lọc tài liệu:', error);
                     if (listContainer) {
-                         listContainer.innerHTML = '<p class="text-danger">Đã xảy ra lỗi khi tải dữ liệu.</p>';
+                        listContainer.innerHTML = '<p class="text-danger">Đã xảy ra lỗi khi tải dữ liệu.</p>';
                     }
                 })
                 .finally(() => {
-                     if (listContainer) listContainer.classList.remove('loading');
+                    if (listContainer) listContainer.classList.remove('loading');
                 });
         }
 

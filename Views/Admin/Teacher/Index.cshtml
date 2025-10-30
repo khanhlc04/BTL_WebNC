@@ -38,8 +38,9 @@
                     <td>
                         @if (item.TeacherSubjects != null && item.TeacherSubjects.Count > 0)
                         {
-                           @string.Join(", ", ((IEnumerable<dynamic>)item.TeacherSubjects).Select(ts => ts.Subject != null ? ts.Subject.Name : "Unknown"))
-                        }
+                            @string.Join(", ", ((IEnumerable<dynamic>)item.TeacherSubjects).Select(ts => ts.Subject != null ?
+                            ts.Subject.Name : "Unknown"))
+                                }
                         else
                         {
                             <span>Chưa đăng ký môn học</span>
@@ -63,258 +64,259 @@
 
 <!-- Modal Thêm/Sửa -->
 <div class="modal fade" id="teacherModal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalTitle">Thêm giảng viên</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <form id="teacherForm" enctype="multipart/form-data">
-          <input type="hidden" id="teacherId" />
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Thêm giảng viên</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="teacherForm" enctype="multipart/form-data">
+                    <input type="hidden" id="teacherId" />
 
-          <div class="mb-3">
-            <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-            <input type="email" class="form-control" id="email" required />
-          </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                        <input type="email" class="form-control" id="email" required />
+                    </div>
 
-          <div class="mb-3">
-            <label for="fullName" class="form-label">Tên giảng viên <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" id="fullName" required />
-          </div>
+                    <div class="mb-3">
+                        <label for="fullName" class="form-label">Tên giảng viên <span
+                                class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="fullName" required />
+                    </div>
 
-          <div class="mb-3">
-            <label for="thumbnailFile" class="form-label">Thumbnail (Ảnh)</label>
-            <input type="file" class="form-control" id="thumbnailFile" accept="image/*" />
-            <small class="text-muted">Chấp nhận: JPG, PNG, GIF</small>
-            <div id="thumbnailPreview" class="mt-2"></div>
-          </div>
+                    <div class="mb-3">
+                        <label for="thumbnailFile" class="form-label">Thumbnail (Ảnh)</label>
+                        <input type="file" class="form-control" id="thumbnailFile" accept="image/*" />
+                        <small class="text-muted">Chấp nhận: JPG, PNG, GIF</small>
+                        <div id="thumbnailPreview" class="mt-2"></div>
+                    </div>
 
-          <div class="mb-3">
-            <label for="subject" class="form-label">Môn học <span class="text-danger">*</span></label>
-            <select class="form-select" id="subject" name="subjects" multiple required>
-              @if (subjects != null)
-              {
-                  foreach (var subject in subjects)
-                  {
-                      <option value="@subject.Id">@subject.Name</option>
-                  }
-              }
-            </select>
-          </div>
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Môn học <span class="text-danger">*</span></label>
+                        <select class="form-select" id="subject" name="subjects" multiple required>
+                            @if (subjects != null)
+                            {
+                                foreach (var subject in subjects)
+                                {
+                                    <option value="@subject.Id">@subject.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
 
-          <div class="mb-3" id="passwordDiv">
-            <label for="password" class="form-label">Mật khẩu <span class="text-danger">*</span></label>
-            <input name="password" type="password" class="form-control" id="password" required />
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-        <button type="button" class="btn btn-primary" onclick="saveTeacher()" id="btnSave">
-          <span class="spinner-border spinner-border-sm d-none" id="loadingSpinner"></span>
-          Lưu
-        </button>
-      </div>
+                    <div class="mb-3" id="passwordDiv">
+                        <label for="password" class="form-label">Mật khẩu <span class="text-danger">*</span></label>
+                        <input name="password" type="password" class="form-control" id="password" required />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="saveTeacher()" id="btnSave">
+                    <span class="spinner-border spinner-border-sm d-none" id="loadingSpinner"></span>
+                    Lưu
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 @section Scripts {
-  <script>
-    let currentModal;
-    let isEditMode = false;
-    
-    document.addEventListener('DOMContentLoaded', function() {
-        currentModal = new bootstrap.Modal(document.getElementById('teacherModal'));
-    
-         document.getElementById('thumbnailFile').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('thumbnailPreview').innerHTML = 
-                        `<img src="${e.target.result}" style="max-width:200px;max-height:200px;" class="img-thumbnail" />`;
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-    });
+    <script>
+        let currentModal;
+        let isEditMode = false;
 
-    function openCreateModal() {
-      isEditMode = false;
-      document.getElementById('modalTitle').textContent = 'Thêm giảng viên';
-      document.getElementById('teacherForm').reset();
-      document.getElementById('teacherId').value = '';
-      
-       
-      const pwdDiv = document.getElementById('passwordDiv');
-      const pwdInput = document.getElementById('password');
-      pwdDiv.classList.remove('d-none');
-      pwdInput.required = true;
-      pwdInput.disabled = false;
-    
-      currentModal.show();
-    }
+        document.addEventListener('DOMContentLoaded', function () {
+            currentModal = new bootstrap.Modal(document.getElementById('teacherModal'));
 
-    function saveTeacher() {
-        const form = document.getElementById('teacherForm');
-        if (!form.checkValidity()) {
-            form.reportValidity();
-            return;
-        }
-        
-        // Show loading
-        const btnSave = document.getElementById('btnSave');
-        const spinner = document.getElementById('loadingSpinner');
-        btnSave.disabled = true;
-        spinner.classList.remove('d-none');
-        
-        const formData = new FormData();
-        
-        if (isEditMode) {
-            formData.append('id', document.getElementById('teacherId').value);
-        }
-
-        formData.append('email', document.getElementById('email').value);
-        formData.append('fullName', document.getElementById('fullName').value);
-        // Lấy nhiều môn học đã chọn
-        const selectedSubjects = Array.from(document.getElementById('subject').selectedOptions).map(o => o.value);
-        selectedSubjects.forEach(s => formData.append('subjects', s));
-
-         const thumbnailFile = document.getElementById('thumbnailFile').files[0];
-        if (thumbnailFile) {
-            formData.append('thumbnailFile', thumbnailFile);
-        }
-
-        if (!isEditMode) formData.append('password', document.getElementById('password').value);
-
-        const url = isEditMode ? '/AdminTeacher/UpdateTeacher' : '/AdminTeacher/CreateTeacher';
-
-        fetch(url, {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(result => {
-            btnSave.disabled = false;
-            spinner.classList.add('d-none');
-
-            if (result.success) {
-                // If server returned data (DTO), use it to insert/update the table row (Method A)
-                if (result.data) {
-                    const d = result.data;
-                    const t = d.teacher;
-                    const subs = Array.isArray(d.subjects) ? d.subjects : [];
-
-                    const subjectsHtml = subs.length > 0 ? subs.map(s => s.name).join(', ') : 'Chưa đăng ký môn học';
-                    const thumbHtml = t.thumbnailPath ? `<img src="/${t.thumbnailPath}" alt="Thumbnail" style="max-width:80px;max-height:80px;" />` : '';
-                    const actions = `<button class="btn btn-sm btn-warning" onclick="openEditModal(${t.id})">Sửa</button> <button class="btn btn-sm btn-danger" onclick="deleteTeacher(${t.id})">Xóa</button>`;
-
-                    const rowInner = `<td>${t.id}</td><td>${t.fullName}</td><td>${thumbHtml}</td><td>${t.email}</td><td>${t.accountId || ''}</td><td>${subjectsHtml}</td><td>${actions}</td>`;
-
-                    const tbody = document.querySelector('table.table tbody');
-                    if (isEditMode) {
-                        const existing = document.querySelector(`tr[data-id="${t.id}"]`);
-                        if (existing) {
-                            existing.innerHTML = rowInner;
-                        }
-                    } else {
-                        const tr = document.createElement('tr');
-                        tr.setAttribute('data-id', t.id);
-                        tr.innerHTML = rowInner;
-                        // prepend new row
-                        if (tbody.firstChild) tbody.insertBefore(tr, tbody.firstChild);
-                        else tbody.appendChild(tr);
+            document.getElementById('thumbnailFile').addEventListener('change', function (e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        document.getElementById('thumbnailPreview').innerHTML =
+                            `<img src="${e.target.result}" style="max-width:200px;max-height:200px;" class="img-thumbnail" />`;
                     }
-
-                    currentModal.hide();
-                } else {
-                    // fallback: no data returned -> reload page
-                    currentModal.hide();
-                    location.reload();
+                    reader.readAsDataURL(file);
                 }
-
-            } else {
-                alert(result.message);
-            }
-        })
-        .catch(error => {
-            btnSave.disabled = false;
-            spinner.classList.add('d-none');
-            console.error('Error:', error);
-            alert('Có lỗi xảy ra');
-        });
-    }
-
-    function openEditModal(id) {
-        isEditMode = true;
-        document.getElementById('teacherForm').reset();
-        document.getElementById('teacherId').value = '';
-        document.getElementById('modalTitle').textContent = 'Sửa thông tin giảng viên';
-        
-        const pwdDiv = document.getElementById('passwordDiv');
-        const pwdInput = document.getElementById('password');
-        pwdDiv.classList.add('d-none');
-        pwdInput.required = false;
-        pwdInput.disabled = true;
-
-        currentModal.show();
-        
-        // Lấy thông tin document
-        fetch(`/AdminTeacher/GetTeacher?id=${id}`)
-            .then(response => response.json())
-            .then(result => {
-                if (result.success) {
-                    const doc = result.data;
-                    document.getElementById('teacherId').value = doc.id;
-                    document.getElementById('email').value = doc.email;
-                    document.getElementById('fullName').value = doc.fullName;
-
-                    const sel = document.getElementById('subject');
-                    const selected = Array.isArray(doc.teacherSubjects) ? doc.teacherSubjects.map(s => s.subjectId) : [];
-
-                    Array.from(sel.options).forEach(o => {
-                        o.selected = selected.includes(parseInt(o.value));
-                    });
-                    document.getElementById('fullName').value = doc.fullName;
-
-                    currentModal.show();
-                } else {
-                    alert(result.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Có lỗi xảy ra khi tải dữ liệu');
             });
-    }
+        });
 
-    function deleteTeacher(id) {
-      if (!confirm('Bạn có chắc chắn muốn xóa giảng viên này? Giảng viên sẽ bị xóa vĩnh viễn!')) {
-          return;
-      }
+        function openCreateModal() {
+            isEditMode = false;
+            document.getElementById('modalTitle').textContent = 'Thêm giảng viên';
+            document.getElementById('teacherForm').reset();
+            document.getElementById('teacherId').value = '';
 
-      fetch('/AdminTeacher/DeleteTeacher', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(id)
-      })
-      .then(response => response.json())
-      .then(result => {
-          if (result.success) {
-              alert(result.message);
-              document.querySelector(`tr[data-id="${id}"]`).remove();
-          } else {
-              alert(result.message);
-          }
-      })
-      .catch(error => {
-          console.error('Error:', error);
-          alert('Có lỗi xảy ra');
-      });
-  }
-  </script>
+
+            const pwdDiv = document.getElementById('passwordDiv');
+            const pwdInput = document.getElementById('password');
+            pwdDiv.classList.remove('d-none');
+            pwdInput.required = true;
+            pwdInput.disabled = false;
+
+            currentModal.show();
+        }
+
+        function saveTeacher() {
+            const form = document.getElementById('teacherForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            // Show loading
+            const btnSave = document.getElementById('btnSave');
+            const spinner = document.getElementById('loadingSpinner');
+            btnSave.disabled = true;
+            spinner.classList.remove('d-none');
+
+            const formData = new FormData();
+
+            if (isEditMode) {
+                formData.append('id', document.getElementById('teacherId').value);
+            }
+
+            formData.append('email', document.getElementById('email').value);
+            formData.append('fullName', document.getElementById('fullName').value);
+            // Lấy nhiều môn học đã chọn
+            const selectedSubjects = Array.from(document.getElementById('subject').selectedOptions).map(o => o.value);
+            selectedSubjects.forEach(s => formData.append('subjects', s));
+
+            const thumbnailFile = document.getElementById('thumbnailFile').files[0];
+            if (thumbnailFile) {
+                formData.append('thumbnailFile', thumbnailFile);
+            }
+
+            if (!isEditMode) formData.append('password', document.getElementById('password').value);
+
+            const url = isEditMode ? '/AdminTeacher/UpdateTeacher' : '/AdminTeacher/CreateTeacher';
+
+            fetch(url, {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(result => {
+                    btnSave.disabled = false;
+                    spinner.classList.add('d-none');
+
+                    if (result.success) {
+                        // If server returned data (DTO), use it to insert/update the table row (Method A)
+                        if (result.data) {
+                            const d = result.data;
+                            const t = d.teacher;
+                            const subs = Array.isArray(d.subjects) ? d.subjects : [];
+
+                            const subjectsHtml = subs.length > 0 ? subs.map(s => s.name).join(', ') : 'Chưa đăng ký môn học';
+                            const thumbHtml = t.thumbnailPath ? `<img src="/${t.thumbnailPath}" alt="Thumbnail" style="max-width:80px;max-height:80px;" />` : '';
+                            const actions = `<button class="btn btn-sm btn-warning" onclick="openEditModal(${t.id})">Sửa</button> <button class="btn btn-sm btn-danger" onclick="deleteTeacher(${t.id})">Xóa</button>`;
+
+                            const rowInner = `<td>${t.id}</td><td>${t.fullName}</td><td>${thumbHtml}</td><td>${t.email}</td><td>${t.accountId || ''}</td><td>${subjectsHtml}</td><td>${actions}</td>`;
+
+                            const tbody = document.querySelector('table.table tbody');
+                            if (isEditMode) {
+                                const existing = document.querySelector(`tr[data-id="${t.id}"]`);
+                                if (existing) {
+                                    existing.innerHTML = rowInner;
+                                }
+                            } else {
+                                const tr = document.createElement('tr');
+                                tr.setAttribute('data-id', t.id);
+                                tr.innerHTML = rowInner;
+                                // prepend new row
+                                if (tbody.firstChild) tbody.insertBefore(tr, tbody.firstChild);
+                                else tbody.appendChild(tr);
+                            }
+
+                            currentModal.hide();
+                        } else {
+                            // fallback: no data returned -> reload page
+                            currentModal.hide();
+                            location.reload();
+                        }
+
+                    } else {
+                        alert(result.message);
+                    }
+                })
+                .catch(error => {
+                    btnSave.disabled = false;
+                    spinner.classList.add('d-none');
+                    console.error('Error:', error);
+                    alert('Có lỗi xảy ra');
+                });
+        }
+
+        function openEditModal(id) {
+            isEditMode = true;
+            document.getElementById('teacherForm').reset();
+            document.getElementById('teacherId').value = '';
+            document.getElementById('modalTitle').textContent = 'Sửa thông tin giảng viên';
+
+            const pwdDiv = document.getElementById('passwordDiv');
+            const pwdInput = document.getElementById('password');
+            pwdDiv.classList.add('d-none');
+            pwdInput.required = false;
+            pwdInput.disabled = true;
+
+            currentModal.show();
+
+            // Lấy thông tin document
+            fetch(`/AdminTeacher/GetTeacher?id=${id}`)
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        const doc = result.data;
+                        document.getElementById('teacherId').value = doc.id;
+                        document.getElementById('email').value = doc.email;
+                        document.getElementById('fullName').value = doc.fullName;
+
+                        const sel = document.getElementById('subject');
+                        const selected = Array.isArray(doc.teacherSubjects) ? doc.teacherSubjects.map(s => s.subjectId) : [];
+
+                        Array.from(sel.options).forEach(o => {
+                            o.selected = selected.includes(parseInt(o.value));
+                        });
+                        document.getElementById('fullName').value = doc.fullName;
+
+                        currentModal.show();
+                    } else {
+                        alert(result.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Có lỗi xảy ra khi tải dữ liệu');
+                });
+        }
+
+        function deleteTeacher(id) {
+            if (!confirm('Bạn có chắc chắn muốn xóa giảng viên này? Giảng viên sẽ bị xóa vĩnh viễn!')) {
+                return;
+            }
+
+            fetch('/AdminTeacher/DeleteTeacher', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(id)
+            })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        alert(result.message);
+                        document.querySelector(`tr[data-id="${id}"]`).remove();
+                    } else {
+                        alert(result.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Có lỗi xảy ra');
+                });
+        }
+    </script>
 }

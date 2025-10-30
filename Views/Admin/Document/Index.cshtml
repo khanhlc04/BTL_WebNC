@@ -22,34 +22,36 @@
   <tbody>
     @if (Model != null)
     {
-        foreach (var item in Model)
-        {
-            <tr data-id="@item.Id">
-                <td>@item.Id</td>
-                <td>@item.Title</td>
-                <td>
-                  @if (!string.IsNullOrEmpty(item.ThumbnailPath))
-                  {
-                    <img src="/@item.ThumbnailPath" alt="Thumbnail" style="max-width:80px;max-height:80px;" />
-                  }
-                </td>
-                <td>
-                  @if (!string.IsNullOrEmpty(item.FileName))
-                  {
-                    <a href="/AdminDocument/DownloadFile?id=@item.Id">@item.FileName</a>
-                  }
-                </td>
-                <td>@(item.Subject?.Name ?? "")</td>
-                <td>
-                    <button class="btn btn-sm btn-warning" onclick="openEditModal(@item.Id)">Sửa</button>
-                    <button class="btn btn-sm btn-danger" onclick="deleteDocument(@item.Id)">Xóa</button>
-                </td>
-            </tr>
-        }
+      foreach (var item in Model)
+      {
+        <tr data-id="@item.Id">
+          <td>@item.Id</td>
+          <td>@item.Title</td>
+          <td>
+            @if (!string.IsNullOrEmpty(item.ThumbnailPath))
+            {
+              <img src="/@item.ThumbnailPath" alt="Thumbnail" style="max-width:80px;max-height:80px;" />
+            }
+          </td>
+          <td>
+            @if (!string.IsNullOrEmpty(item.FileName))
+            {
+              <a href="/AdminDocument/DownloadFile?id=@item.Id">@item.FileName</a>
+            }
+          </td>
+          <td>@(item.Subject?.Name ?? "")</td>
+          <td>
+            <button class="btn btn-sm btn-warning" onclick="openEditModal(@item.Id)">Sửa</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteDocument(@item.Id)">Xóa</button>
+          </td>
+        </tr>
+      }
     }
     else
     {
-        <tr><td colspan="6">Không có dữ liệu</td></tr>
+      <tr>
+        <td colspan="6">Không có dữ liệu</td>
+      </tr>
     }
   </tbody>
 </table>
@@ -65,37 +67,37 @@
       <div class="modal-body">
         <form id="documentForm" enctype="multipart/form-data">
           <input type="hidden" id="documentId" />
-          
+
           <div class="mb-3">
             <label for="title" class="form-label">Tiêu đề <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="title" required />
           </div>
-          
+
           <div class="mb-3">
             <label for="thumbnailFile" class="form-label">Thumbnail (Ảnh)</label>
             <input type="file" class="form-control" id="thumbnailFile" accept="image/*" />
             <small class="text-muted">Chấp nhận: JPG, PNG, GIF</small>
             <div id="thumbnailPreview" class="mt-2"></div>
           </div>
-          
+
           <div class="mb-3">
             <label for="documentFile" class="form-label">File tài liệu <span class="text-danger">*</span></label>
             <input type="file" class="form-control" id="documentFile" required />
             <small class="text-muted">Chấp nhận: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, ZIP</small>
             <div id="fileInfo" class="mt-2"></div>
           </div>
-          
+
           <div class="mb-3">
             <label for="subjectId" class="form-label">Môn học <span class="text-danger">*</span></label>
             <select id="subjectId" class="form-control" required>
-                <option value="">-- Chọn môn học --</option>
-                @if (subjects != null)
+              <option value="">-- Chọn môn học --</option>
+              @if (subjects != null)
+              {
+                foreach (var s in subjects)
                 {
-                    foreach (var s in subjects)
-                    {
-                        <option value="@s.Id">@s.Name</option>
-                    }
+                  <option value="@s.Id">@s.Name</option>
                 }
+              }
             </select>
           </div>
         </form>
@@ -112,213 +114,213 @@
 </div>
 
 @section Scripts {
-<script>
-let currentModal;
-let isEditMode = false;
+  <script>
+    let currentModal;
+    let isEditMode = false;
 
-// Khởi tạo modal
-document.addEventListener('DOMContentLoaded', function() {
-    currentModal = new bootstrap.Modal(document.getElementById('documentModal'));
-    
-    // Preview thumbnail
-    document.getElementById('thumbnailFile').addEventListener('change', function(e) {
+    // Khởi tạo modal
+    document.addEventListener('DOMContentLoaded', function () {
+      currentModal = new bootstrap.Modal(document.getElementById('documentModal'));
+
+      // Preview thumbnail
+      document.getElementById('thumbnailFile').addEventListener('change', function (e) {
         const file = e.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('thumbnailPreview').innerHTML = 
-                    `<img src="${e.target.result}" style="max-width:200px;max-height:200px;" class="img-thumbnail" />`;
-            }
-            reader.readAsDataURL(file);
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            document.getElementById('thumbnailPreview').innerHTML =
+              `<img src="${e.target.result}" style="max-width:200px;max-height:200px;" class="img-thumbnail" />`;
+          }
+          reader.readAsDataURL(file);
         }
-    });
-    
-    // Show file info
-    document.getElementById('documentFile').addEventListener('change', function(e) {
+      });
+
+      // Show file info
+      document.getElementById('documentFile').addEventListener('change', function (e) {
         const file = e.target.files[0];
         if (file) {
-            const sizeInMB = (file.size / (1024 * 1024)).toFixed(2);
-            document.getElementById('fileInfo').innerHTML = 
-                `<small class="text-info">File: ${file.name} (${sizeInMB} MB)</small>`;
+          const sizeInMB = (file.size / (1024 * 1024)).toFixed(2);
+          document.getElementById('fileInfo').innerHTML =
+            `<small class="text-info">File: ${file.name} (${sizeInMB} MB)</small>`;
         }
+      });
     });
-});
 
-// Mở modal tạo mới
-function openCreateModal() {
-    isEditMode = false;
-    document.getElementById('modalTitle').textContent = 'Thêm tài liệu';
-    document.getElementById('documentForm').reset();
-    document.getElementById('documentId').value = '';
-    document.getElementById('thumbnailPreview').innerHTML = '';
-    document.getElementById('fileInfo').innerHTML = '';
-    document.getElementById('documentFile').required = true;
-    currentModal.show();
-}
+    // Mở modal tạo mới
+    function openCreateModal() {
+      isEditMode = false;
+      document.getElementById('modalTitle').textContent = 'Thêm tài liệu';
+      document.getElementById('documentForm').reset();
+      document.getElementById('documentId').value = '';
+      document.getElementById('thumbnailPreview').innerHTML = '';
+      document.getElementById('fileInfo').innerHTML = '';
+      document.getElementById('documentFile').required = true;
+      currentModal.show();
+    }
 
-// Mở modal chỉnh sửa
-function openEditModal(id) {
-    isEditMode = true;
-    document.getElementById('modalTitle').textContent = 'Sửa tài liệu';
-    document.getElementById('documentForm').reset();
-    document.getElementById('thumbnailPreview').innerHTML = '';
-    document.getElementById('fileInfo').innerHTML = '';
-    document.getElementById('documentFile').required = false;
-    
-    // Lấy thông tin document
-    fetch(`/AdminDocument/GetDocument?id=${id}`)
+    // Mở modal chỉnh sửa
+    function openEditModal(id) {
+      isEditMode = true;
+      document.getElementById('modalTitle').textContent = 'Sửa tài liệu';
+      document.getElementById('documentForm').reset();
+      document.getElementById('thumbnailPreview').innerHTML = '';
+      document.getElementById('fileInfo').innerHTML = '';
+      document.getElementById('documentFile').required = false;
+
+      // Lấy thông tin document
+      fetch(`/AdminDocument/GetDocument?id=${id}`)
         .then(response => response.json())
         .then(result => {
-            if (result.success) {
-                const doc = result.data;
-                document.getElementById('documentId').value = doc.id;
-                document.getElementById('title').value = doc.title;
-                document.getElementById('subjectId').value = doc.subjectId;
-                
-                // Hiển thị thumbnail hiện tại
-                if (doc.thumbnailPath) {
-                    document.getElementById('thumbnailPreview').innerHTML = 
-                        `<img src="/${doc.thumbnailPath}" style="max-width:200px;max-height:200px;" class="img-thumbnail" />
-                         <p class="text-muted mt-1">Thumbnail hiện tại</p>`;
-                }
-                
-                // Hiển thị thông tin file hiện tại
-                if (doc.fileName) {
-                    document.getElementById('fileInfo').innerHTML = 
-                        `<small class="text-info">File hiện tại: ${doc.fileName}</small>`;
-                }
-                
-                currentModal.show();
-            } else {
-                alert(result.message);
+          if (result.success) {
+            const doc = result.data;
+            document.getElementById('documentId').value = doc.id;
+            document.getElementById('title').value = doc.title;
+            document.getElementById('subjectId').value = doc.subjectId;
+
+            // Hiển thị thumbnail hiện tại
+            if (doc.thumbnailPath) {
+              document.getElementById('thumbnailPreview').innerHTML =
+                `<img src="/${doc.thumbnailPath}" style="max-width:200px;max-height:200px;" class="img-thumbnail" />
+                             <p class="text-muted mt-1">Thumbnail hiện tại</p>`;
             }
+
+            // Hiển thị thông tin file hiện tại
+            if (doc.fileName) {
+              document.getElementById('fileInfo').innerHTML =
+                `<small class="text-info">File hiện tại: ${doc.fileName}</small>`;
+            }
+
+            currentModal.show();
+          } else {
+            alert(result.message);
+          }
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('Có lỗi xảy ra khi tải dữ liệu');
+          console.error('Error:', error);
+          alert('Có lỗi xảy ra khi tải dữ liệu');
         });
-}
+    }
 
-// Lưu document (tạo mới hoặc cập nhật)
-function saveDocument() {
-    const form = document.getElementById('documentForm');
-    if (!form.checkValidity()) {
+    // Lưu document (tạo mới hoặc cập nhật)
+    function saveDocument() {
+      const form = document.getElementById('documentForm');
+      if (!form.checkValidity()) {
         form.reportValidity();
         return;
-    }
-    
-    // Show loading
-    const btnSave = document.getElementById('btnSave');
-    const spinner = document.getElementById('loadingSpinner');
-    btnSave.disabled = true;
-    spinner.classList.remove('d-none');
-    
-    const formData = new FormData();
-    
-    if (isEditMode) {
+      }
+
+      // Show loading
+      const btnSave = document.getElementById('btnSave');
+      const spinner = document.getElementById('loadingSpinner');
+      btnSave.disabled = true;
+      spinner.classList.remove('d-none');
+
+      const formData = new FormData();
+
+      if (isEditMode) {
         formData.append('id', document.getElementById('documentId').value);
-    }
-    
-    formData.append('title', document.getElementById('title').value);
-    formData.append('subjectId', document.getElementById('subjectId').value);
-    
-    // Thêm file thumbnail nếu có
-    const thumbnailFile = document.getElementById('thumbnailFile').files[0];
-    if (thumbnailFile) {
+      }
+
+      formData.append('title', document.getElementById('title').value);
+      formData.append('subjectId', document.getElementById('subjectId').value);
+
+      // Thêm file thumbnail nếu có
+      const thumbnailFile = document.getElementById('thumbnailFile').files[0];
+      if (thumbnailFile) {
         formData.append('thumbnailFile', thumbnailFile);
-    }
-    
-    // Thêm file tài liệu nếu có
-    const documentFile = document.getElementById('documentFile').files[0];
-    if (documentFile) {
+      }
+
+      // Thêm file tài liệu nếu có
+      const documentFile = document.getElementById('documentFile').files[0];
+      if (documentFile) {
         formData.append('documentFile', documentFile);
-    }
-    
-    const url = isEditMode ? '/AdminDocument/UpdateDocument' : '/AdminDocument/CreateDocument';
-    
-    fetch(url, {
+      }
+
+      const url = isEditMode ? '/AdminDocument/UpdateDocument' : '/AdminDocument/CreateDocument';
+
+      fetch(url, {
         method: 'POST',
         body: formData
-    })
-    .then(response => response.json())
-    .then(result => {
-        btnSave.disabled = false;
-        spinner.classList.add('d-none');
-        
-        if (result.success) {
+      })
+        .then(response => response.json())
+        .then(result => {
+          btnSave.disabled = false;
+          spinner.classList.add('d-none');
+
+          if (result.success) {
             const d = result.data;
             console.log(d)
             const row = document.querySelector(`#documentTable tbody tr[data-id="${d.id}"]`);
-          if (row) {
-            row.innerHTML = `
-              <td>${d.id}</td>
-              <td>${d.title}</td>
-              <td>${d.thumbnailPath ? `<img src="/${d.thumbnailPath}" style="max-width:80px;max-height:80px;" />` : ''}</td>
-              <td>${d.fileName ? `<a href="/AdminDocument/DownloadFile?id=${d.id}">${d.fileName}</a>` : ''}</td>
-              <td>${d.subjectName ?? ''}</td>
-              <td>
-                <button class="btn btn-sm btn-warning" onclick="openEditModal(${d.id})">Sửa</button>
-                <button class="btn btn-sm btn-danger" onclick="deleteDocument(${d.id})">Xóa</button>
-              </td>
-            `;
-          } else {
-            const tbody = document.querySelector('#documentTable tbody');
-            const rowHtml = `
-              <tr data-id="${d.id}">
-                <td>${d.id}</td>
-                <td>${d.title}</td>
-                <td>${d.thumbnailPath ? `<img src="/${d.thumbnailPath}" style="max-width:80px;max-height:80px;" />` : ''}</td>
-                <td>${d.fileName ? `<a href="/AdminDocument/DownloadFile?id=${d.id}">${d.fileName}</a>` : ''}</td>
-                <td>${d.subjectName ?? ''}</td>
-                <td>
-                  <button class="btn btn-sm btn-warning" onclick="openEditModal(${d.id})">Sửa</button>
-                  <button class="btn btn-sm btn-danger" onclick="deleteDocument(${d.id})">Xóa</button>
-                </td>
-              </tr>
-            `;
-            tbody.insertAdjacentHTML('afterbegin', rowHtml);
-          }
+            if (row) {
+              row.innerHTML = `
+                  <td>${d.id}</td>
+                  <td>${d.title}</td>
+                  <td>${d.thumbnailPath ? `<img src="/${d.thumbnailPath}" style="max-width:80px;max-height:80px;" />` : ''}</td>
+                  <td>${d.fileName ? `<a href="/AdminDocument/DownloadFile?id=${d.id}">${d.fileName}</a>` : ''}</td>
+                  <td>${d.subjectName ?? ''}</td>
+                  <td>
+                    <button class="btn btn-sm btn-warning" onclick="openEditModal(${d.id})">Sửa</button>
+                    <button class="btn btn-sm btn-danger" onclick="deleteDocument(${d.id})">Xóa</button>
+                  </td>
+                `;
+            } else {
+              const tbody = document.querySelector('#documentTable tbody');
+              const rowHtml = `
+                  <tr data-id="${d.id}">
+                    <td>${d.id}</td>
+                    <td>${d.title}</td>
+                    <td>${d.thumbnailPath ? `<img src="/${d.thumbnailPath}" style="max-width:80px;max-height:80px;" />` : ''}</td>
+                    <td>${d.fileName ? `<a href="/AdminDocument/DownloadFile?id=${d.id}">${d.fileName}</a>` : ''}</td>
+                    <td>${d.subjectName ?? ''}</td>
+                    <td>
+                      <button class="btn btn-sm btn-warning" onclick="openEditModal(${d.id})">Sửa</button>
+                      <button class="btn btn-sm btn-danger" onclick="deleteDocument(${d.id})">Xóa</button>
+                    </td>
+                  </tr>
+                `;
+              tbody.insertAdjacentHTML('afterbegin', rowHtml);
+            }
 
             currentModal.hide();
             alert(result.message);
-        } else {
+          } else {
             alert(result.message);
-        }
-    })
-    .catch(error => {
-        btnSave.disabled = false;
-        spinner.classList.add('d-none');
-        console.error('Error:', error);
-        alert('Có lỗi xảy ra');
-    });
-}
-
-// Xóa document
-function deleteDocument(id) {
-    if (!confirm('Bạn có chắc chắn muốn xóa tài liệu này? File sẽ bị xóa vĩnh viễn!')) {
-        return;
+          }
+        })
+        .catch(error => {
+          btnSave.disabled = false;
+          spinner.classList.add('d-none');
+          console.error('Error:', error);
+          alert('Có lỗi xảy ra');
+        });
     }
-    
-    fetch('/AdminDocument/DeleteDocument', {
+
+    // Xóa document
+    function deleteDocument(id) {
+      if (!confirm('Bạn có chắc chắn muốn xóa tài liệu này? File sẽ bị xóa vĩnh viễn!')) {
+        return;
+      }
+
+      fetch('/AdminDocument/DeleteDocument', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(id)
-    })
-    .then(response => response.json())
-    .then(result => {
-        if (result.success) {
+      })
+        .then(response => response.json())
+        .then(result => {
+          if (result.success) {
             alert(result.message);
             document.querySelector(`tr[data-id="${id}"]`).remove();
-        } else {
+          } else {
             alert(result.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Có lỗi xảy ra');
-    });
-}
-</script>
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Có lỗi xảy ra');
+        });
+    }
+  </script>
 }

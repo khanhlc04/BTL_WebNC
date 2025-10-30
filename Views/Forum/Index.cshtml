@@ -10,17 +10,17 @@
         transition: box-shadow 0.2s, transform 0.2s;
         background-color: #fff;
         border: none !important;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         margin-bottom: 1rem;
         padding: 1.25rem;
         border-bottom: 1px solid #dee2e6 !important;
     }
 
-        .question-item:hover {
-            transform: translateY(-4px) scale(1.01);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-            background-color: #f8f9fa;
-        }
+    .question-item:hover {
+        transform: translateY(-4px) scale(1.01);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        background-color: #f8f9fa;
+    }
 
     .question-link {
         color: inherit;
@@ -68,7 +68,8 @@
     </div>
 
     <!-- Create Question Modal -->
-    <div class="modal fade" id="createQuestionModal" tabindex="-1" aria-labelledby="createQuestionModalLabel" aria-hidden="true">
+    <div class="modal fade" id="createQuestionModal" tabindex="-1" aria-labelledby="createQuestionModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -83,10 +84,8 @@
                             <label class="form-label">
                                 <i class="bi bi-pencil"></i> Nội dung câu hỏi
                             </label>
-                            <textarea id="questionContent" name="Content"
-                                      class="form-control" rows="6"
-                                      placeholder="Nhập nội dung câu hỏi của bạn..."
-                                      required minlength="20"></textarea>
+                            <textarea id="questionContent" name="Content" class="form-control" rows="6"
+                                placeholder="Nhập nội dung câu hỏi của bạn..." required minlength="20"></textarea>
 
                             <div class="d-flex justify-content-between mt-2">
                                 <div class="char-count text-muted">
@@ -137,17 +136,14 @@
     <div class="mb-4">
         <div class="position-relative">
             <input type="text" id="searchBox" class="form-control form-control-lg shadow-sm"
-                   placeholder="Tìm kiếm câu hỏi..."
-                   style="padding-left: 3rem; padding-right: 3rem; border-radius: 50px; background-color: #f8f9fa;" />
+                placeholder="Tìm kiếm câu hỏi..."
+                style="padding-left: 3rem; padding-right: 3rem; border-radius: 50px; background-color: #f8f9fa;" />
             <i class="bi bi-search position-absolute"
-               style="left: 1.25rem; top: 50%; transform: translateY(-50%); color: #6c757d;"></i>
-            <button type="button" id="clearSearch"
-                    class="btn position-absolute d-none align-items-center"
-                    style="right: 0.5rem; top: 50%; transform: translateY(-50%);
+                style="left: 1.25rem; top: 50%; transform: translateY(-50%); color: #6c757d;"></i>
+            <button type="button" id="clearSearch" class="btn position-absolute d-none align-items-center" style="right: 0.5rem; top: 50%; transform: translateY(-50%);
                            height: 35px; border-radius: 20px;
                            background: #e9ecef; border: none;
-                           padding: 0 15px;"
-                    title="Xóa tìm kiếm">
+                           padding: 0 15px;" title="Xóa tìm kiếm">
                 <i class="bi bi-x-lg" style="font-size: 1.2rem; color: #495057;"></i>
                 <span style="margin-left: 5px; color: #495057;">Xóa</span>
             </button>
@@ -170,7 +166,7 @@
             foreach (var q in Model)
             {
                 <div class="list-group-item question-item"
-                     onclick="window.location.href='@Url.Action("Details", "Forum", new { id = q.QuestionId })'">
+                    onclick="window.location.href='@Url.Action("Details", "Forum", new { id = q.QuestionId })'">
                     <div class="row align-items-center">
                         <!-- Question content -->
                         <div class="col-md-7">
@@ -222,7 +218,7 @@
 
 <script>
     // Modal form handling
-        // Modal form handling
+    // Modal form handling
     function submitQuestion(event) {
         event.preventDefault();
         const content = document.getElementById('questionContent').value.trim(); // ✅ giữ lại .trim()
@@ -237,18 +233,18 @@
             url: '@Url.Action("Create", "Forum")',
             type: 'POST',
             data: { Content: content },
-            success: function(response) {
+            success: function (response) {
                 $('#createQuestionModal').modal('hide');
                 location.reload();
             },
-            error: function(xhr) {
+            error: function (xhr) {
                 alert('Có lỗi xảy ra khi đăng câu hỏi. Vui lòng thử lại!');
             }
         });
     }
 
     // Modal content handling
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const questionContent = document.getElementById('questionContent');
         const charCount = document.getElementById('charCount');
         const showPreview = document.getElementById('showPreview');
@@ -277,7 +273,7 @@
 
         questionContent.addEventListener('input', updateCharCount);
 
-        showPreview.addEventListener('change', function() {
+        showPreview.addEventListener('change', function () {
             previewArea.classList.toggle('d-none', !this.checked);
             if (this.checked) {
                 preview.textContent = questionContent.value;
@@ -285,7 +281,7 @@
         });
 
         // Reset form khi đóng modal
-        modal.addEventListener('hidden.bs.modal', function() {
+        modal.addEventListener('hidden.bs.modal', function () {
             document.getElementById('questionForm').reset();
             previewArea.classList.add('d-none');
             showPreview.checked = false;
@@ -296,13 +292,13 @@
 
     // Search functionality
     document.addEventListener("DOMContentLoaded", function () {
-    const searchBox = document.getElementById("searchBox");
-    const clearBtn = document.getElementById("clearSearch");
-    let searchTimeout;
-    // Save original server-rendered list so we can restore it when query is empty
-    const questionListEl = document.getElementById('questionList');
-    const originalListHtml = questionListEl ? questionListEl.innerHTML : '';
-    toggleClearButton();
+        const searchBox = document.getElementById("searchBox");
+        const clearBtn = document.getElementById("clearSearch");
+        let searchTimeout;
+        // Save original server-rendered list so we can restore it when query is empty
+        const questionListEl = document.getElementById('questionList');
+        const originalListHtml = questionListEl ? questionListEl.innerHTML : '';
+        toggleClearButton();
 
         function escapeRegExp(string) {
             return string.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&');
@@ -334,7 +330,7 @@
                 url: '@Url.Action("SearchQuestions", "Forum")',
                 type: 'GET',
                 data: { query: value },
-                success: function(questions) {
+                success: function (questions) {
                     if (!questions || questions.length === 0) {
                         // Non-empty query but no results -> show not found
                         questionList.innerHTML = `
@@ -398,7 +394,7 @@
                         }, index * 100);
                     });
                 },
-                error: function() {
+                error: function () {
                     questionList.innerHTML = `
                         <div class="text-center py-5">
                             <i class="bi bi-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
@@ -426,7 +422,7 @@
             });
         }
         // Debounced search with AJAX
-        searchBox.addEventListener("input", function() {
+        searchBox.addEventListener("input", function () {
             clearTimeout(searchTimeout);
             toggleClearButton();
             searchTimeout = setTimeout(() => {
@@ -444,7 +440,7 @@
             }
         }
 
-        clearBtn.addEventListener("click", function() {
+        clearBtn.addEventListener("click", function () {
             searchBox.value = "";
             toggleClearButton();
             filterQuestions();

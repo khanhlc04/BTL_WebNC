@@ -1,7 +1,8 @@
 @using BTL_WebNC.Models.Chat
 @{
     var room = ViewBag.Room;
-    var messages = ViewBag.Messages as IEnumerable<BTL_WebNC.Models.Chat.ChatModel> ?? Enumerable.Empty<BTL_WebNC.Models.Chat.ChatModel>();
+    var messages = ViewBag.Messages as IEnumerable<BTL_WebNC.Models.Chat.ChatModel> ??
+    Enumerable.Empty<BTL_WebNC.Models.Chat.ChatModel>();
     var other = ViewBag.Other;
     var currentEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? "";
 
@@ -15,7 +16,8 @@
         @foreach (var m in messages)
         {
             var senderEmail = m.Sender?.Email ?? "";
-            var isMine = !string.IsNullOrEmpty(senderEmail) && string.Equals(senderEmail, currentEmail, StringComparison.OrdinalIgnoreCase);
+            var isMine = !string.IsNullOrEmpty(senderEmail) && string.Equals(senderEmail, currentEmail,
+            StringComparison.OrdinalIgnoreCase);
             <div class="message @(isMine ? "mine" : "other")" style="margin-bottom:8px;">
                 <div style="display:flex; justify-content:@(isMine ? "flex-end" : "flex-start");">
                     <div style="max-width:80%; background:@(isMine ? "#e6ffe6" : "#fff"); padding:8px; border-radius:8px;">
@@ -60,16 +62,16 @@
             const msgDiv = document.getElementById('messages');
             const wrapper = document.createElement('div');
             wrapper.innerHTML = `
-                <div class="message other" style="margin-bottom:8px;">
-                <div style="display:flex; justify-content:flex-start">
-                    <div style="max-width:80%; background:#fff; padding:8px; border-radius:8px;">
-                        <div style="font-weight:600; font-size:0.95rem;">${user}</div>
-                        <div style="margin-top:6px;">${message}</div>
-                        <div><small class="text-muted">${new Date().toLocaleString()}</small></div>
+                    <div class="message other" style="margin-bottom:8px;">
+                    <div style="display:flex; justify-content:flex-start">
+                        <div style="max-width:80%; background:#fff; padding:8px; border-radius:8px;">
+                            <div style="font-weight:600; font-size:0.95rem;">${user}</div>
+                            <div style="margin-top:6px;">${message}</div>
+                            <div><small class="text-muted">${new Date().toLocaleString()}</small></div>
+                        </div>
                     </div>
-                </div>
-                </div>
-            `;
+                    </div>
+                `;
             msgDiv.appendChild(wrapper);
             msgDiv.scrollTop = msgDiv.scrollHeight;
         });
@@ -81,21 +83,21 @@
                 if (!text) return;
                 connection.invoke('SendPrivateMessage', '@currentEmail', '@(other?.Email ?? "")', text)
                     .then(function () {
-                      const msgDiv = document.getElementById('messages');
-                      const wrapper = document.createElement('div');
-                       wrapper.innerHTML = `
-                        <div class="message mine" style="margin-bottom:8px;">
-                        <div style="display:flex; justify-content:flex-end">
-                            <div style="max-width:80%; background:#e6ffe6; padding:8px; border-radius:8px;">
-                                <div style="font-weight:600; font-size:0.95rem;">You</div>
-                                <div style="margin-top:6px;">${text}</div>
-                                <div><small class="text-muted">${new Date().toLocaleString()}</small></div>
+                        const msgDiv = document.getElementById('messages');
+                        const wrapper = document.createElement('div');
+                        wrapper.innerHTML = `
+                            <div class="message mine" style="margin-bottom:8px;">
+                            <div style="display:flex; justify-content:flex-end">
+                                <div style="max-width:80%; background:#e6ffe6; padding:8px; border-radius:8px;">
+                                    <div style="font-weight:600; font-size:0.95rem;">You</div>
+                                    <div style="margin-top:6px;">${text}</div>
+                                    <div><small class="text-muted">${new Date().toLocaleString()}</small></div>
+                                </div>
                             </div>
-                        </div>
-                        </div>
-                    `;
-                    msgDiv.appendChild(wrapper);
-                    msgDiv.scrollTop = msgDiv.scrollHeight;
+                            </div>
+                        `;
+                        msgDiv.appendChild(wrapper);
+                        msgDiv.scrollTop = msgDiv.scrollHeight;
                     })
                     .catch(function (err) { console.error('SendPrivateMessage failed:', err.toString()); });
                 input.value = '';

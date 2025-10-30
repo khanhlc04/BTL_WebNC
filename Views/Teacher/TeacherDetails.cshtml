@@ -2,22 +2,65 @@
 @using System.Collections.Generic
 @{
     var teacher = ViewBag.Teacher as BTL_WebNC.Models.Teacher.TeacherModel;
-    var subjects = ViewBag.Subjects as IEnumerable<BTL_WebNC.Models.Subject.SubjectModel> ?? Enumerable.Empty<BTL_WebNC.Models.Subject.SubjectModel>();
+    var subjects = ViewBag.Subjects as IEnumerable<BTL_WebNC.Models.Subject.SubjectModel> ??
+    Enumerable.Empty<BTL_WebNC.Models.Subject.SubjectModel>();
 
     ViewData["Title"] = teacher?.FullName ?? "Danh sách môn học của giảng viên";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <style>
-    .subject-grid { display:flex; flex-wrap:wrap; gap:16px; margin-top:12px; }
-    .subject-card { background:#fff; border-radius:8px; padding:12px; box-shadow:0 2px 8px rgba(0,0,0,0.06); flex:1 1 calc(25% - 16px); min-width:200px; text-decoration:none; color:inherit; display:flex; gap:12px; align-items:flex-start; }
-    .subject-thumb { flex:0 0 88px; }
-    .subject-thumb img { width:88px; height:88px; object-fit:cover; border-radius:6px; display:block; }
-    .subject-fallback { width:88px; height:88px; border-radius:6px; background:#e9ecef; display:flex; align-items:center; justify-content:center; font-weight:700; color:#6c757d; }
-    .subject-info { flex:1 1 auto; }
-    .subject-card h4 { margin:0 0 8px 0; font-size:16px; }
-    .subject-card .muted { color:#666; font-size:14px; }
-    @@media (max-width:768px) { .subject-card { flex:1 1 100%; } }
+    .subject-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .subject-card {
+        background: #fff;
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+        width: calc((100% - 32px) / 3);
+    }
+
+    .thumb-wrap {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border-radius: 6px;
+        background: #f6f7fb;
+    }
+
+    .subject-thumb {
+        width: 100%;
+        height: 140px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .subject-card h4 {
+        margin: 0 0 8px 0;
+    }
+
+    .subject-card .muted {
+        color: #666;
+        font-size: 14px;
+    }
+
+    @@media (max-width:768px) {
+        .subject-card {
+            flex: 1 1 100%;
+        }
+    }
 </style>
 
 
@@ -25,11 +68,14 @@
     <div style="flex:0 0 auto;">
         @if (!string.IsNullOrEmpty(teacher?.ThumbnailPath))
         {
-            <img src="/@teacher.ThumbnailPath" alt="@teacher.FullName" style="width:140px;height:140px;border-radius:8px;object-fit:cover;" />
+            <img src="/@teacher.ThumbnailPath" alt="@teacher.FullName"
+                style="width:140px;height:140px;border-radius:8px;object-fit:cover;" />
         }
         else
         {
-            <div style="width:140px;height:140px;border-radius:8px;background:#e9ecef;display:flex;align-items:center;justify-content:center;color:#6c757d;font-weight:600;">@((teacher?.FullName ?? "").Split(' ').LastOrDefault() ?? "T")</div>
+            <div
+                style="width:140px;height:140px;border-radius:8px;background:#e9ecef;display:flex;align-items:center;justify-content:center;color:#6c757d;font-weight:600;">
+                @((teacher?.FullName ?? "").Split(' ').LastOrDefault() ?? "T")</div>
         }
     </div>
     <div>
@@ -44,21 +90,16 @@
     <div class="subject-grid">
         @foreach (var item in subjects)
         {
+            var thumb = string.IsNullOrWhiteSpace(item?.ThumbnailPath)
+            ? Url.Content("~/images/default-subject.png")
+            : Url.Content("~/" + item.ThumbnailPath.TrimStart('~', '/'));
+
             <a class="subject-card" href="@Url.Action("Details", "Subject", new { id = item.Id })">
-                <div class="subject-thumb">
-                    @if (!string.IsNullOrEmpty(item.ThumbnailPath))
-                    {
-                        <img src="/@item.ThumbnailPath" alt="@item.Name" />
-                    }
-                    else
-                    {
-                        <div class="subject-fallback">@((item.Name ?? "").Substring(0,1).ToUpper())</div>
-                    }
+                <div class="thumb-wrap">
+                    <img src="@thumb" alt="@item.Name" class="subject-thumb" />
                 </div>
-                <div class="subject-info">
-                    <h4>@item.Name</h4>
-                    <p class="muted">@item.Description</p>
-                </div>
+                <h4>@item.Name</h4>
+                <p class="muted">@item.Description</p>
             </a>
         }
     </div>
@@ -67,4 +108,3 @@ else
 {
     <div>Giảng viên chưa đăng ký môn học nào.</div>
 }
-

@@ -70,7 +70,7 @@
             <label for="fullName" class="form-label">Tên sinh viên <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="fullName" required />
           </div>
-    
+
           <div class="mb-3" id="passwordDiv">
             <label for="password" class="form-label">Mật khẩu <span class="text-danger">*</span></label>
             <input type="password" class="form-control" id="password" name="password" required />
@@ -92,9 +92,9 @@
   <script>
     let currentModal;
     let isEditMode = false;
-    
-    document.addEventListener('DOMContentLoaded', function() {
-        currentModal = new bootstrap.Modal(document.getElementById('studentModal'));
+
+    document.addEventListener('DOMContentLoaded', function () {
+      currentModal = new bootstrap.Modal(document.getElementById('studentModal'));
     });
 
     function openCreateModal() {
@@ -102,7 +102,7 @@
       document.getElementById('modalTitle').textContent = 'Thêm sinh viên';
       document.getElementById('studentForm').reset();
       document.getElementById('studentId').value = '';
-      
+
       const pwdDiv = document.getElementById('passwordDiv');
       const pwdInput = document.getElementById('password');
       pwdDiv.classList.remove('d-none');
@@ -113,116 +113,116 @@
     }
 
     function saveStudent() {
-        const form = document.getElementById('studentForm');
-        if (!form.checkValidity()) {
-            form.reportValidity();
-            return;
-        }
-        
-        // Show loading
-        const btnSave = document.getElementById('btnSave');
-        const spinner = document.getElementById('loadingSpinner');
-        btnSave.disabled = true;
-        spinner.classList.remove('d-none');
-        
-        const formData = new FormData();
-        
-        if (isEditMode) {
-            formData.append('id', document.getElementById('studentId').value);
-        }
+      const form = document.getElementById('studentForm');
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
 
-        formData.append('email', document.getElementById('email').value);
-        formData.append('studentCode', document.getElementById('studentCode').value);
-        formData.append('fullName', document.getElementById('fullName').value);
-        if (!isEditMode) formData.append('password', document.getElementById('password').value);
+      // Show loading
+      const btnSave = document.getElementById('btnSave');
+      const spinner = document.getElementById('loadingSpinner');
+      btnSave.disabled = true;
+      spinner.classList.remove('d-none');
 
-        const url = isEditMode ? '/AdminStudent/UpdateStudent' : '/AdminStudent/CreateStudent';
+      const formData = new FormData();
 
-        fetch(url, {
-            method: 'POST',
-            body: formData
-        })
+      if (isEditMode) {
+        formData.append('id', document.getElementById('studentId').value);
+      }
+
+      formData.append('email', document.getElementById('email').value);
+      formData.append('studentCode', document.getElementById('studentCode').value);
+      formData.append('fullName', document.getElementById('fullName').value);
+      if (!isEditMode) formData.append('password', document.getElementById('password').value);
+
+      const url = isEditMode ? '/AdminStudent/UpdateStudent' : '/AdminStudent/CreateStudent';
+
+      fetch(url, {
+        method: 'POST',
+        body: formData
+      })
         .then(response => response.json())
         .then(result => {
-            btnSave.disabled = false;
-            spinner.classList.add('d-none');
-            
-            if (result.success) {
-                currentModal.hide();
-                location.reload();
-            } else {
-                alert(result.message);
-            }
+          btnSave.disabled = false;
+          spinner.classList.add('d-none');
+
+          if (result.success) {
+            currentModal.hide();
+            location.reload();
+          } else {
+            alert(result.message);
+          }
         })
         .catch(error => {
-            btnSave.disabled = false;
-            spinner.classList.add('d-none');
-            console.error('Error:', error);
-            alert('Có lỗi xảy ra');
+          btnSave.disabled = false;
+          spinner.classList.add('d-none');
+          console.error('Error:', error);
+          alert('Có lỗi xảy ra');
         });
     }
 
     function openEditModal(id) {
-        isEditMode = true;
-        document.getElementById('studentForm').reset();
-        document.getElementById('studentId').value = '';
-        document.getElementById('modalTitle').textContent = 'Sửa thông tin sinh viên';
-        
-        const pwdDiv = document.getElementById('passwordDiv');
-        const pwdInput = document.getElementById('password');
-        pwdDiv.classList.add('d-none');
-        pwdInput.required = false;
-        pwdInput.disabled = true;
+      isEditMode = true;
+      document.getElementById('studentForm').reset();
+      document.getElementById('studentId').value = '';
+      document.getElementById('modalTitle').textContent = 'Sửa thông tin sinh viên';
 
-        currentModal.show();
-        
-        // Lấy thông tin document
-        fetch(`/AdminStudent/GetStudent?id=${id}`)
-            .then(response => response.json())
-            .then(result => {
-                if (result.success) {
-                    const doc = result.data;
-                    document.getElementById('studentId').value = doc.id;
-                    document.getElementById('email').value = doc.email;
-                    document.getElementById('studentCode').value = doc.studentCode;
-                    document.getElementById('fullName').value = doc.fullName;
+      const pwdDiv = document.getElementById('passwordDiv');
+      const pwdInput = document.getElementById('password');
+      pwdDiv.classList.add('d-none');
+      pwdInput.required = false;
+      pwdInput.disabled = true;
 
-                    currentModal.show();
-                } else {
-                    alert(result.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Có lỗi xảy ra khi tải dữ liệu');
-            });
+      currentModal.show();
+
+      // Lấy thông tin document
+      fetch(`/AdminStudent/GetStudent?id=${id}`)
+        .then(response => response.json())
+        .then(result => {
+          if (result.success) {
+            const doc = result.data;
+            document.getElementById('studentId').value = doc.id;
+            document.getElementById('email').value = doc.email;
+            document.getElementById('studentCode').value = doc.studentCode;
+            document.getElementById('fullName').value = doc.fullName;
+
+            currentModal.show();
+          } else {
+            alert(result.message);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Có lỗi xảy ra khi tải dữ liệu');
+        });
     }
 
     function deleteStudent(id) {
       if (!confirm('Bạn có chắc chắn muốn xóa sinh viên này? Sinh viên sẽ bị xóa vĩnh viễn!')) {
-          return;
+        return;
       }
 
       fetch('/AdminStudent/DeleteStudent', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(id)
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(id)
       })
-      .then(response => response.json())
-      .then(result => {
+        .then(response => response.json())
+        .then(result => {
           if (result.success) {
-              alert(result.message);
-              document.querySelector(`tr[data-id="${id}"]`).remove();
+            alert(result.message);
+            document.querySelector(`tr[data-id="${id}"]`).remove();
           } else {
-              alert(result.message);
+            alert(result.message);
           }
-      })
-      .catch(error => {
+        })
+        .catch(error => {
           console.error('Error:', error);
           alert('Có lỗi xảy ra');
-      });
-  }
+        });
+    }
   </script>
 }

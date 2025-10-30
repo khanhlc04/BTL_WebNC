@@ -10,14 +10,59 @@
 }
 
 <style>
-    .teacher-grid { display:flex; flex-wrap:wrap; gap:16px; }
-    .teacher-card { background:#fff; border-radius:8px; padding:12px; box-shadow:0 2px 8px rgba(0,0,0,0.06); flex:1 1 calc(25% - 16px); min-width:220px; position:relative; text-decoration:none; color:inherit; }
-    .teacher-thumb { text-align:center; margin-bottom:8px; }
-    .teacher-thumb img { width:96px; height:96px; border-radius:50%; object-fit:cover; display:inline-block; }
-    .teacher-card h4 { margin:0 0 8px 0; font-size:16px; }
-    .teacher-card p { margin:0; color:#555; font-size:14px; }
-    .chat-btn { position:absolute; right:8px; top:8px; }
-    @@media (max-width:768px) { .teacher-card { flex:1 1 100%; } }
+    .teacher-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .teacher-card {
+        background: #fff;
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        flex: 1 1 calc(25% - 16px);
+        min-width: 220px;
+        position: relative;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .teacher-thumb {
+        text-align: center;
+        margin-bottom: 8px;
+    }
+
+    .teacher-thumb img {
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        object-fit: cover;
+        display: inline-block;
+    }
+
+    .teacher-card h4 {
+        margin: 0 0 8px 0;
+        font-size: 16px;
+    }
+
+    .teacher-card p {
+        margin: 0;
+        color: #555;
+        font-size: 14px;
+    }
+
+    .chat-btn {
+        position: absolute;
+        right: 8px;
+        top: 8px;
+    }
+
+    @@media (max-width:768px) {
+        .teacher-card {
+            flex: 1 1 100%;
+        }
+    }
 </style>
 
 <h2>Danh sách giảng viên</h2>
@@ -30,7 +75,8 @@
             <div class="teacher-card">
                 @if (isStudent)
                 {
-                    <a class="btn btn-sm btn-success chat-btn" href="@Url.Action("Index", "Chat", new { recipientId = item.AccountId })">Chat</a>
+                    <a class="btn btn-sm btn-success chat-btn"
+                        href="@Url.Action("Index", "Chat", new { recipientId = item.AccountId })">Chat</a>
                 }
 
                 <div class="teacher-thumb">
@@ -40,13 +86,15 @@
                     }
                     else
                     {
-                        <div style="width:96px;height:96px;border-radius:50%;background:#e9ecef;display:inline-flex;align-items:center;justify-content:center;color:#6c757d;font-weight:600;">@((item.FullName ?? "").Split(' ').LastOrDefault() ?? "T")</div>
+                        <div
+                            style="width:96px;height:96px;border-radius:50%;background:#e9ecef;display:inline-flex;align-items:center;justify-content:center;color:#6c757d;font-weight:600;">
+                            @((item.FullName ?? "").Split(' ').LastOrDefault() ?? "T")</div>
                     }
                 </div>
 
                 <h4><a href="@Url.Action("Details", "Teacher", new { id = item.Id })">@item.FullName</a></h4>
                 <p>@(item.Email ?? "-")</p>
-                <p style="margin-top:8px; color:#888; font-size:13px;">Môn: 
+                <p style="margin-top:8px; color:#888; font-size:13px;">Môn:
                     @if (item.TeacherSubjects != null && item.TeacherSubjects.Any())
                     {
                         @string.Join(", ", item.TeacherSubjects.Select(ts => ts.Subject?.Name ?? "N/A"))
