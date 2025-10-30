@@ -254,6 +254,7 @@
             document.getElementById('teacherForm').reset();
             document.getElementById('teacherId').value = '';
             document.getElementById('modalTitle').textContent = 'Sửa thông tin giảng viên';
+            document.getElementById('thumbnailPreview').innerHTML = '';
 
             const pwdDiv = document.getElementById('passwordDiv');
             const pwdInput = document.getElementById('password');
@@ -280,6 +281,12 @@
                             o.selected = selected.includes(parseInt(o.value));
                         });
                         document.getElementById('fullName').value = doc.fullName;
+
+                        if (doc.thumbnailPath) {
+                            document.getElementById('thumbnailPreview').innerHTML =
+                                `<img src="/${doc.thumbnailPath}" style="max-width:200px;max-height:200px;" class="img-thumbnail" />
+                                            <p class="text-muted mt-1">Thumbnail hiện tại</p>`;
+                        }
 
                         currentModal.show();
                     } else {

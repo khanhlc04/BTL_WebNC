@@ -3,8 +3,11 @@
 @{
     ViewData["Title"] = "Danh sách môn học";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var subjects = ViewBag.Subjects as IEnumerable<BTL_WebNC.Models.Subject.SubjectModel> ?? Enumerable.Empty<BTL_WebNC.Models.Subject.SubjectModel>();
+    var subjects = ViewBag.Subjects as IEnumerable<BTL_WebNC.Models.Subject.SubjectModel> ??
+    Enumerable.Empty<BTL_WebNC.Models.Subject.SubjectModel>();
 }
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 <style>
     .toolbar-container {
@@ -12,11 +15,13 @@
         justify-content: flex-end;
         margin-bottom: 20px;
     }
+
     .controls-stack {
         display: flex;
         flex-direction: column;
         gap: 10px;
     }
+
     .control-row {
         display: flex;
         justify-content: flex-end;
@@ -24,27 +29,70 @@
         gap: 8px;
     }
 
-    .subject-grid { display:flex; flex-wrap:wrap; gap:16px; }
-    .subject-card { background:#fff; border-radius:8px; padding:12px; box-shadow:0 2px 8px rgba(0,0,0,0.06); text-decoration:none; color:inherit; display:flex; flex-direction:column; gap:8px; align-items:flex-start; width: calc((100% - 32px) / 3); }
-    .thumb-wrap { width:100%; display:flex; align-items:center; justify-content:center; overflow:hidden; border-radius:6px; background:#f6f7fb; }
-    .subject-thumb { width:100%; height:140px; object-fit:cover; display:block; }
-    .subject-card h4 { margin:0 0 8px 0; }
-    .subject-card .muted { color:#666; font-size:14px; }
+    .subject-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
 
-    
-    @@media (max-width:768px) { .subject-card { flex:1 1 100%; } }
+    .subject-card {
+        background: #fff;
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+        width: calc((100% - 32px) / 3);
+    }
+
+    .thumb-wrap {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border-radius: 6px;
+        background: #f6f7fb;
+    }
+
+    .subject-thumb {
+        width: 100%;
+        height: 140px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .subject-card h4 {
+        margin: 0 0 8px 0;
+    }
+
+    .subject-card .muted {
+        color: #666;
+        font-size: 14px;
+    }
+
+
+    @@media (max-width:768px) {
+        .subject-card {
+            flex: 1 1 100%;
+        }
+    }
 </style>
 
-<h2>Danh sách môn học</h2>
-
 <form asp-action="Index" method="get">
-    <div class="toolbar-container">
-        <div class="controls-stack">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">Danh sách môn học</h4>
 
-            <div class="control-row">
-                <span>Tìm kiếm:</span>
-                <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control d-inline-block w-auto" />
-            </div>
+        <div class="input-group w-50">
+            <input type="text" name="searchString" value="@ViewData["CurrentFilter"]"
+                class="form-control d-inline-block w-auto" placeholder="Tìm kiếm tài liệu..." />
+            <button id="clearSearch" class="btn btn-outline-secondary" title="Xóa" type="submit">
+                Tìm
+            </button>
         </div>
     </div>
 </form>
@@ -54,7 +102,8 @@
     {
         foreach (var item in subjects)
         {
-            var thumb = string.IsNullOrWhiteSpace(item?.ThumbnailPath) ? Url.Content("~/images/default-subject.png") : Url.Content(item.ThumbnailPath);
+            var thumb = string.IsNullOrWhiteSpace(item?.ThumbnailPath) ? Url.Content("~/images/default-subject.png") :
+            Url.Content(item.ThumbnailPath);
             <a class="subject-card" href="@Url.Action("Details", "Subject", new { id = item.Id })">
                 <div class="thumb-wrap">
                     <img src="@thumb" alt="@item.Name" class="subject-thumb" />

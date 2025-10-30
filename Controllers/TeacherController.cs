@@ -1,7 +1,6 @@
-using System.Security.Claims;
+using BTL_WebNC.Models.Subject;
 using BTL_WebNC.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BTL_WebNC.Controllers.User
 {
@@ -22,28 +21,10 @@ namespace BTL_WebNC.Controllers.User
             _teacherSubjectRepo = teacherSubjectRepo;
         }
 
-        public async Task<IActionResult> Index(
-            string sortOrder,
-            string searchString,
-            int? subjectId
-        )
+        public async Task<IActionResult> Index(string searchString, int? subjectId)
         {
-            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
-
-            bool isStudent =
-                !string.IsNullOrEmpty(userEmail) && userEmail.EndsWith("@students.hou.edu.vn");
-
-            ViewData["IsStudent"] = isStudent;
-
-            string currentSortOrder = string.IsNullOrEmpty(sortOrder) ? "id_asc" : sortOrder;
-            ViewData["CurrentSort"] = currentSortOrder;
-            ViewData["CurrentFilter"] = searchString;
-
-            var subjects = await _subjectRepo.GetAllAsync();
-            ViewBag.Subjects = new SelectList(subjects, "Id", "Name", subjectId);
-            ViewData["CurrentSubjectId"] = subjectId;
-
             var teachers = await _teacherRepo.GetAllAsync();
+            var subjects = await _subjectRepo.GetAllAsync();
 
             if (subjectId.HasValue && subjectId > 0)
             {
@@ -59,21 +40,7 @@ namespace BTL_WebNC.Controllers.User
                     .ToList();
             }
 
-            switch (currentSortOrder)
-            {
-                case "name_asc":
-                    teachers = teachers.OrderBy(t => t.FullName).ToList();
-                    break;
-                case "name_desc":
-                    teachers = teachers.OrderByDescending(t => t.FullName).ToList();
-                    break;
-                case "id_desc":
-                    teachers = teachers.OrderByDescending(t => t.Id).ToList();
-                    break;
-                default:
-                    teachers = teachers.OrderBy(t => t.Id).ToList();
-                    break;
-            }
+            ViewBag.Subjects = subjects;
 
             return View("~/Views/Teacher/TeacherList.cshtml", teachers);
         }
@@ -88,7 +55,7 @@ namespace BTL_WebNC.Controllers.User
             var tsLinks = await _teacherSubjectRepo.GetByTeacherIdAsync(id);
             var subjectIds = tsLinks.Select(ts => ts.SubjectId).Distinct().ToList();
 
-            var subjects = new List<BTL_WebNC.Models.Subject.SubjectModel>();
+            var subjects = new List<SubjectModel>();
             foreach (var sid in subjectIds)
             {
                 var s = await _subjectRepo.GetByIdAsync(sid);

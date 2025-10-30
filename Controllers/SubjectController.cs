@@ -26,13 +26,8 @@ namespace BTL_WebNC.Controllers
             _teacherSubjectRepo = teacherSubjectRepo;
         }
 
-        public async Task<IActionResult> Index(string sortOrder, string searchString)
+        public async Task<IActionResult> Index(string searchString)
         {
-            string currentSortOrder = string.IsNullOrEmpty(sortOrder) ? "id_asc" : sortOrder;
-
-            ViewData["CurrentSort"] = currentSortOrder;
-            ViewData["CurrentFilter"] = searchString;
-
             var subjects = await _subjectRepo.GetAllAsync();
 
             if (!string.IsNullOrEmpty(searchString))
@@ -40,22 +35,6 @@ namespace BTL_WebNC.Controllers
                 subjects = subjects
                     .Where(s => s.Name.ToLower().Contains(searchString.ToLower()))
                     .ToList();
-            }
-
-            switch (currentSortOrder)
-            {
-                case "name_asc":
-                    subjects = subjects.OrderBy(s => s.Name).ToList();
-                    break;
-                case "name_desc":
-                    subjects = subjects.OrderByDescending(s => s.Name).ToList();
-                    break;
-                case "id_desc":
-                    subjects = subjects.OrderByDescending(s => s.Id).ToList();
-                    break;
-                default:
-                    subjects = subjects.OrderBy(s => s.Id).ToList();
-                    break;
             }
 
             ViewBag.Subjects = subjects;
@@ -73,14 +52,14 @@ namespace BTL_WebNC.Controllers
             var docs = allDocs
                 .Where(d => d.SubjectId == id && !d.Deleted)
                 .OrderBy(d => d.Title)
-                .Take(4)
+                .Take(3)
                 .ToList();
 
             // get teachers that are linked to this subject via TeacherSubject join table
             var tsLinks = await _teacherSubjectRepo.GetBySubjectIdAsync(id);
             var teacherIds = tsLinks.Select(ts => ts.TeacherId).Distinct().ToList();
             var teachers = new List<TeacherModel>();
-            foreach (var tid in teacherIds.Take(4))
+            foreach (var tid in teacherIds.Take(3))
             {
                 var t = await _teacherRepo.GetByIdAsync(tid);
                 if (t != null)

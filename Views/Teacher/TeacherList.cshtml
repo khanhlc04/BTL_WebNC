@@ -4,9 +4,10 @@
 @{
     ViewData["Title"] = "Danh sách giảng viên";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var currentSort = ViewData["CurrentSort"] as string ?? string.Empty;
     var userEmail = User.FindFirst(ClaimTypes.Email)?.Value ?? string.Empty;
     var isStudent = userEmail.EndsWith("@students.hou.edu.vn");
+    var subjects = ViewBag.Subjects as IEnumerable<BTL_WebNC.Models.Subject.SubjectModel> ??
+    Enumerable.Empty<BTL_WebNC.Models.Subject.SubjectModel>();
 }
 
 <style>
@@ -65,7 +66,32 @@
     }
 </style>
 
-<h2>Danh sách giảng viên</h2>
+<form asp-action="Index" method="get">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">Danh sách giảng viên</h4>
+
+        <div class="input-group w-50">
+            <input type="text" name="searchString" value="@ViewData["CurrentFilter"]"
+                class="form-control d-inline-block w-auto" placeholder="Tìm kiếm tài liệu..." />
+
+            <button id="clearSearch" class="btn btn-outline-secondary" title="Xóa" type="submit">
+                Tìm
+            </button>
+        </div>
+
+        <div class="filter-subjects" style="min-width:220px;">
+       <label for="subjectSelect" class="form-label visually-hidden">Chọn môn học</label>
+       <select id="subjectSelect" name="subjectId" multiple class="form-select form-select-sm">
+           <option disabled>-- Chọn môn học --</option>
+           @foreach (var subject in subjects)
+           {
+               <option value="@subject.Id">@subject.Name</option>
+           }
+       </select>
+       <div id="subjectBadges" class="mt-2"></div>
+   </div>
+    </div>
+</form>
 
 <div class="teacher-grid">
     @if (Model != null)

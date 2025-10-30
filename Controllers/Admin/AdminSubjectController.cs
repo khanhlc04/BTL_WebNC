@@ -80,20 +80,22 @@ namespace BTL_WebNC.Controllers.Admin
         {
             try
             {
-                string thumbnailPath = null;
+                var existingSubject = await _subjectRepo.GetByIdAsync(id);
+                if (existingSubject == null)
+                    return NotFound(new { success = false, message = "Không tìm thấy môn học" });
+
                 if (thumbnailFile != null && thumbnailFile.Length > 0)
                 {
-                    thumbnailPath = await _fileHelper.SaveFileAsync(thumbnailFile, "thumbnails");
+                    existingSubject.ThumbnailPath = await _fileHelper.SaveFileAsync(
+                        thumbnailFile,
+                        "thumbnails"
+                    );
                 }
 
-                var subject = new SubjectModel
-                {
-                    Id = id,
-                    Name = name,
-                    Description = description,
-                    ThumbnailPath = thumbnailPath,
-                };
-                var result = await _subjectRepo.UpdateAsync(subject);
+                existingSubject.Name = name;
+                existingSubject.Description = description;
+
+                var result = await _subjectRepo.UpdateAsync(existingSubject);
                 return Json(
                     new
                     {

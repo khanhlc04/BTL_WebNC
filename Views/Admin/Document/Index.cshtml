@@ -90,7 +90,7 @@
           <div class="mb-3">
             <label for="subjectId" class="form-label">Môn học <span class="text-danger">*</span></label>
             <select id="subjectId" class="form-control" required>
-              <option value="">-- Chọn môn học --</option>
+              <option disabled>-- Chọn môn học --</option>
               @if (subjects != null)
               {
                 foreach (var s in subjects)
@@ -249,7 +249,6 @@
 
           if (result.success) {
             const d = result.data;
-            console.log(d)
             const row = document.querySelector(`#documentTable tbody tr[data-id="${d.id}"]`);
             if (row) {
               row.innerHTML = `

@@ -6,7 +6,7 @@
 
 <button class="btn btn-primary mb-3" onclick="openCreateModal()">Thêm môn học</button>
 
-<table class="table table-striped">
+<table id="subjectTable" class="table table-striped">
     <thead>
         <tr>
             <th>ID</th>
@@ -158,7 +158,41 @@
 
                     if (result.success) {
                         currentModal.hide();
-                        location.reload();
+                        const d = result.data;
+                        const row = document.querySelector(`#subjectTable tbody tr[data-id="${d.id}"]`);
+                        if (row) {
+                            row.innerHTML = `
+                                <td>${d.id}</td>
+                                <td>${d.name}</td>
+                                <td>
+                                    ${d.thumbnailPath ? `<img src="/${d.thumbnailPath}" alt="Thumbnail" style="max-width:80px;max-height:80px;" />` : ''}
+                                    }
+                                </td>
+                                <td>${d.description}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning" onclick="openEditModal(${d.id})">Sửa</button>
+                                    <button class="btn btn-sm btn-danger" onclick="deleteSubject(${d.id})">Xóa</button>
+                                </td>
+                            `;
+                        } else {
+                            const tbody = document.querySelector('#documentTable tbody');
+                            const rowHtml = `
+                                <tr data-id="${d.id}">
+                                    <td>${d.id}</td>
+                                    <td>${d.name}</td>
+                                    <td>
+                                        ${d.thumbnailPath ? `<img src="/${d.thumbnailPath}" alt="Thumbnail" style="max-width:80px;max-height:80px;" />` : ''}
+                                        }
+                                    </td>
+                                    <td>${d.description}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-warning" onclick="openEditModal(${d.id})">Sửa</button>
+                                        <button class="btn btn-sm btn-danger" onclick="deleteSubject(${d.id})">Xóa</button>
+                                    </td>
+                                </tr>
+                            `;
+                            tbody.insertAdjacentHTML('afterbegin', rowHtml);
+                        }
                     } else {
                         alert(result.message);
                     }
@@ -175,6 +209,7 @@
             isEditMode = true;
             document.getElementById('subjectForm').reset();
             document.getElementById('subjectId').value = '';
+            document.getElementById('thumbnailPreview').innerHTML = '';
             currentModal.show();
 
             // Lấy thông tin document
@@ -186,6 +221,12 @@
                         document.getElementById('subjectId').value = doc.id;
                         document.getElementById('name').value = doc.name;
                         document.getElementById('description').value = doc.description;
+                        
+                        if (doc.thumbnailPath) {
+                            document.getElementById('thumbnailPreview').innerHTML =
+                                `<img src="/${doc.thumbnailPath}" style="max-width:200px;max-height:200px;" class="img-thumbnail" />
+                                            <p class="text-muted mt-1">Thumbnail hiện tại</p>`;
+                        }
 
                         currentModal.show();
                     } else {
