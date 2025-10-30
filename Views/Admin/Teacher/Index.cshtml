@@ -104,11 +104,6 @@
                             }
                         </select>
                     </div>
-
-                    <div class="mb-3" id="passwordDiv">
-                        <label for="password" class="form-label">Mật khẩu <span class="text-danger">*</span></label>
-                        <input name="password" type="password" class="form-control" id="password" required />
-                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -148,13 +143,7 @@
             document.getElementById('modalTitle').textContent = 'Thêm giảng viên';
             document.getElementById('teacherForm').reset();
             document.getElementById('teacherId').value = '';
-
-
-            const pwdDiv = document.getElementById('passwordDiv');
-            const pwdInput = document.getElementById('password');
-            pwdDiv.classList.remove('d-none');
-            pwdInput.required = true;
-            pwdInput.disabled = false;
+            document.getElementById('thumbnailPreview').innerHTML = '';
 
             currentModal.show();
         }
@@ -188,8 +177,6 @@
             if (thumbnailFile) {
                 formData.append('thumbnailFile', thumbnailFile);
             }
-
-            if (!isEditMode) formData.append('password', document.getElementById('password').value);
 
             const url = isEditMode ? '/AdminTeacher/UpdateTeacher' : '/AdminTeacher/CreateTeacher';
 
@@ -255,12 +242,6 @@
             document.getElementById('teacherId').value = '';
             document.getElementById('modalTitle').textContent = 'Sửa thông tin giảng viên';
             document.getElementById('thumbnailPreview').innerHTML = '';
-
-            const pwdDiv = document.getElementById('passwordDiv');
-            const pwdInput = document.getElementById('password');
-            pwdDiv.classList.add('d-none');
-            pwdInput.required = false;
-            pwdInput.disabled = true;
 
             currentModal.show();
 

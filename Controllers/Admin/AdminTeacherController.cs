@@ -58,7 +58,6 @@ namespace BTL_WebNC.Controllers.Admin
         public async Task<IActionResult> CreateTeacher(
             [FromForm] string fullName,
             [FromForm] string email,
-            [FromForm] string password,
             [FromForm] List<int> subjects,
             [FromForm] IFormFile thumbnailFile
         )
@@ -74,11 +73,12 @@ namespace BTL_WebNC.Controllers.Admin
                 var account = new AccountModel
                 {
                     Email = email,
-                    Password = password,
+                    Password = "HOU123",
                     Role = "Teacher",
                     Deleted = false,
                 };
-                await _accountRepo.CreateAsync(account);
+
+                var createdAccount = await _accountRepo.CreateAsync(account);
 
                 string thumbnailPath = null;
                 if (thumbnailFile != null)
@@ -90,9 +90,11 @@ namespace BTL_WebNC.Controllers.Admin
                 {
                     FullName = fullName,
                     Email = email,
-                    AccountId = account.Id,
+                    AccountId = createdAccount.Id,
                     ThumbnailPath = thumbnailPath,
                 };
+
+                Console.WriteLine("Creating teacher: " + teacher.AccountId);
 
                 await _teacherRepo.CreateAsync(teacher);
 

@@ -70,11 +70,6 @@
             <label for="fullName" class="form-label">Tên sinh viên <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="fullName" required />
           </div>
-
-          <div class="mb-3" id="passwordDiv">
-            <label for="password" class="form-label">Mật khẩu <span class="text-danger">*</span></label>
-            <input type="password" class="form-control" id="password" name="password" required />
-          </div>
         </form>
       </div>
       <div class="modal-footer">
@@ -103,12 +98,6 @@
       document.getElementById('studentForm').reset();
       document.getElementById('studentId').value = '';
 
-      const pwdDiv = document.getElementById('passwordDiv');
-      const pwdInput = document.getElementById('password');
-      pwdDiv.classList.remove('d-none');
-      pwdInput.required = true;
-      pwdInput.disabled = false;
-
       currentModal.show();
     }
 
@@ -134,7 +123,6 @@
       formData.append('email', document.getElementById('email').value);
       formData.append('studentCode', document.getElementById('studentCode').value);
       formData.append('fullName', document.getElementById('fullName').value);
-      if (!isEditMode) formData.append('password', document.getElementById('password').value);
 
       const url = isEditMode ? '/AdminStudent/UpdateStudent' : '/AdminStudent/CreateStudent';
 
@@ -167,12 +155,6 @@
       document.getElementById('studentForm').reset();
       document.getElementById('studentId').value = '';
       document.getElementById('modalTitle').textContent = 'Sửa thông tin sinh viên';
-
-      const pwdDiv = document.getElementById('passwordDiv');
-      const pwdInput = document.getElementById('password');
-      pwdDiv.classList.add('d-none');
-      pwdInput.required = false;
-      pwdInput.disabled = true;
 
       currentModal.show();
 

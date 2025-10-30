@@ -41,8 +41,7 @@ namespace BTL_WebNC.Controllers.Admin
         public async Task<IActionResult> CreateStudent(
             [FromForm] string fullName,
             [FromForm] string email,
-            [FromForm] string studentCode,
-            [FromForm] string password
+            [FromForm] string studentCode
         )
         {
             try
@@ -56,7 +55,7 @@ namespace BTL_WebNC.Controllers.Admin
                 var account = new AccountModel
                 {
                     Email = email,
-                    Password = password,
+                    Password = "HOU123",
                     Role = "Student",
                     Deleted = false,
                 };
