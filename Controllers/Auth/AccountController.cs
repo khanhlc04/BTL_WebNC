@@ -16,6 +16,68 @@ namespace BTL_WebNC.Controllers
             _accountRepository = accountRepository;
         }
 
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            if (!(User?.Identity?.IsAuthenticated == true))
+                return RedirectToAction("Login", "Account");
+
+            return View("~/Views/Account/ChangePassword.cshtml");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
+        {
+            if (!(User?.Identity?.IsAuthenticated == true))
+                return RedirectToAction("Login", "Account");
+
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/Account/ChangePassword.cshtml", model);
+            }
+
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                ModelState.AddModelError("", "Không xác định được người dùng");
+                return View("~/Views/Account/ChangePassword.cshtml", model);
+            }
+
+            if (!int.TryParse(userIdClaim.Value, out var userId))
+            {
+                ModelState.AddModelError("", "Không xác định được người dùng");
+                return View("~/Views/Account/ChangePassword.cshtml", model);
+            }
+
+            var account = await _accountRepository.GetByIdAsync(userId);
+            if (account == null)
+            {
+                ModelState.AddModelError("", "Tài khoản không tồn tại");
+                return View("~/Views/Account/ChangePassword.cshtml", model);
+            }
+
+            // Verify current password (note: passwords are stored plain in this project)
+            if (account.Password != model.CurrentPassword)
+            {
+                ModelState.AddModelError("CurrentPassword", "Mật khẩu hiện tại không đúng");
+                return View("~/Views/Account/ChangePassword.cshtml", model);
+            }
+
+            if (model.NewPassword != model.ConfirmPassword)
+            {
+                ModelState.AddModelError("ConfirmPassword", "Mật khẩu xác nhận không khớp");
+                return View("~/Views/Account/ChangePassword.cshtml", model);
+            }
+
+            // Update password
+            account.Password = model.NewPassword;
+            await _accountRepository.UpdateAsync(account);
+
+            // After change, redirect to home
+            return RedirectToAction("Index", "Home");
+        }
+
         // GET: /Account/Login
         public IActionResult Login()
         {
