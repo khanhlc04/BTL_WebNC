@@ -49,7 +49,8 @@ namespace BTL_WebNC.Repositories
             if (subject == null)
                 return false;
             subject.Deleted = true;
-            await UpdateAsync(subject);
+            var result = await UpdateAsync(subject);
+            Console.WriteLine("ketr" + result);
             return true;
         }
 

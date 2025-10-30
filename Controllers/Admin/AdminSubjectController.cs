@@ -112,11 +112,11 @@ namespace BTL_WebNC.Controllers.Admin
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteSubject([FromForm] int id)
+        public async Task<IActionResult> DeleteSubject([FromBody] int id)
         {
             try
             {
-                await _subjectRepo.DeleteAsync(id);
+                var result = await _subjectRepo.DeleteAsync(id);
                 return Json(new { success = true, message = "Xóa môn học thành công" });
             }
             catch (Exception ex)

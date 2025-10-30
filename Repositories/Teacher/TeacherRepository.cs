@@ -71,16 +71,9 @@ namespace BTL_WebNC.Repositories
 
         public async Task<TeacherModel> UpdateAsync(TeacherModel teacher)
         {
-            var existing = await _context.Teachers.FindAsync(teacher.Id);
-            if (existing == null)
-                return null;
-
-            existing.FullName = teacher.FullName;
-            existing.Email = teacher.Email;
-            existing.ThumbnailPath = teacher.ThumbnailPath;
-
+            _context.Entry(teacher).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-            return existing;
+            return teacher;
         }
 
         public async Task<bool> DeleteAsync(int id)
