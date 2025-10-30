@@ -18,7 +18,7 @@ namespace BTL_WebNC.Repositories
         {
             return await _context
                 .Documents.Where(d => !d.Deleted)
-                .OrderBy(d => d.Title)
+                .OrderByDescending(d => d.Id)
                 .ToListAsync();
         }
 

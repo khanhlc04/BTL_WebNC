@@ -1,5 +1,7 @@
 using BTL_WebNC.Data;
+using BTL_WebNC.Models.Subject;
 using BTL_WebNC.Models.Teacher;
+using BTL_WebNC.Models.TeacherSubject;
 using Microsoft.EntityFrameworkCore;
 
 namespace BTL_WebNC.Repositories
@@ -20,6 +22,7 @@ namespace BTL_WebNC.Repositories
                 .Include(t => t.TeacherSubjects.Where(ts => !ts.Deleted))
                 .ThenInclude(ts => ts.Subject)
                 .Where(t => !t.Deleted)
+                .OrderByDescending(t => t.Id)
                 .ToListAsync();
         }
 
@@ -33,7 +36,21 @@ namespace BTL_WebNC.Repositories
                     FullName = t.FullName,
                     Email = t.Email,
                     Account = t.Account,
-                    TeacherSubjects = t.TeacherSubjects.Where(ts => !ts.Deleted).ToList(),
+                    ThumbnailPath = t.ThumbnailPath,
+
+                    TeacherSubjects = t
+                        .TeacherSubjects.Where(ts => !ts.Deleted)
+                        .Select(ts => new TeacherSubjectModel
+                        {
+                            Id = ts.Id,
+                            SubjectId = ts.SubjectId,
+                            Subject = new SubjectModel
+                            {
+                                Id = ts.Subject.Id,
+                                Name = ts.Subject.Name,
+                            },
+                        })
+                        .ToList(),
                 })
                 .FirstOrDefaultAsync();
         }
@@ -60,6 +77,7 @@ namespace BTL_WebNC.Repositories
 
             existing.FullName = teacher.FullName;
             existing.Email = teacher.Email;
+            existing.ThumbnailPath = teacher.ThumbnailPath;
 
             await _context.SaveChangesAsync();
             return existing;

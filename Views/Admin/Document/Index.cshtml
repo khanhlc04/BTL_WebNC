@@ -246,8 +246,41 @@ function saveDocument() {
         spinner.classList.add('d-none');
         
         if (result.success) {
+            const d = result.data;
+            console.log(d)
+            const row = document.querySelector(`#documentTable tbody tr[data-id="${d.id}"]`);
+          if (row) {
+            row.innerHTML = `
+              <td>${d.id}</td>
+              <td>${d.title}</td>
+              <td>${d.thumbnailPath ? `<img src="/${d.thumbnailPath}" style="max-width:80px;max-height:80px;" />` : ''}</td>
+              <td>${d.fileName ? `<a href="/AdminDocument/DownloadFile?id=${d.id}">${d.fileName}</a>` : ''}</td>
+              <td>${d.subjectName ?? ''}</td>
+              <td>
+                <button class="btn btn-sm btn-warning" onclick="openEditModal(${d.id})">Sửa</button>
+                <button class="btn btn-sm btn-danger" onclick="deleteDocument(${d.id})">Xóa</button>
+              </td>
+            `;
+          } else {
+            const tbody = document.querySelector('#documentTable tbody');
+            const rowHtml = `
+              <tr data-id="${d.id}">
+                <td>${d.id}</td>
+                <td>${d.title}</td>
+                <td>${d.thumbnailPath ? `<img src="/${d.thumbnailPath}" style="max-width:80px;max-height:80px;" />` : ''}</td>
+                <td>${d.fileName ? `<a href="/AdminDocument/DownloadFile?id=${d.id}">${d.fileName}</a>` : ''}</td>
+                <td>${d.subjectName ?? ''}</td>
+                <td>
+                  <button class="btn btn-sm btn-warning" onclick="openEditModal(${d.id})">Sửa</button>
+                  <button class="btn btn-sm btn-danger" onclick="deleteDocument(${d.id})">Xóa</button>
+                </td>
+              </tr>
+            `;
+            tbody.insertAdjacentHTML('afterbegin', rowHtml);
+          }
+
             currentModal.hide();
-            location.reload();
+            alert(result.message);
         } else {
             alert(result.message);
         }

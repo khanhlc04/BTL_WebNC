@@ -18,6 +18,7 @@ namespace BTL_WebNC.Repositories
             return await _context
                 .Students.Include(s => s.Account)
                 .Where(s => !s.Deleted)
+                .OrderByDescending(s => s.Id)
                 .ToListAsync();
         }
 

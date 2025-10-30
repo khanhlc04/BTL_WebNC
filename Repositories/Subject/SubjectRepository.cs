@@ -18,7 +18,10 @@ namespace BTL_WebNC.Repositories
 
         public async Task<IEnumerable<SubjectModel>> GetAllAsync()
         {
-            return await _context.Subjects.Where(s => !s.Deleted).ToListAsync();
+            return await _context
+                .Subjects.Where(s => !s.Deleted)
+                .OrderByDescending(d => d.Id)
+                .ToListAsync();
         }
 
         public async Task<SubjectModel> GetByIdAsync(int id)

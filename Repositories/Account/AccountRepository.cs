@@ -15,7 +15,10 @@ namespace BTL_WebNC.Repositories
 
         public async Task<IEnumerable<AccountModel>> GetAllAsync()
         {
-            return await _context.Accounts.Where(a => !a.Deleted).ToListAsync();
+            return await _context
+                .Accounts.Where(a => !a.Deleted)
+                .OrderByDescending(a => a.Id)
+                .ToListAsync();
         }
 
         public async Task<AccountModel> GetByIdAsync(int id)

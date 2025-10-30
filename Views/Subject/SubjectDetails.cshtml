@@ -1,3 +1,6 @@
+@model IEnumerable<BTL_WebNC.Models.Teacher.TeacherModel>
+@using System.Security.Claims
+
 @{
     var subject = ViewBag.Subject;
     var documents = ViewBag.Documents;
@@ -5,26 +8,54 @@
 
     ViewData["Title"] = subject?.Name ?? "Chi tiết môn học";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var userEmail = User.FindFirst(ClaimTypes.Email)?.Value ?? string.Empty;
+    var isStudent = userEmail.EndsWith("@students.hou.edu.vn");
 }
 
 <style>
     .detail-container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    .subject-hero { display:flex; gap:16px; align-items:center; margin-bottom:8px; }
+    .subject-hero-thumb { width:160px; height:120px; object-fit:cover; border-radius:8px; background:#f6f7fb; }
+    .subject-hero-meta h1 { margin:0 0 8px 0; }
     .section { margin-top: 28px; }
     .section-header { display:flex; justify-content:space-between; align-items:center; }
     .section-title { font-size:20px; font-weight:600; }
     .view-all { font-size:14px; color:#667eea; text-decoration:none; }
 
     .card-grid { display:flex; flex-wrap:wrap; gap:16px; margin-top:16px; }
-    .card { background:#fff; border-radius:8px; padding:12px; box-shadow:0 2px 8px rgba(0,0,0,0.06); flex:1 1 calc(25% - 16px); min-width:200px; text-decoration:none; color:inherit; }
+    .card { background:#fff; border-radius:8px; padding:12px; box-shadow:0 2px 8px rgba(0,0,0,0.06); width: calc((100% - 32px) / 3);; text-decoration:none; color:inherit; }
     .card h4 { margin:0 0 8px 0; font-size:16px; }
     .card p { margin:0; color:#555; font-size:14px; }
 
+    .card .thumb-wrap { width:100%; height:140px; overflow:hidden; border-radius:6px; display:flex; align-items:center; justify-content:center; background:#f6f7fb; margin-bottom:8px; }
+    .card .doc-thumb { width:100%; height:100%; object-fit:cover; display:block; }
+
+    .teacher-grid { display:flex; flex-wrap:wrap; gap:16px; }
+    .teacher-card { background:#fff; border-radius:8px; padding:12px; box-shadow:0 2px 8px rgba(0,0,0,0.06); flex:1 1 calc(25% - 16px); min-width:220px; position:relative; text-decoration:none; color:inherit; }
+    .teacher-thumb { text-align:center; margin-bottom:8px; }
+    .teacher-thumb img { width:96px; height:96px; border-radius:50%; object-fit:cover; display:inline-block; }
+    .teacher-card h4 { margin:0 0 8px 0; font-size:16px; }
+    .teacher-card p { margin:0; color:#555; font-size:14px; }
+    .chat-btn { position:absolute; right:8px; top:8px; }
     @@media (max-width:768px) { .card { flex:1 1 100%; } }
 </style>
 
 <div class="detail-container">
-    <h1>@(subject?.Name ?? "-")</h1>
-    <p>@(string.IsNullOrWhiteSpace(subject?.Description) ? "Không có mô tả cho môn học này." : subject.Description)</p>
+   @{
+    var thumbPath = string.IsNullOrWhiteSpace(subject?.ThumbnailPath)
+        ? Url.Content("~/images/default-subject.png")
+        : Url.Content("~/" + subject.ThumbnailPath.TrimStart('~', '/'));
+}
+<div class="subject-hero">
+    <img src="@thumbPath" alt="@(subject?.Name ?? "")" class="subject-hero-thumb" />
+    <div class="subject-hero-meta">
+        <h1>@(subject?.Name ?? "-")</h1>
+        <p>@(string.IsNullOrWhiteSpace(subject?.Description)
+            ? "Không có mô tả cho môn học này."
+            : subject.Description)</p>
+    </div>
+</div>
 
     <div class="section">
         <div class="section-header">
@@ -37,9 +68,16 @@
             {
                 foreach (var doc in documents)
                 {
+
+                        var docThumb = string.IsNullOrWhiteSpace(doc?.ThumbnailPath)
+                            ? Url.Content("~/images/default-doc.png")
+                            : Url.Content("~/" + (doc?.ThumbnailPath ?? "").TrimStart('~', '/'));
                     <a class="card" href="@Url.Action("View", "Document", new { id = doc.Id })">
-                        <h4>@doc.Title</h4>
-                        <p>@(string.IsNullOrWhiteSpace(doc.FileName) ? doc.FilePath : doc.FileName)</p>
+                        <div class="thumb-wrap">
+                            <img src="@docThumb" alt="@(doc?.Title ?? "")" class="doc-thumb" />
+                        </div>
+                        <h4>@(doc?.Title ?? "-")</h4>
+                        <p>@(string.IsNullOrWhiteSpace(doc?.FileName) ? (doc?.FilePath ?? "-") : doc.FileName)</p>
                     </a>
                 }
             }
@@ -56,15 +94,40 @@
             <a class="view-all" href="@Url.Action("Index", "Teacher", new { subjectId = subject?.Id })">Xem tất cả</a>
         </div>
 
-        <div class="card-grid">
+        <div class="teacher-grid">
             @if (teachers != null)
             {
-                foreach (var t in teachers)
+                foreach (var item in teachers)
                 {
-                    <a class="card" href="@Url.Action("Details", "Teacher", new { id = t.Id })">
-                        <h4>@t.FullName</h4>
-                        <p>@t.Email</p>
-                    </a>
+                    @if (isStudent)
+                {
+                    <a class="btn btn-sm btn-success chat-btn" href="@Url.Action("Index", "Chat", new { recipientId = item.AccountId })">Chat</a>
+                }
+
+                <div class="teacher-thumb">
+                    @if (!string.IsNullOrEmpty(item.ThumbnailPath))
+                    {
+                        <img src="/@item.ThumbnailPath" alt="@item.FullName" />
+                    }
+                    else
+                    {
+                        <div style="width:96px;height:96px;border-radius:50%;background:#e9ecef;display:inline-flex;align-items:center;justify-content:center;color:#6c757d;font-weight:600;">@((item.FullName ?? "").Split(' ').LastOrDefault() ?? "T")</div>
+                    }
+                </div>
+
+                <h4><a href="@Url.Action("Details", "Teacher", new { id = item.Id })">@item.FullName</a></h4>
+                <p>@(item.Email ?? "-")</p>
+                <p style="margin-top:8px; color:#888; font-size:13px;">Môn: 
+                    @if (item.TeacherSubjects != null)
+                    {
+                        @string.Join(", ", ((IEnumerable<dynamic>)item.TeacherSubjects)
+                            .Select(ts => (ts.Subject != null ? ts.Subject.Name : "N/A")))
+                    }
+                    else
+                    {
+                        <span>Chưa đăng ký môn học</span>
+                    }
+                </p>
                 }
             }
             else

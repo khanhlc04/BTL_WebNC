@@ -13,6 +13,9 @@ namespace BTL_WebNC.Models.Teacher
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
+        [StringLength(500)]
+        public string? ThumbnailPath { get; set; }
+
         [Required]
         [StringLength(100)]
         public string FullName { get; set; }

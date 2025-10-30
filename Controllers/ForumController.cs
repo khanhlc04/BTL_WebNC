@@ -28,22 +28,26 @@ namespace BTL_WebNC.Controllers
         public async Task<IActionResult> SearchQuestions(string query)
         {
             var searchResults = await _questionRepo.SearchAsync(query);
-            var list = searchResults.Select(q => new
-            {
-                questionId = q.Id,
-                content = q.Content,
-                authorName = q.Account?.Email,
-                createdAt = q.CreatedAt,
-                replyCount = q.Answers?.Count(a => !a.Deleted) ?? 0,
-                lastReplyAuthor = q.Answers?
-                    .Where(a => !a.Deleted)
-                    .OrderByDescending(a => a.CreatedAt)
-                    .FirstOrDefault()?.Account?.Email,
-                lastReplyDate = q.Answers?
-                    .Where(a => !a.Deleted)
-                    .OrderByDescending(a => a.CreatedAt)
-                    .FirstOrDefault()?.CreatedAt
-            }).ToList();
+            var list = searchResults
+                .Select(q => new
+                {
+                    questionId = q.Id,
+                    content = q.Content,
+                    authorName = q.Account?.Email,
+                    createdAt = q.CreatedAt,
+                    replyCount = q.Answers?.Count(a => !a.Deleted) ?? 0,
+                    lastReplyAuthor = q
+                        .Answers?.Where(a => !a.Deleted)
+                        .OrderByDescending(a => a.CreatedAt)
+                        .FirstOrDefault()
+                        ?.Account?.Email,
+                    lastReplyDate = q
+                        .Answers?.Where(a => !a.Deleted)
+                        .OrderByDescending(a => a.CreatedAt)
+                        .FirstOrDefault()
+                        ?.CreatedAt,
+                })
+                .ToList();
 
             // Return the array directly (frontend expects an array)
             return Json(list);
@@ -52,7 +56,8 @@ namespace BTL_WebNC.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var question = await _questionRepo.GetByIdAsync(id);
-            if (question == null) return NotFound();
+            if (question == null)
+                return NotFound();
 
             return View(question);
         }
@@ -79,7 +84,7 @@ namespace BTL_WebNC.Controllers
                 QuestionId = questionId,
                 AccountId = userId,
                 Content = content,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.Now,
             };
 
             var createdAnswer = await _answerRepo.CreateAsync(answer);
@@ -95,11 +100,13 @@ namespace BTL_WebNC.Controllers
         public async Task<IActionResult> GetSortedAnswers(int questionId, string sortOrder)
         {
             var answers = await _answerRepo.GetByQuestionIdAsync(questionId);
-            if (answers == null) return NotFound();
+            if (answers == null)
+                return NotFound();
 
-            var orderedAnswers = sortOrder?.ToLower() == "asc"
-                ? answers.OrderBy(a => a.CreatedAt)
-                : answers.OrderByDescending(a => a.CreatedAt);
+            var orderedAnswers =
+                sortOrder?.ToLower() == "asc"
+                    ? answers.OrderBy(a => a.CreatedAt)
+                    : answers.OrderByDescending(a => a.CreatedAt);
 
             return PartialView("_AnswersList", orderedAnswers);
         }
@@ -129,7 +136,7 @@ namespace BTL_WebNC.Controllers
             {
                 Content = Content,
                 AccountId = userId,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.Now,
             };
 
             await _questionRepo.CreateAsync(question);
@@ -161,7 +168,7 @@ namespace BTL_WebNC.Controllers
                 QuestionId = QuestionId,
                 Content = Content,
                 AccountId = userId,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.Now,
             };
 
             await _answerRepo.CreateAsync(answer);

@@ -79,8 +79,15 @@ namespace BTL_WebNC.Controllers.Admin
                     SubjectId = subjectId,
                 };
 
-                await _documentRepo.CreateAsync(model);
-                return Json(new { success = true, message = "Thêm tài liệu thành công" });
+                var document = await _documentRepo.CreateAsync(model);
+                return Json(
+                    new
+                    {
+                        success = true,
+                        message = "Thêm tài liệu thành công",
+                        data = document,
+                    }
+                );
             }
             catch (Exception ex)
             {
@@ -135,8 +142,15 @@ namespace BTL_WebNC.Controllers.Admin
                 existingDoc.Title = title;
                 existingDoc.SubjectId = subjectId;
 
-                await _documentRepo.UpdateAsync(existingDoc);
-                return Json(new { success = true, message = "Cập nhật tài liệu thành công" });
+                var document = await _documentRepo.UpdateAsync(existingDoc);
+                return Json(
+                    new
+                    {
+                        success = true,
+                        message = "Cập nhật tài liệu thành công",
+                        data = document,
+                    }
+                );
             }
             catch (Exception ex)
             {

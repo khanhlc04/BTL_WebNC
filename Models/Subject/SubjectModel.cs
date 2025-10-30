@@ -12,6 +12,9 @@ namespace BTL_WebNC.Models.Subject
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
+        [StringLength(500)]
+        public string? ThumbnailPath { get; set; }
+
         [Required]
         [StringLength(100)]
         public string Name { get; set; }

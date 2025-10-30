@@ -11,6 +11,7 @@
         <tr>
             <th>ID</th>
             <th>Tên môn học</th>
+            <th>Hình ảnh</th>
             <th>Mô tả</th>
             <th>Thao tác</th>
         </tr>
@@ -23,6 +24,12 @@
                 <tr data-id="@item.Id">
                     <td>@item.Id</td>
                     <td>@item.Name</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.ThumbnailPath))
+                        {
+                            <img src="/@item.ThumbnailPath" alt="Thumbnail" style="max-width:80px;max-height:80px;" />
+                        }
+                    </td>
                     <td>@item.Description</td>
                     <td>
                         <button class="btn btn-sm btn-warning" onclick="openEditModal(@item.Id)">Sửa</button>
@@ -54,6 +61,14 @@
             <label for="name" class="form-label">Tên môn học <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="name" required />
           </div>
+
+          <div class="mb-3">
+            <label for="thumbnailFile" class="form-label">Thumbnail (Ảnh)</label>
+            <input type="file" class="form-control" id="thumbnailFile" accept="image/*" />
+            <small class="text-muted">Chấp nhận: JPG, PNG, GIF</small>
+            <div id="thumbnailPreview" class="mt-2"></div>
+          </div>
+          
     
           <div class="mb-3">
             <label for="description" class="form-label">Mô tả <span class="text-danger">*</span></label>
@@ -79,6 +94,18 @@
     
     document.addEventListener('DOMContentLoaded', function() {
         currentModal = new bootstrap.Modal(document.getElementById('subjectModal'));
+
+         document.getElementById('thumbnailFile').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('thumbnailPreview').innerHTML = 
+                    `<img src="${e.target.result}" style="max-width:200px;max-height:200px;" class="img-thumbnail" />`;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
     });
 
     function openCreateModal() {
@@ -110,6 +137,11 @@
 
         formData.append('name', document.getElementById('name').value);
         formData.append('description', document.getElementById('description').value);
+
+        const thumbnailFile = document.getElementById('thumbnailFile').files[0];
+        if (thumbnailFile) {
+            formData.append('thumbnailFile', thumbnailFile);
+        }
 
         const url = isEditMode ? '/AdminSubject/UpdateSubject' : '/AdminSubject/CreateSubject';
 

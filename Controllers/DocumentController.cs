@@ -1,11 +1,10 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 using BTL_WebNC.Models.Document;
 using BTL_WebNC.Repositories;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace BTL_WebNC.Controllers.Document
 {
@@ -39,7 +38,10 @@ namespace BTL_WebNC.Controllers.Document
 
         // Action FilterDocuments (dùng cho AJAX, trả về PartialView)
         [HttpGet]
-        public async Task<IActionResult> FilterDocuments(string searchTerm, [FromQuery] List<int> subjectIds)
+        public async Task<IActionResult> FilterDocuments(
+            string searchTerm,
+            [FromQuery] List<int> subjectIds
+        )
         {
             var documents = await GetFilteredDocumentsAsync(searchTerm, subjectIds);
 
@@ -130,7 +132,10 @@ namespace BTL_WebNC.Controllers.Document
         }
 
         // Helper private để tái sử dụng logic filter
-        private async Task<IEnumerable<DocumentModel>> GetFilteredDocumentsAsync(string searchTerm, List<int> subjectIds)
+        private async Task<IEnumerable<DocumentModel>> GetFilteredDocumentsAsync(
+            string searchTerm,
+            List<int> subjectIds
+        )
         {
             var documents = await _documentRepo.GetAllAsync() ?? new List<DocumentModel>();
 
@@ -184,11 +189,17 @@ namespace BTL_WebNC.Controllers.Document
                 // Documents
                 { ".pdf", "application/pdf" },
                 { ".doc", "application/vnd.ms-word" },
-                { ".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document" },
+                {
+                    ".docx",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                },
                 { ".xls", "application/vnd.ms-excel" },
                 { ".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" },
                 { ".ppt", "application/vnd.ms-powerpoint" },
-                { ".pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation" },
+                {
+                    ".pptx",
+                    "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                },
                 // Archives
                 { ".zip", "application/zip" },
                 { ".rar", "application/x-rar-compressed" },

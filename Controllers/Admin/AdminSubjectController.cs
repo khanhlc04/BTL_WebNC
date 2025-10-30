@@ -1,3 +1,4 @@
+using BTL_WebNC.Helpers;
 using BTL_WebNC.Models.Subject;
 using BTL_WebNC.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -9,10 +10,12 @@ namespace BTL_WebNC.Controllers.Admin
     public class AdminSubjectController : Controller
     {
         private readonly ISubjectRepository _subjectRepo;
+        private readonly IFileHelper _fileHelper;
 
-        public AdminSubjectController(ISubjectRepository subjectRepo)
+        public AdminSubjectController(ISubjectRepository subjectRepo, IFileHelper fileHelper)
         {
             _subjectRepo = subjectRepo;
+            _fileHelper = fileHelper;
         }
 
         public async Task<IActionResult> Index()
@@ -34,14 +37,32 @@ namespace BTL_WebNC.Controllers.Admin
         [HttpPost]
         public async Task<IActionResult> CreateSubject(
             [FromForm] string name,
-            [FromForm] string description
+            [FromForm] string description,
+            [FromForm] IFormFile thumbnailFile
         )
         {
             try
             {
-                var subject = new SubjectModel { Name = name, Description = description };
-                await _subjectRepo.CreateAsync(subject);
-                return Json(new { success = true, message = "Tạo môn học thành công" });
+                string thumbnailPath = null;
+                if (thumbnailFile != null && thumbnailFile.Length > 0)
+                {
+                    thumbnailPath = await _fileHelper.SaveFileAsync(thumbnailFile, "thumbnails");
+                }
+                var subject = new SubjectModel
+                {
+                    Name = name,
+                    Description = description,
+                    ThumbnailPath = thumbnailPath,
+                };
+                var result = await _subjectRepo.CreateAsync(subject);
+                return Json(
+                    new
+                    {
+                        success = true,
+                        message = "Tạo môn học thành công",
+                        data = result,
+                    }
+                );
             }
             catch (Exception ex)
             {
@@ -53,19 +74,34 @@ namespace BTL_WebNC.Controllers.Admin
         public async Task<IActionResult> UpdateSubject(
             [FromForm] int id,
             [FromForm] string name,
-            [FromForm] string description
+            [FromForm] string description,
+            [FromForm] IFormFile thumbnailFile
         )
         {
             try
             {
+                string thumbnailPath = null;
+                if (thumbnailFile != null && thumbnailFile.Length > 0)
+                {
+                    thumbnailPath = await _fileHelper.SaveFileAsync(thumbnailFile, "thumbnails");
+                }
+
                 var subject = new SubjectModel
                 {
                     Id = id,
                     Name = name,
                     Description = description,
+                    ThumbnailPath = thumbnailPath,
                 };
-                await _subjectRepo.UpdateAsync(subject);
-                return Json(new { success = true, message = "Cập nhật môn học thành công" });
+                var result = await _subjectRepo.UpdateAsync(subject);
+                return Json(
+                    new
+                    {
+                        success = true,
+                        message = "Cập nhật môn học thành công",
+                        data = result,
+                    }
+                );
             }
             catch (Exception ex)
             {

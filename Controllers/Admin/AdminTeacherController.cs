@@ -1,3 +1,4 @@
+using BTL_WebNC.Helpers;
 using BTL_WebNC.Models.Account;
 using BTL_WebNC.Models.Teacher;
 using BTL_WebNC.Models.TeacherSubject;
@@ -16,16 +17,20 @@ namespace BTL_WebNC.Controllers.Admin
         private readonly ISubjectRepository _subjectRepo;
         private readonly ITeacherSubjectRepository _teacherSubjectRepo;
 
+        private readonly IFileHelper _fileHelper;
+
         public AdminTeacherController(
             ITeacherRepository teacherRepo,
             IAccountRepository accountRepo,
             ISubjectRepository subjectRepo,
-            ITeacherSubjectRepository teacherSubjectRepo
+            ITeacherSubjectRepository teacherSubjectRepo,
+            IFileHelper fileHelper
         )
         {
             _teacherRepo = teacherRepo;
             _accountRepo = accountRepo;
             _subjectRepo = subjectRepo;
+            _fileHelper = fileHelper;
             _teacherSubjectRepo = teacherSubjectRepo;
         }
 
@@ -54,7 +59,8 @@ namespace BTL_WebNC.Controllers.Admin
             [FromForm] string fullName,
             [FromForm] string email,
             [FromForm] string password,
-            [FromForm] List<int> subjects
+            [FromForm] List<int> subjects,
+            [FromForm] IFormFile thumbnailFile
         )
         {
             try
@@ -74,25 +80,26 @@ namespace BTL_WebNC.Controllers.Admin
                 };
                 await _accountRepo.CreateAsync(account);
 
+                string thumbnailPath = null;
+                if (thumbnailFile != null)
+                {
+                    thumbnailPath = await _fileHelper.SaveFileAsync(thumbnailFile, "thumbnails");
+                }
+
                 var teacher = new TeacherModel
                 {
                     FullName = fullName,
                     Email = email,
                     AccountId = account.Id,
+                    ThumbnailPath = thumbnailPath,
                 };
-                await _teacherRepo.CreateAsync(teacher);
 
-                Console.WriteLine(
-                    $"Created teacher Id={teacher.Id}, subjects={(subjects != null ? string.Join(',', subjects) : "null")}"
-                );
+                await _teacherRepo.CreateAsync(teacher);
 
                 if (subjects != null)
                 {
                     foreach (var subjectId in subjects)
                     {
-                        Console.WriteLine(
-                            $"Creating TeacherSubject -> TeacherId={teacher.Id}, SubjectId={subjectId}"
-                        );
                         var teacherSubject = new TeacherSubjectModel
                         {
                             TeacherId = teacher.Id,
@@ -102,19 +109,44 @@ namespace BTL_WebNC.Controllers.Admin
                     }
                 }
 
-                return Json(new { success = true, message = "Tạo giảng viên thành công" });
+                // Prepare DTO to return to client: teacher info + assigned subjects
+                var allSubjects = await _subjectRepo.GetAllAsync();
+                var assignedSubjects = new List<object>();
+                if (subjects != null && subjects.Count > 0)
+                {
+                    assignedSubjects = allSubjects
+                        .Where(s => subjects.Contains(s.Id))
+                        .Select(s => new
+                        {
+                            id = s.Id,
+                            name = s.Name,
+                            thumbnailPath = s.ThumbnailPath,
+                        })
+                        .Cast<object>()
+                        .ToList();
+                }
+
+                var teacherDto = new
+                {
+                    id = teacher.Id,
+                    fullName = teacher.FullName,
+                    email = teacher.Email,
+                    thumbnailPath = teacher.ThumbnailPath,
+                    accountId = teacher.AccountId,
+                };
+
+                return Json(
+                    new
+                    {
+                        success = true,
+                        message = "Tạo giảng viên thành công",
+                        data = new { teacher = teacherDto, subjects = assignedSubjects },
+                    }
+                );
             }
             catch (Exception ex)
             {
-                return BadRequest(
-                    new
-                    {
-                        success = false,
-                        message = ex.Message,
-                        detail = ex.InnerException?.Message,
-                        trace = ex.ToString(),
-                    }
-                );
+                return BadRequest(new { success = false, message = ex.Message });
             }
         }
 
@@ -123,18 +155,48 @@ namespace BTL_WebNC.Controllers.Admin
             [FromForm] int id,
             [FromForm] string fullName,
             [FromForm] string email,
-            [FromForm] List<int> subjects
+            [FromForm] List<int> subjects,
+            [FromForm] IFormFile thumbnailFile
         )
         {
             try
             {
-                var teacher = new TeacherModel
+                var existingTeacher = await _teacherRepo.GetByIdAsync(id);
+                if (existingTeacher == null)
+                    return NotFound(new { success = false, message = "Không tìm thấy giảng viên" });
+
+                // Giữ giá trị hiện tại
+                string thumbnailPath = existingTeacher.ThumbnailPath;
+
+                // Nếu có file mới, lưu trước; nếu lưu thành công thì xóa file cũ
+                if (thumbnailFile != null && thumbnailFile.Length > 0)
                 {
-                    Id = id,
-                    FullName = fullName,
-                    Email = email,
-                };
-                await _teacherRepo.UpdateAsync(teacher);
+                    var newPath = await _fileHelper.SaveFileAsync(thumbnailFile, "thumbnails");
+                    if (!string.IsNullOrEmpty(newPath))
+                    {
+                        // xóa file cũ nếu khác
+                        if (
+                            !string.IsNullOrEmpty(existingTeacher.ThumbnailPath)
+                            && !string.Equals(
+                                existingTeacher.ThumbnailPath,
+                                newPath,
+                                StringComparison.OrdinalIgnoreCase
+                            )
+                        )
+                        {
+                            _fileHelper.DeleteFile(existingTeacher.ThumbnailPath);
+                        }
+
+                        thumbnailPath = newPath;
+                    }
+                }
+
+                // Cập nhật entity đã load
+                existingTeacher.FullName = fullName;
+                existingTeacher.Email = email;
+                existingTeacher.ThumbnailPath = thumbnailPath;
+
+                var createdTeacher = await _teacherRepo.UpdateAsync(existingTeacher);
 
                 var account = await _accountRepo.GetByEmailAsync(email);
 
@@ -157,14 +219,47 @@ namespace BTL_WebNC.Controllers.Admin
                     {
                         var teacherSubject = new TeacherSubjectModel
                         {
-                            TeacherId = teacher.Id,
+                            TeacherId = createdTeacher.Id,
                             SubjectId = subjectId,
                         };
                         await _teacherSubjectRepo.CreateAsync(teacherSubject);
                     }
                 }
 
-                return Json(new { success = true, message = "Cập nhật giảng viên thành công" });
+                // Prepare DTO to return to client: teacher info + assigned subjects (same shape as CreateTeacher)
+                var allSubjects = await _subjectRepo.GetAllAsync();
+                var assignedSubjects = new List<object>();
+                if (subjects != null && subjects.Count > 0)
+                {
+                    assignedSubjects = allSubjects
+                        .Where(s => subjects.Contains(s.Id))
+                        .Select(s => new
+                        {
+                            id = s.Id,
+                            name = s.Name,
+                            thumbnailPath = s.ThumbnailPath,
+                        })
+                        .Cast<object>()
+                        .ToList();
+                }
+
+                var teacherDto = new
+                {
+                    id = createdTeacher.Id,
+                    fullName = createdTeacher.FullName,
+                    email = createdTeacher.Email,
+                    thumbnailPath = createdTeacher.ThumbnailPath,
+                    accountId = createdTeacher.AccountId,
+                };
+
+                return Json(
+                    new
+                    {
+                        success = true,
+                        message = "Cập nhật giảng viên thành công",
+                        data = new { teacher = teacherDto, subjects = assignedSubjects },
+                    }
+                );
             }
             catch (Exception ex)
             {

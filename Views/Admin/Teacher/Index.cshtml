@@ -12,6 +12,7 @@
         <tr>
             <th>ID</th>
             <th>Họ tên</th>
+            <th>Hình ảnh</th>
             <th>Email</th>
             <th>Mã tài khoản</th>
             <th>Môn học dạy</th>
@@ -26,6 +27,12 @@
                 <tr data-id="@item.Id">
                     <td>@item.Id</td>
                     <td>@item.FullName</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.ThumbnailPath))
+                        {
+                            <img src="/@item.ThumbnailPath" alt="Thumbnail" style="max-width:80px;max-height:80px;" />
+                        }
+                    </td>
                     <td>@item.Email</td>
                     <td>@item.AccountId</td>
                     <td>
@@ -77,6 +84,13 @@
           </div>
 
           <div class="mb-3">
+            <label for="thumbnailFile" class="form-label">Thumbnail (Ảnh)</label>
+            <input type="file" class="form-control" id="thumbnailFile" accept="image/*" />
+            <small class="text-muted">Chấp nhận: JPG, PNG, GIF</small>
+            <div id="thumbnailPreview" class="mt-2"></div>
+          </div>
+
+          <div class="mb-3">
             <label for="subject" class="form-label">Môn học <span class="text-danger">*</span></label>
             <select class="form-select" id="subject" name="subjects" multiple required>
               @if (subjects != null)
@@ -113,6 +127,18 @@
     
     document.addEventListener('DOMContentLoaded', function() {
         currentModal = new bootstrap.Modal(document.getElementById('teacherModal'));
+    
+         document.getElementById('thumbnailFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('thumbnailPreview').innerHTML = 
+                        `<img src="${e.target.result}" style="max-width:200px;max-height:200px;" class="img-thumbnail" />`;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
     });
 
     function openCreateModal() {
@@ -156,6 +182,11 @@
         const selectedSubjects = Array.from(document.getElementById('subject').selectedOptions).map(o => o.value);
         selectedSubjects.forEach(s => formData.append('subjects', s));
 
+         const thumbnailFile = document.getElementById('thumbnailFile').files[0];
+        if (thumbnailFile) {
+            formData.append('thumbnailFile', thumbnailFile);
+        }
+
         if (!isEditMode) formData.append('password', document.getElementById('password').value);
 
         const url = isEditMode ? '/AdminTeacher/UpdateTeacher' : '/AdminTeacher/CreateTeacher';
@@ -168,10 +199,42 @@
         .then(result => {
             btnSave.disabled = false;
             spinner.classList.add('d-none');
-            
+
             if (result.success) {
-                currentModal.hide();
-                location.reload();
+                // If server returned data (DTO), use it to insert/update the table row (Method A)
+                if (result.data) {
+                    const d = result.data;
+                    const t = d.teacher;
+                    const subs = Array.isArray(d.subjects) ? d.subjects : [];
+
+                    const subjectsHtml = subs.length > 0 ? subs.map(s => s.name).join(', ') : 'Chưa đăng ký môn học';
+                    const thumbHtml = t.thumbnailPath ? `<img src="/${t.thumbnailPath}" alt="Thumbnail" style="max-width:80px;max-height:80px;" />` : '';
+                    const actions = `<button class="btn btn-sm btn-warning" onclick="openEditModal(${t.id})">Sửa</button> <button class="btn btn-sm btn-danger" onclick="deleteTeacher(${t.id})">Xóa</button>`;
+
+                    const rowInner = `<td>${t.id}</td><td>${t.fullName}</td><td>${thumbHtml}</td><td>${t.email}</td><td>${t.accountId || ''}</td><td>${subjectsHtml}</td><td>${actions}</td>`;
+
+                    const tbody = document.querySelector('table.table tbody');
+                    if (isEditMode) {
+                        const existing = document.querySelector(`tr[data-id="${t.id}"]`);
+                        if (existing) {
+                            existing.innerHTML = rowInner;
+                        }
+                    } else {
+                        const tr = document.createElement('tr');
+                        tr.setAttribute('data-id', t.id);
+                        tr.innerHTML = rowInner;
+                        // prepend new row
+                        if (tbody.firstChild) tbody.insertBefore(tr, tbody.firstChild);
+                        else tbody.appendChild(tr);
+                    }
+
+                    currentModal.hide();
+                } else {
+                    // fallback: no data returned -> reload page
+                    currentModal.hide();
+                    location.reload();
+                }
+
             } else {
                 alert(result.message);
             }
